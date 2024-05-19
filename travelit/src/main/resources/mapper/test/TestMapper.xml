@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.back.travelit.mapper.TestMapper">
+    <insert id="insertUser" parameterType="com.back.travelit.dto.test.request.TestRequest">
+        INSERT INTO TEST_TABLE (username, email) VALUES (#{username}, #{email})
+    </insert>
+
+    <select id="getUserById" parameterType="long" resultType="com.back.travelit.domain.test.Test">
+        SELECT * FROM TEST_TABLE WHERE id = #{id}
+    </select>
+</mapper>
