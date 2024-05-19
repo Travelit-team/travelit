@@ -10,7 +10,7 @@ src─|
     |    ├─ product (상품 패키지)
     |    ├─ planner (플래너 패키지)
     |    ├─ location (지역 정보 패키지)
-    ├─domain : mapper의 반환 값으로 사용될 클래스 구성(https://github.com/sksrpf1126/study/blob/main/Spring(Spring%20Boot)/MyBatis/MyBatis%20%EC%97%90%EC%84%9C%EC%9D%98%20DTO%20%EB%B6%84%EB%A6%AC.md) 참고
+    ├─domain : mapper의 반환 값으로 사용될 클래스 구성
     |    ├─ member
     |    ├─ product
     |    ├─ planner
