@@ -17,7 +17,15 @@ src─|
     |    ├─ location
     ├─dto
     |    ├─ request (request 즉, 요청 객체로 사용자가 서버쪽으로 데이터를 전달할 때 받을 DTO 선언)
+    |        |    ├─ member (회원 패키지)
+    |        |    ├─ product (상품 패키지)
+    |        |    ├─ planner (플래너 패키지)
+    |        |    ├─ location (지역 정보 패키지)
     |    ├─ response (response 즉, 응답 객체로 DB의 데이터를 해당 DTO로 받아서 최종적으로 사용자에게 반환할 DTO 선언)
+    |        |    ├─ member (회원 패키지)
+    |        |    ├─ product (상품 패키지)
+    |        |    ├─ planner (플래너 패키지)
+    |        |    ├─ location (지역 정보 패키지)
     ├─mapper : 매퍼 파일 보관
     |    ├─ member
     |    ├─ product
