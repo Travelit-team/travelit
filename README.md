@@ -71,4 +71,5 @@ src─|
     |    ├─ product
     |    ├─ planner
     |    ├─ location
+    |    ├─ fragments
 ```
