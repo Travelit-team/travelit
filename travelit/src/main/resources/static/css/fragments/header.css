@@ -1,0 +1,86 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.header-display {
+    width: 100vw;
+}
+
+#header-contents {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-margin {
+    margin: 0px 15vw;
+}
+
+#header-logo {
+    height: 70px;
+    cursor: pointer;
+}
+
+#header-menu {
+    display: flex;
+    font-size: 18px;
+    color: #a7a7a7;
+}
+
+#header-menu > ul {
+    list-style: none;
+    display: flex;
+    width: 22vw;
+    padding: 0px;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 650;
+}
+
+.header-menu-list:hover {
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.header-menu-list:hover > a:after {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    background: #000;
+    border-radius: 100%;
+    position: absolute;
+    top: 25px;
+}
+
+#header-login-menu {
+    display: flex;
+    align-items: center;
+}
+
+#header-login-menu > button {
+    cursor: pointer;
+}
+
+#header-signup {
+    margin-right: 10px;
+    border-radius: 25px;
+    background: white;
+    border: none;
+    height: 40px;
+    width: 110px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+#header-login {
+    border-radius: 25px;
+    background: #FF5100;
+    border: none;
+    color: white;
+    height: 40px;
+    width: 80px;
+    font-size: 15px;
+    font-weight: 700;
+}
