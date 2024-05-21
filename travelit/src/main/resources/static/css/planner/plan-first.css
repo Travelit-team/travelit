@@ -13,4 +13,50 @@ html, body {
 #calendar{
     width: 40vw;
 }
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
 
+h1 {
+    text-align: center;
+}
+
+#regions-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.region-card {
+    width: 200px;
+    margin: 10px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.region-card h3 {
+    margin-top: 10px;
+}
+
+.region-card button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#itinerary {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
