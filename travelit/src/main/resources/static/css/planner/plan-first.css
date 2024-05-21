@@ -1,0 +1,16 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+}
+.plan-first-display{
+    width: 100vw;
+}
+
+.plan-first-wrapper{
+    margin: 3vw 15vw;
+}
+
+#calendar{
+    width: 40vw;
+}
+
