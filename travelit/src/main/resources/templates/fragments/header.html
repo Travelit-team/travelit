@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <link rel="stylesheet" href="/css/fragments/header.css" />
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<header th:fragment ="header">
+    <div class="header-display">
+        <div id="header-contents" class="header-margin">
+            <div>
+                <img id="header-logo" src="/images/fragments/header-logo.png" />
+            </div>
+            <div id="header-menu">
+                <ul>
+                    <li class="header-menu-list"><a>상품</a></li>
+                    <li class="header-menu-list"><a>플래너</a></li>
+                    <li class="header-menu-list"><a>지역 정보</a></li>
+                </ul>
+            </div>
+            <div id="header-login-menu">
+                <button id="header-signup">회원가입</button>
+                <button id="header-login">로그인</button>
+            </div>
+        </div>
+    </div>
+</header>
+</html>
