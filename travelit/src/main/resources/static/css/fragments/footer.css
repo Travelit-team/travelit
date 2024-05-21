@@ -1,0 +1,17 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.footer-display {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+
+.footer-display > p {
+    font-size: 15px;
+    color: #8e8a8a;
+    font-weight: bold;
+
+}
