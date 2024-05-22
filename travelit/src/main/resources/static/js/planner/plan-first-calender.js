@@ -43,61 +43,30 @@ const regions = [
     { name: '인천'},
     { name: '강원도'},
     { name: '전라도'},
-    { name: '충천도'},
+    { name: '충청도'},
     { name: '경상도'},
     { name: '제주도'},
 ];
 
-const regionsContainer = document.getElementById('regions-container');
-const itineraryContainer = document.getElementById('itinerary');
-const titleInput = document.getElementById('title');
+document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.card'); //'.card'클래스를 가진 모든 요소를 저장.cards는 NodeList
+    const selectedCardIds = new Set();
 
-let selectedRegions = [];
+    cards.forEach(card => { //'.card'요소를 'card'의 인수로 처리
+        card.addEventListener('click', () => { //클릭 이벤트 리스너
+            card.classList.toggle('selected'); //토글
 
-function createRegionCard(region) {
-    const card = document.createElement('div');
-    card.classList.add('region-card');
+            // data-id 값을 가져와서 콘솔에 출력
+            const dataId = card.getAttribute('data-id');
 
-    const nameElement = document.createElement('h3');
-    nameElement.textContent = region.name;
-    card.appendChild(nameElement);
-
-    const button = document.createElement('button');
-    button.textContent = '+';
-    button.addEventListener('click', function() {
-        addRegionToItinerary(region);
-    });
-    card.appendChild(button);
-
-    return card;
-}
-
-function addRegionToItinerary(region) {
-    if (!selectedRegions.includes(region)) {
-        selectedRegions.push(region);
-        updateItinerary();
-    }
-}
-
-function updateItinerary() {
-    itineraryContainer.innerHTML = '';
-
-    if (selectedRegions.length > 0) {
-        const title = document.createElement('h2');
-        title.textContent = titleInput.value;
-        itineraryContainer.appendChild(title);
-
-        const list = document.createElement('ul');
-        selectedRegions.forEach(region => {
-            const listItem = document.createElement('li');
-            listItem.textContent = region.name;
-            list.appendChild(listItem);
-                });
-                itineraryContainer.appendChild(list);
-              }
+            if (card.classList.contains('selected')) {
+                selectedCardIds.add(dataId);
+            } else {
+                selectedCardIds.delete(dataId);
             }
 
-            // Call the function to create and display region cards initially
-            regions.forEach(region => regionsContainer.appendChild(createRegionCard(region)));
-
-
+            // 선택된 데이터 ID 목록 출력
+            console.log(`Selected card IDs: ${Array.from(selectedCardIds).join(', ')}`);
+        });
+    });
+});

@@ -9,17 +9,31 @@
 </head>
 <body>
     <header th:replace="fragments/header :: header"></header>
-    <form action="#">
+    <form action="#" method="post">
         <div class="plan-first-display">
-            <div class="plan-first-wrapper">
-                <div id="calendar"></div>
-                <div>
-                    <label for="title">여행 제목</label>
-                    <input type="text" id="title" name="title" required>
+            <div class="plan-first-wrap">
+                <div class="left-wrap">
+                    <div id="calendar"></div>
                 </div>
-                <div>
-                    <h1>여행 지역 선택</h1>
-                    <div id="regions-container"></div>
+                <div class="right-wrap">
+                    <div class="plan-title-wrap">
+                        <label for="title" class="plan-title">여행 제목</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div class="plan-state">
+                        <div class="plan-state-title"><h1>여행 지역 선택</h1></div>
+                        <div class="card-list">
+                            <div class="card" data-id="L001">서울</div>
+                            <div class="card" data-id="L002">경기도</div>
+                            <div class="card" data-id="L003">인천</div>
+                            <div class="card" data-id="L004">강원도</div>
+                            <div class="card" data-id="L005">전라도</div>
+                            <div class="card" data-id="L006">충청도</div>
+                            <div class="card" data-id="L007">경상도</div>
+                            <div class="card" data-id="L008">제주도</div>
+                        </div>
+                    </div>
+                    <input type="submit" id="make-plan" name="make-plan" value="일정만들기"/>
                 </div>
             </div>
         </div>
