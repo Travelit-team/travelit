@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
         select: function(info) {
             startDate = info.startStr;
             endDate = info.end.toISOString().split('T')[0];
+            $("#startDate").val(startDate);
+            $("#endDate").val(endDate);
             console.log(startDate);
             console.log(endDate);
 
@@ -66,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // 선택된 데이터 ID 목록 출력
+            $("#state").val(Array.from(selectedCardIds).join(', '));
             console.log(`Selected card IDs: ${Array.from(selectedCardIds).join(', ')}`);
         });
     });

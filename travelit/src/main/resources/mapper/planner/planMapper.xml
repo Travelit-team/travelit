@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.back.travelit.mapper.planner.PlanMapper">
+
+    <insert id="createPlan" parameterType="com.back.travelit.dto.request.planner.PlanCreateReqDTO">
+        insert into PLAN(USER_ID, PL_STR_DATE, PL_END_DATE, PL_TITLE)
+            values (1,#{startDate},#{endDate},#{title})
+    </insert>
+
+</mapper>

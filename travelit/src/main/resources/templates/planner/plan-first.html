@@ -9,7 +9,7 @@
 </head>
 <body>
     <header th:replace="fragments/header :: header"></header>
-    <form action="#" method="post">
+    <form action="/planner/plan-make" method="post">
         <div class="plan-first-display">
             <div class="plan-first-wrap">
                 <div class="left-wrap">
@@ -33,6 +33,9 @@
                             <div class="card" data-id="L008">제주도</div>
                         </div>
                     </div>
+                    <input type="hidden" id="startDate" name="startDate"/>
+                    <input type="hidden" id="endDate" name="endDate"/>
+                    <input type="hidden" id="state" name="state"/>
                     <input type="submit" id="make-plan" name="make-plan" value="일정만들기"/>
                 </div>
             </div>
@@ -41,5 +44,6 @@
     <footer th:replace="fragments/footer :: footer"></footer>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <script src="/js/planner/plan-first-calender.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 </body>
 </html>
