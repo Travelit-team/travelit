@@ -5,9 +5,17 @@
 
 <mapper namespace="com.back.travelit.mapper.planner.PlanMapper">
 
-    <insert id="createPlan" parameterType="com.back.travelit.dto.request.planner.PlanCreateReqDTO">
+    <insert id="insertMakePlan" parameterType="com.back.travelit.dto.request.planner.PlanCreateReqDTO"
+            useGeneratedKeys="true" keyProperty="PlanCreateReqDTO.planId">
         insert into PLAN(USER_ID, PL_STR_DATE, PL_END_DATE, PL_TITLE)
             values (1,#{startDate},#{endDate},#{title})
+    </insert>
+
+    <insert id="insertMakePlanLoc" parameterType="map">
+        insert int PLAN_LOC(PLAN_ID, LOCATION_CODE)
+        <foreach item="state" collection="strArr" separator=",">
+               values(#{planID},#{state})
+        </foreach>
     </insert>
 
 </mapper>

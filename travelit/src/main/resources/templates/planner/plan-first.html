@@ -9,7 +9,7 @@
 </head>
 <body>
     <header th:replace="fragments/header :: header"></header>
-    <form action="/planner/plan-make" method="post">
+    <form action="/planner/plan-make" method="post" class="submit">
         <div class="plan-first-display">
             <div class="plan-first-wrap">
                 <div class="left-wrap">
@@ -44,6 +44,7 @@
     <footer th:replace="fragments/footer :: footer"></footer>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <script src="/js/planner/plan-first-calender.js"></script>
+    <script src="/js/planner/plan-first-location.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 </body>
 </html>

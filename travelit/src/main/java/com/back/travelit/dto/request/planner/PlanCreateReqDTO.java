@@ -1,19 +1,24 @@
 package com.back.travelit.dto.request.planner;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
+import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+//@AllArgsConstructor
 public class PlanCreateReqDTO {
 
-    private int userId;
+    private int planId;
 
     private String title;
-    private LocalDateTime startDate;
-    private LocalDateTime  endDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    private LocalDate startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    private LocalDate  endDate;
+
     private String state;
 }
