@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 등록</title>
+</head>
+<body>
+    <form id="saveForm" method="POST" autocomplete="off">
+        <!--수정일 때 게시글 전달-->
+        <input type="hidden" id="PRO_ID" name="PRO_ID" th:if="${product != null}" th:value="${product.PRO_ID}" />
+        <input type="hidden" id="USER_ID" name="USER_ID" value="1" />
+
+
+        <div>상품명<input type="text" id="PRO_NAME" name="PRO_NAME" required/></div>
+        <div>
+            <label for="PRO_CATEGORY_TOTAL">카테고리01</label>
+            <select id="PRO_CATEGORY_TOTAL" name="PRO_CATEGORY_TOTAL" required>
+                <option value="입장권">입장권</option>
+                <option value="액티비티">액티비티</option>
+                <option value="투어">투어</option>
+                <option value="교통">교통</option>
+            </select>
+        </div>
+        <div>카테고리02<input type="text" id="PRO_CATEGORY_DETAIL" name="PRO_CATEGORY_DETAIL" required/></div>
+        <div>내용<br/><textarea id="PRO_CONTENT" name="PRO_CONTENT" cols="50" rows="10" placeholder="내용을 입력해 주세요." required></textarea></div>
+        <div>
+            예약가능여부
+            <input type="radio" id="PRO_RES_Y" name="PRO_RES" value="Y" required/>
+            <label for="PRO_RES_Y">가능</label>
+            <input type="radio" id="PRO_RES_N" name="PRO_RES" value="N" required/>
+            <label for="PRO_RES_N">불가</label>
+        </div>
+        <div>가격<input type="number" id="PRO_PRICE" name="PRO_PRICE" step="100" required/></div>
+        <div>1회 구매가능 수량<input type="number" id="PRO_PER_MAX" name="PRO_PER_MAX" required/></div>
+        <div>
+            <label for="PRO_LOCATION">지역</label>
+            <select id="PRO_LOCATION" name="PRO_LOCATION" required>
+                <option value="서울">서울</option>
+                <option value="경기도">경기도</option>
+                <option value="인천">인천</option>
+                <option value="충청도">충청도</option>
+                <option value="강원도">강원도</option>
+                <option value="전라도">전라도</option>
+                <option value="경상도">경상도</option>
+                <option value="제주도">제주도</option>
+                <option value="ETC">기타</option>
+            </select>
+        </div>
+        <div>투어일<input type="number" id="TOUR_DATE" name="TOUR_DATE" required/></div>
+        <div>투어시간<input type="number" id="TOUR_TIME" name="TOUR_TIME" required/></div>
+        <div>투어시작일<input type="date" id="TOUR_START" name="TOUR_START" required placeholder="YYYY-MM-DD"/></div>
+        <div>투어종료일<input type="date" id="TOUR_END" name="TOUR_END" required placeholder="YYYY-MM-DD"/></div>
+    </form>
+    <button type="submit" onclick="saveProduct();" id="saveBtn">저장</button>
+    <a th:href="@{/product/productList}">뒤로</a>
+</body>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // 게시글 저장(수정)
+    function saveProduct() {
+        const form = document.getElementById('saveForm');
+
+        const fields = [form.PRO_NAME, form.PRO_CATEGORY_TOTAL, form.PRO_CATEGORY_DETAIL, form.PRO_CONTENT,
+                        form.PRO_RES, form.PRO_PRICE, form.PRO_PER_MAX, form.PRO_LOCATION,
+                        form.TOUR_DATE, form.TOUR_TIME, form.TOUR_START, form.TOUR_END];
+        const fieldNames = ['상품명', '카테고리1', '카테고리2', '상품 설명', '예약 가능 여부', '가격',
+                            '구매 가능 수량', '지역', '소요일', '소요시간', '투어시작일', '투어종료일'];
+
+        for (let i = 0, len = fields.length; i < len; i++) {
+            isValid(fields[i], fieldNames[i]);
+        }
+
+        document.getElementById('saveBtn').disabled = true;
+        form.action = [[${product == null}]] ? '/product/save' : '/product/update';
+        form.submit();
+    }
+
+    function hasCoda(value) {
+        return ((value.charCodeAt(value.length - 1) - 0xAC00) % 28) > 0;
+    }
+
+    function isValid(target, fieldName, focusTarget) {
+        if (target.value.trim()) {
+            return true;
+        }
+
+        const particle = (hasCoda(fieldName)) ? '을' : '를';
+        const elementType = (target.type === 'text' || target.type === 'password' || target.type === 'search' || target.type === 'textarea') ? '입력' : '선택';
+        alert(`${fieldName + particle} ${elementType}해 주세요.`);
+
+        target.value = '';
+        (!focusTarget ? target : focusTarget).focus();
+        throw new Error(`"${target.PRO_ID}" is required...`)
+    }
+    /*]]>*/
+</script>
+
+</html>

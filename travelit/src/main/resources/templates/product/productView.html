@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+</head>
+<body>
+        <h2>상품 상세 페이지</h2>
+        <div th:text="${product.PRO_ID}">상품ID</div>
+        <div th:text="${product.USER_ID}">관리자ID</div>
+        <div th:text="${product.PRO_NAME}">상품명</div>
+        <div th:text="${product.PRO_CATEGORY_TOTAL}">카테고리 01</div>
+        <div th:text="${product.PRO_CATEGORY_DETAIL}">카테고리 02</div>
+        <div th:text="${product.PRO_CONTENT}">내용</div>
+        <div th:text="${product.PRO_RES}">예약가능여부</div>
+        <div th:text="${product.PRO_PRICE}">가격</div>
+        <div th:text="${product.PRO_PER_MAX}">최대 인원수</div>
+        <div th:text="${#dates.format(product.PRO_DATE, 'yyyy-MM-dd')}">생성일</div>
+        <div th:text="${product.PRO_LOCATION}">위치</div>
+        <div th:text="${product.PRO_VIEW}">조회수</div>
+        <div th:text="${product.TOUR_DATE}">투어일</div>
+        <div th:text="${product.TOUR_TIME}">투어 시간</div>
+        <div th:text="${#dates.format(product.TOUR_START, 'yyyy-MM-dd')}">투어 시작일</div>
+        <div th:text="${#dates.format(product.TOUR_END, 'yyyy-MM-dd')}">투어 종료일</div>
+        <br/>
+        <a th:href="@{/product/productWrite(PRO_ID=${product.PRO_ID})}">수정</a>
+        <button type="button" onclick="deleteProduct();">삭제</button>
+        <a th:href="@{/poproductst/productList}">뒤로</a>
+</body>
+
+<script th:inline="javascript">
+        /*<![CDATA[*/
+
+        // 게시글 삭제
+        function deleteProduct() {
+                const PRO_ID = [[ ${product.PRO_ID} ]];
+                const PRO_NAME = [[ ${product.PRO_NAME} ]];
+
+                if ( !confirm(PRO_ID + '번 ' + PRO_NAME + ' 상품을 삭제할까요?') ) {
+                        return false;
+                }
+
+                const formHtml = `
+                    <form id="deleteForm" action="/product/delete" method="post">
+                        <input type="hidden" id="PRO_" name="PRO_ID" value="${PRO_ID}" />
+                    </form>
+                `;
+                const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+                const form = doc.body.firstChild;
+                document.body.append(form);
+                document.getElementById('deleteForm').submit();
+        }
+</script>
+
+</html>
