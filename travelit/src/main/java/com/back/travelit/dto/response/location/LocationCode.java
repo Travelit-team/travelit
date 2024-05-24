@@ -1,4 +1,4 @@
-package com.back.travelit.dto.response;
+package com.back.travelit.dto.response.location;
 
 import lombok.Builder;
 import lombok.Getter;

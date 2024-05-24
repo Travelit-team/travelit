@@ -3,7 +3,7 @@ package com.back.travelit.service.location;
 import com.back.travelit.common.exception.BaseException;
 import com.back.travelit.common.exception.ErrorCode;
 import com.back.travelit.common.s3.S3Service;
-import com.back.travelit.dto.response.LocationCode;
+import com.back.travelit.dto.response.location.LocationCode;
 import com.back.travelit.dto.request.location.LocationWriteRequest;
 import com.back.travelit.mapper.location.LocationMapper;
 import lombok.RequiredArgsConstructor;

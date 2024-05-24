@@ -1,6 +1,6 @@
 package com.back.travelit.controller.location;
 
-import com.back.travelit.dto.response.LocationCode;
+import com.back.travelit.dto.response.location.LocationCode;
 import com.back.travelit.dto.request.location.LocationWriteRequest;
 import com.back.travelit.service.location.LocationService;
 import jakarta.validation.Valid;

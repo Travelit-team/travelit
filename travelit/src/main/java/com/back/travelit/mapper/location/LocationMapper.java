@@ -1,6 +1,6 @@
 package com.back.travelit.mapper.location;
 
-import com.back.travelit.dto.response.LocationCode;
+import com.back.travelit.dto.response.location.LocationCode;
 import com.back.travelit.dto.request.location.LocationSubInfo;
 import com.back.travelit.dto.request.location.LocationWriteRequest;
 import org.apache.ibatis.annotations.Mapper;

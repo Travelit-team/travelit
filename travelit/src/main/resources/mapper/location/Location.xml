@@ -19,7 +19,7 @@
                )
     </insert>
 
-    <select id="selectAllLocationCode" resultType="com.back.travelit.dto.response.LocationCode">
+    <select id="selectAllLocationCode" resultType="com.back.travelit.dto.response.location.LocationCode">
         SELECT *
         FROM LOCATION_CODE;
     </select>
