@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/location/write.css" />
+    <script type="text/javascript" th:src="@{'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${@environment.getProperty('kakao-javaScript-key')} + '&libraries=services'} "></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <th:block th:replace="fragments/header :: head"></th:block>
+    <th:block th:replace="fragments/footer :: head"></th:block>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div id="location-write-container">
+    <div id="location-write-header">
+        <h2>지역정보 등록</h2>
+    </div>
+    <form action="/location/write" method="post" th:action th:object="${writeRequest}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="location-select">지역 선택</label>
+            <div class="field-error-div">
+                <select name="locationCode" th:errorclass="field-error" id="location-select">
+                </select>
+                <div class="field-error" th:errors="*{locationCode}">지역 목록 오류</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="title">제목</label>
+            <div class="field-error-div">
+                <input type="text" class="form-control" th:field="*{title}" th:errorclass="field-error" name="title" id="title" placeholder="제목을 입력하세요">
+                <div class="field-error" th:errors="*{title}">제목 오류</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sub-title">부제목</label>
+            <div class="field-error-div">
+                <input type="text" class="form-control" th:field="*{subTitle}" th:errorclass="field-error" name="subTitle" id="sub-title" placeholder="부제목을 입력하세요">
+                <div class="field-error" th:errors="*{subTitle}">부제목 오류</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description">상세정보</label>
+            <div class="field-error-div">
+                <textarea class="form-control" th:field="*{description}" th:errorclass="field-error" name="description" id="description" rows="10"></textarea>
+                <div class="field-error" th:errors="*{description}">상세정보 오류</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>지역 위치</label>
+            <div id="address-and-map">
+                <div id="address-div">
+                    <input type="text" class="form-control" th:field="*{address}" th:errorclass="field-error" name="address" id="addr" readonly placeholder="주소를 입력하세요">
+                    <button type="button" id="address-button" onclick="onClickAddr()">입력</button>
+                </div>
+                <div class="field-error" th:errors="*{address}">주소 오류</div>
+                <div id="map"></div>
+                <input type="hidden" id="latitude" name="latitude" th:field="*{latitude}" />
+                <input type="hidden" id="longitude" name="longitude" th:field="*{longitude}" />
+            </div>
+        </div>
+
+        <div>
+            <div class="form-group">
+                <label>부가정보</label>
+                <div class="sub-info-border">
+                    <div id="additional-info-container" >
+                        <div th:each="subInfo, iterStat : *{subInfoList}" class="form-group">
+                            <div class="width-100-percent">
+                                <div class="sub-info-key-div">
+                                    <label th:for="|infoKey${iterStat.index}|">정보명</label>
+                                    <input type="text" class="form-control" th:errorclass="field-error" th:field="*{subInfoList[__${iterStat.index}__].infoKey}" placeholder="정보명 입력">
+<!--                                    <div class="field-error" th:errors="*{subInfoList[__${iterStat.index}__].infoKey}"></div>-->
+                                </div>
+                                <div class="sub-info-value-div">
+                                    <label th:for="|infoValue${iterStat.index}|">정보값</label>
+                                    <textarea rows="3" class="form-control" th:errorclass="field-error" th:field="*{subInfoList[__${iterStat.index}__].infoValue}" placeholder="정보값 입력"></textarea>
+<!--                                    <div class="field-error" th:errors="*{subInfoList[__${iterStat.index}__].infoValue}"></div>-->
+                                </div>
+                                <button type="button" class="remove-info-btn">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="add-info-btn-div">
+                        <button type="button" id="add-info-btn">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="file-container">
+            <div class="form-group">
+                <label>파일</label>
+                <input type="file" name="files" class="form-control-file" id="file1">
+                <button type="button" id="add-file-btn">추가</button>
+            </div>
+            <div class="field-error" th:errors="*{files}">최소 하나의 이미지가 필요합니다.</div>
+        </div>
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">작성완료</button>
+            <button type="button" class="btn btn-secondary ml-2">취소</button>
+        </div>
+    </form>
+</div>
+
+<!-- Bootstrap JavaScript dependencies (optional) -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/location/write.js"></script>
+<script type="text/javascript" src="/js/location/write-map-address.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</body>
+</html>
