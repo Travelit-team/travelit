@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/location/write.css" />
     <script type="text/javascript" th:src="@{'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${@environment.getProperty('kakao-javaScript-key')} + '&libraries=services'} "></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <th:block th:replace="fragments/header :: head"></th:block>
     <th:block th:replace="fragments/footer :: head"></th:block>
 </head>
@@ -16,6 +17,14 @@
         <h2>지역정보 등록</h2>
     </div>
     <form action="/location/write" method="post" th:action th:object="${writeRequest}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="location-select">지역 선택</label>
+            <div class="field-error-div">
+                <select name="locationCode" th:errorclass="field-error" id="location-select">
+                </select>
+                <div class="field-error" th:errors="*{locationCode}">지역 목록 오류</div>
+            </div>
+        </div>
         <div class="form-group">
             <label for="title">제목</label>
             <div class="field-error-div">
@@ -94,7 +103,7 @@
 </div>
 
 <!-- Bootstrap JavaScript dependencies (optional) -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/location/write.js"></script>

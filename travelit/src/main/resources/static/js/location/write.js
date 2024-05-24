@@ -1,3 +1,32 @@
+$(document).ready(function() {
+    // 페이지 로드 후 Ajax 요청 보내기
+    $.ajax({
+        type: 'GET',
+        url: '/location/locationCodes',
+        success: function(data) {
+            console.log(data);
+            var locationCodes = data;
+            var $select = $('#location-select');
+            $select.empty(); // 기존 옵션 제거
+
+            // 응답으로 받은 locationCodes로 새로운 옵션 추가
+            $.each(locationCodes, function(index, location) {
+                var option = $('<option></option>')
+                    .attr('value', location.locationCode)
+                    .text(location.locationName);
+                $select.append(option);
+            });
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseJSON.message);
+            $('#location-select').addClass('field-error');
+            const errorDiv = $('<div class="field-error"></div>').text(xhr.responseJSON.message);
+            $('#location-select').after(errorDiv);
+        }
+    });
+});
+
+
 const fileContainer = document.getElementById('file-container');
 const addFileBtn = document.getElementById('add-file-btn');
 const maxFiles = 5;
