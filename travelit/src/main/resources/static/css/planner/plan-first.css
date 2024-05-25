@@ -4,7 +4,7 @@ html, body {
 }
 .plan-first-display{
     width: 100vw;
-    height: 83vh;
+    height: 740px;
     display: block;
 }
 
@@ -46,14 +46,14 @@ html, body {
 .plan-title{
     margin-left:10px;
     width:40%;
-    font-size: 22px;
+    font-size: 18px;
 }
 #title{
     width: 100%;
     height: 30px;
     border: none;
     outline: none;
-    font-size: 22px;
+    font-size: 18px;
 }
 
 .plan-state{
@@ -61,11 +61,20 @@ html, body {
     height: 560px;
 }
 
+.plan-state-title{
+    font-size:26px;
+    height:40px;
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
+}
+
 .card-list {
     margin: 0px 0px 20px 0px;
     display: block;
     flex-wrap: wrap;
     gap: 10px;
+    height: 520px;
 }
 
 .card {
@@ -98,7 +107,7 @@ html, body {
     color: white;
     width: 95%;
     height:52px;
-    margin: 10px;
+    margin: 10px 10px 20px 10px;
     padding:10px;
     font-size: 22px;
 }
