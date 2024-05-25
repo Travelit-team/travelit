@@ -1,10 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <th:block th:replace="fragments/header :: head"></th:block>
+    <th:block th:replace="fragments/footer :: head"></th:block>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Planner Second Step</title>
+    <link rel="stylesheet" type="text/css" href="/css/planner/plan-second.css">
 </head>
 <body>
+    <header th:replace="fragments/header :: header"></header>
+    <form action="/planner/plan-make" method="post" class="submit">
+        <div class="plan-second-display">
+            <div class="plan-second-wrap">
+                <div class="left">
 
+                </div>
+                <div class="center">
+
+                </div>
+                <div class="right">
+                <input type="submit" id="save-shed" name="save-shed" value="일정 저장"/>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>

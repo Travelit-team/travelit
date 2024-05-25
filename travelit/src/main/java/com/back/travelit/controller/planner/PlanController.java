@@ -32,4 +32,10 @@ public class PlanController {
         planService.setMakePlan(createReqDTO);
         return "/planner/plan-second";
     }
+
+    //스케줄 생성
+    @PostMapping("/plan-shed")
+    public String makeShed(){
+        return "/planner/plan-detail";
+    }
 }
