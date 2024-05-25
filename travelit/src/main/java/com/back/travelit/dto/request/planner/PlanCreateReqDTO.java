@@ -1,16 +1,15 @@
 package com.back.travelit.dto.request.planner;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
-@Builder
-//@AllArgsConstructor
 public class PlanCreateReqDTO {
 
+    @Setter
     private int planId;
 
     private String title;
@@ -21,4 +20,13 @@ public class PlanCreateReqDTO {
     private LocalDate  endDate;
 
     private String state;
+
+    public PlanCreateReqDTO(String title, LocalDate startDate, LocalDate endDate, String state) {
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.state = state;
+    }
+
+
 }

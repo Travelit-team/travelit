@@ -16,9 +16,9 @@ public class PlanService {
     private final PlanMapper planMapper;
 
     public void setMakePlan(PlanCreateReqDTO createReqDTO){
+
         planMapper.insertMakePlan(createReqDTO);
-        int planId = createReqDTO.getPlanId();
-        setMakePlanLoc(createReqDTO.getState(),planId);
+        setMakePlanLoc(createReqDTO.getState(), createReqDTO.getPlanId());
     }
     private void setMakePlanLoc(String str, int planId){
         List<String> strArr = Arrays.stream(str.split(",")).collect(Collectors.toList());
