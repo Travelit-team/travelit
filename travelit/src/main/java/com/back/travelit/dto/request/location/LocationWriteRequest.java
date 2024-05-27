@@ -24,10 +24,10 @@ public class LocationWriteRequest {
     @NotBlank(message = "지역은 필수입니다.")
     private String locationCode;
     
-    @Size(min = 2, max = 15, message = "제목의 길이는 2~15 글자 사이어야 합니다.")
+    @Size(min = 2, max = 25, message = "제목의 길이는 2~25 글자 사이어야 합니다.")
     private String title;
 
-    @Size(min = 2, max = 15, message = "부제목의 길이는 2~15 글자 사이어야 합니다.")
+    @Size(min = 2, max = 30, message = "부제목의 길이는 2~30 글자 사이어야 합니다.")
     private String subTitle;
 
     @Size(min = 1, max =10000, message = "상세 내용은 1 ~ 10000 글자 사이어야 합니다.")

@@ -1,7 +1,10 @@
 package com.back.travelit.controller.location;
 
+import com.back.travelit.dto.request.location.SearchRequest;
+import com.back.travelit.dto.response.common.PagingResponse;
 import com.back.travelit.dto.response.location.LocationCode;
 import com.back.travelit.dto.request.location.LocationWriteRequest;
+import com.back.travelit.dto.response.location.LocationPostResponse;
 import com.back.travelit.service.location.LocationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +30,6 @@ public class LocationController {
         return "location/write";
     }
 
-    @GetMapping("/locationCodes")
-    @ResponseBody
-    public List<LocationCode> locationCodes() {
-        return locationService.getLocationCodes();
-    }
-
     @PostMapping("/write")
     public String write(@Valid @ModelAttribute("writeRequest") LocationWriteRequest writeRequest, BindingResult bindingResult) {
         log.info("request {}", writeRequest);
@@ -46,6 +43,27 @@ public class LocationController {
         locationService.saveLocationInfo(writeRequest);
 
         return "redirect:/location/detail/1";
+    }
+
+    @GetMapping("/locationCodes")
+    @ResponseBody
+    public List<LocationCode> locationCodes() {
+        return locationService.getLocationCodes();
+    }
+
+    @GetMapping("/list")
+    public String locationList(@ModelAttribute("params") SearchRequest searchRequest, Model model) {
+        searchRequest.setDefaultSort();
+        searchRequest.setDefaultLocationCode();
+        PagingResponse<LocationPostResponse> locationPosts = locationService.findAllLocationPosts(searchRequest);
+        List<LocationPostResponse> locationRanking = locationService.findLocationRanking(searchRequest.getLocationCode());
+        String currentLocationName= locationService.findLocationName(searchRequest.getLocationCode());
+
+        model.addAttribute("locationPosts", locationPosts);
+        model.addAttribute("locationRanking", locationRanking);
+        model.addAttribute("currentLocationName", currentLocationName);
+
+        return "location/list";
     }
 
     @GetMapping("/detail/{location_id}")
