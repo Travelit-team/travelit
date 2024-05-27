@@ -39,4 +39,78 @@
             (#{locationInfoId}, #{imgUrl})
         </foreach>
     </insert>
+
+    <select id="findAll" parameterType="com.back.travelit.domain.common.PagingSearchCriteria" resultType="com.back.travelit.dto.response.location.LocationPostResponse">
+        SELECT L.LOCATION_INFO_ID AS locationInfoId, L.TITLE, L.ADDRESS, I.IMG_SRC AS profileUrl, L.VIEWS, L.CREATE_AT AS createAt  <include refid="dynamicColumns"/>
+        FROM LOCATION_INFO L
+                 INNER JOIN (
+            SELECT I1.LOCATION_INFO_ID, I1.IMG_SRC
+            from LOCATION_INFO_IMG I1
+                     INNER JOIN (
+                SELECT LOCATION_INFO_ID, MIN(LOCATION_IMG_ID) AS LOCATION_IMG_ID
+                FROM LOCATION_INFO_IMG
+                GROUP BY LOCATION_INFO_ID
+            ) I2 ON I1.LOCATION_IMG_ID = I2.LOCATION_IMG_ID
+        ) I ON L.LOCATION_INFO_ID = I.LOCATION_INFO_ID
+        <include refid="dynamicInnerJoin"/>
+        WHERE L.LOCATION_CODE = #{searchRequest.locationCode}
+            <include refid="search"/>
+        <include refid="sort"/>
+        LIMIT #{pagination.limitStart}, #{searchRequest.recordSize}
+    </select>
+
+    <select id="count" parameterType="com.back.travelit.dto.request.location.SearchRequest" resultType="int">
+        SELECT COUNT(*)
+        FROM LOCATION_INFO L
+        WHERE L.LOCATION_CODE = #{locationCode}
+        <if test="keyword != null and keyword != ''">
+            AND (L.TITLE LIKE CONCAT('%', #{keyword}, '%')
+            OR L.DESCRIPTION LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+    </select>
+
+    <sql id="dynamicColumns">
+        <choose>
+            <when test="searchRequest.sort == 'likes'">
+                , IFNULL(IL.LIKE_COUNT, 0)  AS likeCount
+            </when>
+        </choose>
+    </sql>
+
+    <sql id="dynamicInnerJoin">
+        <choose>
+            <when test="searchRequest.sort == 'likes'">
+                LEFT OUTER JOIN (
+                SELECT LOCATION_INFO_ID, COUNT(*) AS LIKE_COUNT
+                FROM LOCATION_INFO_LIKES
+                GROUP BY LOCATION_INFO_ID
+                ) IL ON L.LOCATION_INFO_ID = IL.LOCATION_INFO_ID
+            </when>
+        </choose>
+    </sql>
+
+    <sql id="sort">
+        <choose>
+            <when test="searchRequest.sort == 'latest'">
+                ORDER BY L.CREATE_AT DESC
+            </when>
+            <when test="searchRequest.sort == 'views'">
+                ORDER BY L.VIEWS DESC
+            </when>
+            <when test="searchRequest.sort == 'likes'">
+                ORDER BY likeCount DESC
+            </when>
+            <otherwise>
+                ORDER BY L.CREATE_AT DESC
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="search">
+        <!-- 검색 키워드가 있을 때 -->
+        <if test="searchRequest.keyword != null and searchRequest.keyword != ''">
+            AND (L.TITLE LIKE CONCAT('%', #{searchRequest.keyword}, '%')
+            OR L.DESCRIPTION LIKE CONCAT('%', #{searchRequest.keyword}, '%'))
+        </if>
+    </sql>
 </mapper>
