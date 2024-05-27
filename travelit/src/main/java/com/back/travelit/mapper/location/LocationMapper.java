@@ -19,4 +19,6 @@ public interface LocationMapper {
     void insertLocationImgs(@Param("locationInfoId") int locationInfoId, @Param("imgUrls") List<String> imgUrls);
     List<LocationPostResponse> findAll(PagingSearchCriteria pageCriteria);
     int count(SearchRequest params);
+    List<LocationPostResponse> findRanking(@Param("locationCode") String locationCode, @Param("count") int count);
+    String getLocationName(String locationCode);
 }

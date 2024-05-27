@@ -56,8 +56,12 @@ public class LocationController {
         searchRequest.setDefaultSort();
         searchRequest.setDefaultLocationCode();
         PagingResponse<LocationPostResponse> locationPosts = locationService.findAllLocationPosts(searchRequest);
+        List<LocationPostResponse> locationRanking = locationService.findLocationRanking(searchRequest.getLocationCode());
+        String currentLocationName= locationService.findLocationName(searchRequest.getLocationCode());
 
         model.addAttribute("locationPosts", locationPosts);
+        model.addAttribute("locationRanking", locationRanking);
+        model.addAttribute("currentLocationName", currentLocationName);
 
         return "location/list";
     }

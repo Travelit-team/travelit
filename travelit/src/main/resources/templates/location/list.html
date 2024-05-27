@@ -57,44 +57,32 @@
             <div class="label">제주도</div>
         </div>
     </div>
-    <div class="rank-container">
-        <div class="rank-card">
-            <div class="ranking">1</div>
-            <img src="/images/location/list/banner/Jeju-do1.jpeg" alt="Post Image">
-            <div class="rank-content">
-                <h2>넘나 좋아요 찾아요!!</h2>
-                <p>새내기를 바라보며 설레임...</p>
-                <div class="author">
-                    <span>이호** (ligh******)</span>
-                </div>
-            </div>
-        </div>
-        <div class="rank-card">
-            <div class="ranking">2</div>
-            <img src="/images/location/list/banner/Jeju-do1.jpeg" alt="Post Image">
-            <div class="rank-content">
-                <h2>입던 옷들이 안맞아 장만했어요 ㅋㅋ</h2>
-                <p>감도 시원하고 부드럽고...</p>
-                <div class="author">
-                    <span>카카오** (cici******)</span>
-                </div>
-            </div>
-        </div>
-        <div class="rank-card">
-            <div class="ranking">3</div>
-            <img src="/images/location/list/banner/Jeju-do1.jpeg" alt="Post Image">
-            <div class="rank-content">
-                <h2>3벌구매중 이옷이 가장 맘에들어요~</h2>
-                <p>소재가 단단해지고 시원해요...</p>
-                <div class="author">
-                    <span>카카오** (alon******)</span>
+</div>
+<div class="rank-background">
+    <div class="rank-outer-div">
+        <div th:text="|${currentLocationName} 여행지 TOP 3|" class="title">여행지 TOP 3</div>
+        <div class="rank-container">
+            <div th:each="rankLocation,num : ${locationRanking}" th:class="'rank-card ' + (${num.count == 1} ? 'center' : '')">
+                <div  th:text="${num.count}" class="ranking"></div>
+                <img th:src="@{${rankLocation.profileUrl}}" th:alt="${rankLocation.title}">
+                <div class="rank-content">
+                    <h2 th:text="${rankLocation.title}">제목</h2>
+                    <div class="rank-content-inner">
+                        <p th:text="${rankLocation.address}">지역 설명 </p>
+                        <div class="rank-content-inner">
+                            <i class="fas fa-heart" style="color: red; margin-right: 10px"></i>
+                            <p th:text="${rankLocation.likeCount}"></p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div>
     <div id="location-contents-container">
         <div class="search-container">
-            <div class="title">OO 추천 여행지</div>
+            <div th:text="|${currentLocationName} 추천 여행지|" class="title">OO 추천 여행지</div>
             <div class="search-filter-div">
                 <div class="search-bar">
                     <input id="keyword" th:value="${params.keyword}" type="text" placeholder="무엇을 찾으시나요?" />

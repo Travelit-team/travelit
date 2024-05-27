@@ -25,6 +25,8 @@ import java.util.List;
 @Transactional
 public class LocationService {
 
+    //랭킹 게시물 수
+    private static final int RANK_COUNT = 3;
     private final LocationMapper locationMapper;
     private final S3Service s3Service;
 
@@ -62,6 +64,17 @@ public class LocationService {
         PagingSearchCriteria pagingSearchCriteria = new PagingSearchCriteria(searchRequest, new Pagination(count, searchRequest));
 
         return new PagingResponse<>(locationMapper.findAll(pagingSearchCriteria), pagingSearchCriteria.getPagination());
+    }
+
+    @Transactional(readOnly = true)
+    public List<LocationPostResponse> findLocationRanking(String locationCode) {
+        List<LocationPostResponse> locationRanking = locationMapper.findRanking(locationCode, RANK_COUNT);
+        return locationRanking;
+    }
+
+    @Transactional(readOnly = true)
+    public String findLocationName(String locationCode) {
+        return locationMapper.getLocationName(locationCode);
     }
 
     private void locationImageUpload(LocationWriteRequest writeRequest, int locationInfoId) {
