@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragments/header :: head"></th:block>
     <th:block th:replace="fragments/footer :: head"></th:block>
@@ -26,17 +26,17 @@
                             <div class="card" data-id="L001">서울</div>
                             <div class="card" data-id="L002">경기도</div>
                             <div class="card" data-id="L003">인천</div>
-                            <div class="card" data-id="L004">강원도</div>
-                            <div class="card" data-id="L005">전라도</div>
-                            <div class="card" data-id="L006">충청도</div>
+                            <div class="card" data-id="L004">충청도</div>
+                            <div class="card" data-id="L005">강원도</div>
+                            <div class="card" data-id="L006">전라도</div>
                             <div class="card" data-id="L007">경상도</div>
                             <div class="card" data-id="L008">제주도</div>
                         </div>
                     </div>
                     <input type="hidden" id="startDate" name="startDate"/>
                     <input type="hidden" id="endDate" name="endDate"/>
-                    <input type="hidden" id="state" name="state"/>
-                    <input type="submit" id="make-plan" name="make-plan" value="일정만들기"/>
+                    <input type="hidden" id="stateCode" name="stateCode"/>
+                    <input type="submit" id="make-plan" value="일정만들기"/>
                 </div>
             </div>
         </div>
