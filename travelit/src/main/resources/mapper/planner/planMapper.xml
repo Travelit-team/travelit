@@ -5,7 +5,7 @@
 
 <mapper namespace="com.back.travelit.mapper.planner.PlanMapper">
 
-    <insert id="insertMakePlan" parameterType="com.back.travelit.dto.request.planner.PlanCreateReqDTO">
+    <insert id="insertMakePlan" parameterType="com.back.travelit.dto.request.planner.PlanCreateReq">
         insert into PLAN(USER_ID, PL_STR_DATE, PL_END_DATE, PL_TITLE)
             values (1,#{startDate},#{endDate},#{title})
         <selectKey keyProperty="planId" resultType="int" order="AFTER">
@@ -20,5 +20,15 @@
                (#{planId},#{state})
         </foreach>
     </insert>
+
+    <select id="selectAllLocCode" parameterType="java.util.List" resultType="com.back.travelit.dto.response.planner.PlanLocCodeRes">
+        select LOCATION_CODE AS stateCode, LOCATION_NAME AS stateName
+        from LOCATION_CODE
+        where LOCATION_CODE in (
+        <foreach item="locCode" collection="locCodes" separator=",">
+            #{locCode}
+        </foreach>
+        )
+    </select>
 
 </mapper>
