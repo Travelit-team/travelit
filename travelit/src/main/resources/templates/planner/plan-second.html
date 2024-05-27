@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragments/header :: head"></th:block>
     <th:block th:replace="fragments/footer :: head"></th:block>
@@ -9,22 +9,45 @@
 </head>
 <body>
     <header th:replace="fragments/header :: header"></header>
-    <form action="/planner/plan-make" method="post" class="submit">
+    <form action="/planner/make-sched" method="post" class="submit">
         <div class="plan-second-display">
             <div class="plan-second-wrap">
-                <div class="left">
-
+                <div class="top-nav">
+                    <div class="plan-title">제목<span th:text="${createReqDTO.getTitle()}"></span></div>
+                    <div class="startDate">시작일<span th:text="${createReqDTO.getStartDate()}"></div>
+                    <div class="endDate">종료일<span th:text="${createReqDTO.getEndDate()}"></div>
+                    <div class="plan-state">여행지<span th:each="state : ${states}">
+                    <span th:text="${state.getStateName()}"</div>
+                    <input type="hidden" value="${createReqDTO.getPlanId()}"/>
                 </div>
-                <div class="center">
-
+                <div class="shed-wrap">
+                    <div id="calendar" class="left">
+                            <input type="hidden" name="planDay" value="1"/>
+                            <div id="schedule"></div>
+                            <input type="hidden" name="locId" value="12"/>
+                            <!--<div th:each="locInfo : ${locInfomations}"></span>
+                            <div th:text="${locInfo.getLocTitle}"></div>
+                            <div th:text="${locInfo.getLocAddress}"></div>
+                            <div th:text="${locInfo.getLocId}"></div>-->
+                    </div>
+                    <div class="center">
+                        <!--<div th:each = "usermark : ${usermarks}"/>
+                        <div th:text = "${usermark.getLocTitle}"/>
+                        <div th:text = "${usermark.getLocAdderss}"/>-->
+                    </div>
+                    <div class="right">
+                        <div class="button">
+                        <input type="submit" id="make-sched" value="일정 저장"/>
+                        </div>
+                    </div>
                 </div>
-                <div class="right">
-                <input type="submit" id="save-shed" name="save-shed" value="일정 저장"/>
-                </div>
+                    <input type="hidden" value=""/>
             </div>
         </div>
 
     </form>
     <footer th:replace="fragments/footer :: footer"></footer>
+    <script src="/js/planner/plan-second-day.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 </body>
 </html>

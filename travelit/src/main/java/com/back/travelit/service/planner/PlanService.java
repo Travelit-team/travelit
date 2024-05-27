@@ -35,7 +35,6 @@ public class PlanService {
         List<String> strArr = Arrays.stream(str.split(",")).collect(Collectors.toList());
         return planMapper.selectAllLocCode(strArr);
     };
-    public void setMakeShed (ScheduleCreateReq shedCreateReqDTO){
-
+    public void setMakeSched (ScheduleCreateReq schedCreateReqDTO){
     }
 }

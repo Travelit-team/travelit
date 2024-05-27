@@ -31,4 +31,14 @@
         )
     </select>
 
+    <insert id="insertMakeSched" parameterType="com.back.travelit.dto.request.planner.ScheduleCreateReq">
+        insert into SCHED (PLAN_ID, PL_DAY)
+        values (#{planId},#{planDay})
+        <selectKey keyProperty="schedId" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+
 </mapper>
