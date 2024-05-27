@@ -1,7 +1,10 @@
 html, body {
     margin: 0px;
     padding: 0px;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
 }
+
 .plan-second-display{
     width: 100vw;
     height: 740px;
