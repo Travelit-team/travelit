@@ -1,9 +1,11 @@
 package com.back.travelit.controller.location;
 
+import com.back.travelit.dto.request.location.LocationSubInfo;
 import com.back.travelit.dto.request.location.SearchRequest;
 import com.back.travelit.dto.response.common.PagingResponse;
 import com.back.travelit.dto.response.location.LocationCode;
 import com.back.travelit.dto.request.location.LocationWriteRequest;
+import com.back.travelit.dto.response.location.LocationDetailResponse;
 import com.back.travelit.dto.response.location.LocationPostResponse;
 import com.back.travelit.service.location.LocationService;
 import jakarta.validation.Valid;
@@ -66,8 +68,16 @@ public class LocationController {
         return "location/list";
     }
 
-    @GetMapping("/detail/{location_id}")
-    public String detail(@PathVariable Long location_id, Model model) {
+    @GetMapping("/detail/{locationInfoId}")
+    public String detail(@PathVariable("locationInfoId") int locationInfoId, Model model) {
+        LocationDetailResponse detailLocation = locationService.findDetailLocation(locationInfoId);
+        List<String> detailLocationImgUrls = locationService.findDetailLocationImgUrls(locationInfoId);
+        List<LocationSubInfo> subLocationInfo = locationService.findSubLocationInfo(locationInfoId);
+
+        model.addAttribute("detailLocation", detailLocation);
+        model.addAttribute("detailLocationImgUrls", detailLocationImgUrls);
+        model.addAttribute("subLocationInfo", subLocationInfo);
+
         return "location/detail";
     }
 
