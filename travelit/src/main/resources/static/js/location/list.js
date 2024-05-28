@@ -111,6 +111,11 @@ function moveToLocation(locationCode) {
     window.location.href = url;
 }
 
+function moveToLocationDetail(locationInfoId) {
+    const url = '/location/detail/' + locationInfoId;
+    window.location.href = url;
+}
+
 // 버튼 텍스트 변경
 const sortButton = $('.dropbtn');
 if (params.sort === 'latest') {

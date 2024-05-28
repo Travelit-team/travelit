@@ -5,10 +5,12 @@ import com.back.travelit.common.exception.ErrorCode;
 import com.back.travelit.common.s3.S3Service;
 import com.back.travelit.domain.common.PagingSearchCriteria;
 import com.back.travelit.dto.request.common.Pagination;
+import com.back.travelit.dto.request.location.LocationSubInfo;
 import com.back.travelit.dto.request.location.SearchRequest;
 import com.back.travelit.dto.response.common.PagingResponse;
 import com.back.travelit.dto.response.location.LocationCode;
 import com.back.travelit.dto.request.location.LocationWriteRequest;
+import com.back.travelit.dto.response.location.LocationDetailResponse;
 import com.back.travelit.dto.response.location.LocationPostResponse;
 import com.back.travelit.mapper.location.LocationMapper;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +77,23 @@ public class LocationService {
     @Transactional(readOnly = true)
     public String findLocationName(String locationCode) {
         return locationMapper.getLocationName(locationCode);
+    }
+
+    @Transactional
+    public LocationDetailResponse findDetailLocation(int locationInfoId) {
+        LocationDetailResponse detailLocation = locationMapper.getDetailLocation(locationInfoId);
+        locationMapper.increaseViews(locationInfoId);
+        return detailLocation;
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> findDetailLocationImgUrls(int locationInfoId) {
+        return locationMapper.getLocationImgUrls(locationInfoId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<LocationSubInfo> findSubLocationInfo(int locationInfoId) {
+        return locationMapper.getLocationSubInfos(locationInfoId);
     }
 
     private void locationImageUpload(LocationWriteRequest writeRequest, int locationInfoId) {

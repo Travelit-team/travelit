@@ -84,6 +84,7 @@ body {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     width: 350px;
     position: relative;
+    cursor: pointer;
 }
 .rank-card img {
     width: 100%;
