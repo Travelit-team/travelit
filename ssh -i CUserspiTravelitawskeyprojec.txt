@@ -1,1 +1,0 @@
-ssh -i C:\Users\pi\Travelit\aws\key\project-ec2-key.pem -L 13306:project-mysql.ct2gi0i86gvs.ap-northeast-2.rds.amazonaws.com:3306 ec2-user@15.164.112.92
