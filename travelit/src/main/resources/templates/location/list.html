@@ -62,7 +62,7 @@
     <div class="rank-outer-div">
         <div th:text="|${currentLocationName} 여행지 TOP 3|" class="title">여행지 TOP 3</div>
         <div class="rank-container">
-            <div th:each="rankLocation,num : ${locationRanking}" th:class="'rank-card ' + (${num.count == 1} ? 'center' : '')">
+            <div th:each="rankLocation,num : ${locationRanking}" th:onclick="moveToLocationDetail([[${rankLocation.locationInfoId}]])" th:class="'rank-card ' + (${num.count == 1} ? 'center' : '')">
                 <div  th:text="${num.count}" class="ranking"></div>
                 <img th:src="@{${rankLocation.profileUrl}}" th:alt="${rankLocation.title}">
                 <div class="rank-content">
@@ -101,7 +101,7 @@
             </div>
         </div>
         <div class="container">
-            <div th:each="location : ${locationPosts.list}" class="card">
+            <div th:each="location : ${locationPosts.list}" class="card" th:onclick="moveToLocationDetail([[${location.locationInfoId}]])">
                 <img th:src="@{${location.profileUrl}}" th:alt="${location.title}">
                 <div class="card-content">
                     <h3 th:text="${location.title}"></h3>
