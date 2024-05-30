@@ -17,25 +17,28 @@
                     <div class="startDate">시작일<span th:text="${createReqDTO.getStartDate()}"></div>
                     <div class="endDate">종료일<span th:text="${createReqDTO.getEndDate()}"></div>
                     <div class="plan-state">여행지<span th:each="state : ${states}">
-                    <span th:text="${state.getStateName()}"</div>
+                    <span th:text="${state.getLocName()}"</div>
                     <input type="hidden" value="${createReqDTO.getPlanId()}"/>
                 </div>
                 <div class="shed-wrap">
                     <div id="calendar" class="left">
-                            <input type="hidden" name="planDay" value="1"/>
-                            <div id="schedule"></div>
-                            <input type="hidden" name="locId" value="12"/>
-                            <!--<div th:each="locInfo : ${locInfomations}"></span>
-                            <div th:text="${locInfo.getLocTitle}"></div>
-                            <div th:text="${locInfo.getLocAddress}"></div>
-                            <div th:text="${locInfo.getLocId}"></div>-->
+                        <ul id="sortable">
+                            <li class="ui-state-default">Item 1</li>
+                            <li class="ui-state-default">Item 2</li>
+                            <li class="ui-state-default">Item 3</li>
+                            <li class="ui-state-default">Item 4</li>
+                            <li class="ui-state-default">Item 5</li>
+                        </ul>
                     </div>
                     <div class="center">
-                        <!--<div th:each = "usermark : ${usermarks}"/>
-                        <div th:text = "${usermark.getLocTitle}"/>
-                        <div th:text = "${usermark.getLocAdderss}"/>-->
+                        <ul>
+                            <li id="favDraggable" class="ui-state-highlight">Drag me down</li>
+                        </ul>
                     </div>
                     <div class="right">
+                        <ul>
+                            <li id="draggable" class="ui-state-highlight">Drag me down</li>
+                        </ul>
                         <div class="button">
                         <input type="submit" id="make-sched" value="일정 저장"/>
                         </div>
@@ -49,5 +52,7 @@
     <footer th:replace="fragments/footer :: footer"></footer>
     <script src="/js/planner/plan-second-day.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 </body>
 </html>
