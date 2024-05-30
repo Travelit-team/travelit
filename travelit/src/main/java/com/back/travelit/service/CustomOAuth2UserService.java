@@ -3,6 +3,8 @@ package com.back.travelit.service;
 import com.back.travelit.dto.*;
 import com.back.travelit.entity.UserEntity;
 import com.back.travelit.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CustomOAuth2UserService.class);
 
     private final UserRepository userRepository;
 
@@ -22,25 +26,25 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         try {
             OAuth2User oAuth2User = super.loadUser(userRequest);
-            System.out.println("oAuth2User: " + oAuth2User);
-            System.out.println("User attributes: " + oAuth2User.getAttributes());
+            logger.info("oAuth2User: {}", oAuth2User);
+            logger.info("User attributes: {}", oAuth2User.getAttributes());
 
             String registrationId = userRequest.getClientRegistration().getRegistrationId();
-            System.out.println("Registration ID: " + registrationId);
+            logger.info("Registration ID: {}", registrationId);
 
             OAuth2Response oAuth2Response;
             if (registrationId.equals("kakao")) {
                 oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
             } else {
-                System.out.println("Unsupported registrationId: " + registrationId);
+                logger.warn("Unsupported registrationId: {}", registrationId);
                 return null;
             }
 
             String username = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
-            System.out.println("Generated username: " + username);
+            logger.info("Generated username: {}", username);
 
             UserEntity existData = userRepository.findByLoginID(username);
-            System.out.println("Existing data: " + existData);
+            logger.info("Existing data: {}", existData);
 
             if (existData == null) {
                 UserEntity userEntity = new UserEntity();
@@ -51,7 +55,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 userEntity.setNickname(oAuth2Response.getName());
                 userEntity.setRole("USER");
                 userRepository.save(userEntity);
-                System.out.println("New user saved: " + userEntity);
+                logger.info("New user saved: {}", userEntity);
 
                 UserDTO userDTO = new UserDTO();
                 userDTO.setUSER_ID(userEntity.getUserID());
@@ -66,7 +70,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 existData.setEmail(oAuth2Response.getEmail());
                 existData.setNickname(oAuth2Response.getName());
                 // userRepository.save(existData);  // Uncomment if necessary
-                System.out.println("Updated existing user: " + existData);
+                logger.info("Updated existing user: {}", existData);
 
                 UserDTO userDTO = new UserDTO();
                 userDTO.setUSER_ID(existData.getUserID());
@@ -79,7 +83,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 return new CustomOAuth2User(userDTO);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error loading user: {}", e.getMessage(), e);
             throw new OAuth2AuthenticationException("Error loading user: " + e.getMessage());
         }
     }
