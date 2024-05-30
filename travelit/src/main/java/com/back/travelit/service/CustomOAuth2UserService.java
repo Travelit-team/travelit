@@ -20,60 +20,67 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User oAuth2User = super.loadUser(userRequest);
-        System.out.println(oAuth2User);
+        try {
+            OAuth2User oAuth2User = super.loadUser(userRequest);
+            System.out.println("oAuth2User: " + oAuth2User);
+            System.out.println("User attributes: " + oAuth2User.getAttributes());
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        OAuth2Response oAuth2Response = null;
-        /*if (registrationId.equals("naver")) {
-            oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
-        } *//*else if (registrationId.equals("google")) {
-            oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
-        }*/ /*else {
-            return null;
-        }*/
+            String registrationId = userRequest.getClientRegistration().getRegistrationId();
+            System.out.println("Registration ID: " + registrationId);
 
-        if(registrationId.equals("kakao")){
-            oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
-        }
-        else return null;
+            OAuth2Response oAuth2Response;
+            if (registrationId.equals("kakao")) {
+                oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
+            } else {
+                System.out.println("Unsupported registrationId: " + registrationId);
+                return null;
+            }
 
-        String username = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
-        UserEntity existData = userRepository.findByLoginID(username);
+            String username = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
+            System.out.println("Generated username: " + username);
 
-        if (existData == null) {
-            UserEntity userEntity = new UserEntity();
-            userEntity.setUserID(null);  // Assuming the ID is auto-generated
-            userEntity.setLoginID(username);
-            userEntity.setLoginPWD(null);  // Password handling would depend on your authentication system
-            userEntity.setEmail(oAuth2Response.getEmail());
-            userEntity.setNickname(oAuth2Response.getName());
-            userEntity.setRole("USER");
-            userRepository.save(userEntity);
+            UserEntity existData = userRepository.findByLoginID(username);
+            System.out.println("Existing data: " + existData);
 
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUSER_ID(userEntity.getUserID());
-            userDTO.setLOGIN_ID(username);
-            userDTO.setLOGIN_PWD(null);
-            userDTO.setEMAIL(oAuth2Response.getEmail());
-            userDTO.setNICKNAME(oAuth2Response.getName());
-            userDTO.setROLE("USER");
-            return new CustomOAuth2User(userDTO);
+            if (existData == null) {
+                UserEntity userEntity = new UserEntity();
+                userEntity.setUserID(null);  // Assuming the ID is auto-generated
+                userEntity.setLoginID(username);
+                userEntity.setLoginPWD(null);  // Password handling would depend on your authentication system
+                userEntity.setEmail(oAuth2Response.getEmail());
+                userEntity.setNickname(oAuth2Response.getName());
+                userEntity.setRole("USER");
+                userRepository.save(userEntity);
+                System.out.println("New user saved: " + userEntity);
 
-        } else {
-            existData.setEmail(oAuth2Response.getEmail());
-            existData.setNickname(oAuth2Response.getName());
-            //userRepository.save(existData);
+                UserDTO userDTO = new UserDTO();
+                userDTO.setUSER_ID(userEntity.getUserID());
+                userDTO.setLOGIN_ID(username);
+                userDTO.setLOGIN_PWD(null);
+                userDTO.setEMAIL(oAuth2Response.getEmail());
+                userDTO.setNICKNAME(oAuth2Response.getName());
+                userDTO.setROLE("USER");
+                return new CustomOAuth2User(userDTO);
 
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUSER_ID(existData.getUserID());
-            userDTO.setLOGIN_ID(existData.getLoginID());
-            userDTO.setLOGIN_PWD(existData.getLoginPWD());
-            userDTO.setEMAIL(oAuth2Response.getEmail());
-            userDTO.setNICKNAME(oAuth2Response.getName());
-            userDTO.setROLE(existData.getRole());
+            } else {
+                existData.setEmail(oAuth2Response.getEmail());
+                existData.setNickname(oAuth2Response.getName());
+                // userRepository.save(existData);  // Uncomment if necessary
+                System.out.println("Updated existing user: " + existData);
 
-            return new CustomOAuth2User(userDTO);
+                UserDTO userDTO = new UserDTO();
+                userDTO.setUSER_ID(existData.getUserID());
+                userDTO.setLOGIN_ID(existData.getLoginID());
+                userDTO.setLOGIN_PWD(existData.getLoginPWD());
+                userDTO.setEMAIL(oAuth2Response.getEmail());
+                userDTO.setNICKNAME(oAuth2Response.getName());
+                userDTO.setROLE(existData.getRole());
+
+                return new CustomOAuth2User(userDTO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new OAuth2AuthenticationException("Error loading user: " + e.getMessage());
         }
     }
 }
