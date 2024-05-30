@@ -4,13 +4,29 @@
     <th:block th:replace="fragments/header :: head"></th:block>
     <th:block th:replace="fragments/footer :: head"></th:block>
     <meta charset="UTF-8">
-    <title>Planner 상세보기</title>
+    <title>Planner</title>
     <link rel="stylesheet" type="text/css" href="/css/planner/plan-second.css">
 </head>
 <body>
-<header th:replace="fragments/header :: header"></header>
-
-<footer th:replace="fragments/footer :: footer"></footer>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <header th:replace="fragments/header :: header"></header>
+    <form action="#" method="post" class="submit">
+        <div class="plan-second-display">
+            <div class="plan-second-wrap">
+                <div class="top-nav">
+                    <div class="plan-title">제목<span th:text="${createReqDTO.getTitle()}"></span></div>
+                    <div class="startDate">시작일<span th:text="${createReqDTO.getStartDate()}"></div>
+                    <div class="endDate">종료일<span th:text="${createReqDTO.getEndDate()}"></div>
+                    <div class="plan-state">여행지<span th:each="state : ${states}">
+                    <span th:text="${state.getLocName()}"</div>
+                </div>
+                    <input type="hidden" value=""/>
+            </div>
+        </div>
+    </form>
+    <footer th:replace="fragments/footer :: footer"></footer>
+    <script src="/js/planner/plan-second-day.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 </body>
 </html>

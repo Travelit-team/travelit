@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-public class ScheduleCreateReq {
+public class ScheduleReplaceReq {
 
     @Setter
     private int schedId;
@@ -17,7 +17,7 @@ public class ScheduleCreateReq {
     //장소 아이디
     private int locInfoId;
 
-    public ScheduleCreateReq(int planId, int planDay, int locInfoId) {
+    public ScheduleReplaceReq(int planId, int planDay, int locInfoId) {
         this.planId = planId;
         this.planDay = planDay;
         this.locInfoId = locInfoId;

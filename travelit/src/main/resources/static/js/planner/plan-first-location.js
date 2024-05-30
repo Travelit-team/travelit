@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // 선택된 데이터 ID 목록 출력
-            $("#stateCode").val(Array.from(selectedCardIds).join(','));
+            $("#locCode").val(Array.from(selectedCardIds).join(','));
             console.log(`Selected card IDs: ${Array.from(selectedCardIds).join(',')}`);
         });
     });
