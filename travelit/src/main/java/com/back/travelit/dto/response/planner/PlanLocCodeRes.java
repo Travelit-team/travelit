@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlanLocCodeRes {
 
-    private String stateCode;
+    private String locCode;
 
-    private String stateName;
+    private String locName;
 
 
 }
