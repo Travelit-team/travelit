@@ -32,7 +32,7 @@ public class LocationService {
     private final LocationMapper locationMapper;
     private final S3Service s3Service;
 
-    public void saveLocationInfo(LocationWriteRequest writeRequest) {
+    public int saveLocationInfo(LocationWriteRequest writeRequest) {
         locationMapper.insertLocation(1, writeRequest);
         int locationInfoId = writeRequest.getLocationInfoId();
         log.info("insert after pk value : {}", locationInfoId);
@@ -40,6 +40,8 @@ public class LocationService {
         isExistsSubInfo(writeRequest, locationInfoId);
 
         locationImageUpload(writeRequest, locationInfoId);
+
+        return locationInfoId;
     }
 
     @Transactional(readOnly = true)
