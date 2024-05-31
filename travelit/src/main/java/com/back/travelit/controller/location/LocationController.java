@@ -1,12 +1,14 @@
 package com.back.travelit.controller.location;
 
 import com.back.travelit.dto.request.location.LocationSubInfo;
+import com.back.travelit.dto.request.location.LocationWriteRequest;
 import com.back.travelit.dto.request.location.SearchRequest;
 import com.back.travelit.dto.response.common.PagingResponse;
 import com.back.travelit.dto.response.location.LocationCode;
-import com.back.travelit.dto.request.location.LocationWriteRequest;
 import com.back.travelit.dto.response.location.LocationDetailResponse;
 import com.back.travelit.dto.response.location.LocationPostResponse;
+import com.back.travelit.security.LoginUser;
+import com.back.travelit.security.oauth.UserDTO;
 import com.back.travelit.service.location.LocationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,9 +44,9 @@ public class LocationController {
             return "/location/write";
         }
 
-        locationService.saveLocationInfo(writeRequest);
+        int locationInfoId = locationService.saveLocationInfo(writeRequest);
 
-        return "redirect:/location/detail/1";
+        return "redirect:/location/detail/{locationInfoId}";
     }
 
     @GetMapping("/locationCodes")
@@ -54,7 +56,7 @@ public class LocationController {
     }
 
     @GetMapping("/list")
-    public String locationList(@ModelAttribute("params") SearchRequest searchRequest, Model model) {
+    public String locationList(@LoginUser UserDTO userDTO, @ModelAttribute("params") SearchRequest searchRequest, Model model) {
         searchRequest.setDefaultSort();
         searchRequest.setDefaultLocationCode();
         PagingResponse<LocationPostResponse> locationPosts = locationService.findAllLocationPosts(searchRequest);

@@ -2,6 +2,7 @@ package com.back.travelit.common.exception;
 
 public enum ErrorCode {
 
+    USER_NOT_FOUND(400, "U_001", "유저를 찾을 수 없습니다."),
     LOCATION_CODES_NOT_EXISTS(500, "L_001", "지역코드를 찾을 수 없습니다");
 
     private final String code;
