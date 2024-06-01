@@ -40,3 +40,32 @@ const marker = new kakao.maps.Marker({
 });
 
 marker.setMap(map);
+
+const LIKE_URL = "/location/like/" + detailLocation.locationInfoId;
+
+$('#bookmark_icon').on('click', function() {
+    const bookmarkIcon = $(this);
+
+    $.ajax({
+        url: LIKE_URL,
+        type: 'POST',
+        success: function(response) {
+            console.log(response);
+            if (response.liked) {
+                bookmarkIcon.removeClass('bookmark').addClass('bookmark-checked');
+                alert(response.message);
+                $('#bookmark-count').text(detailLocation.bookmarkCount + 1);
+                detailLocation.bookmarkCount += 1;
+            } else {
+                bookmarkIcon.removeClass('bookmark-checked').addClass('bookmark');
+                alert(response.message);
+                $('#bookmark-count').text(detailLocation.bookmarkCount - 1);
+                detailLocation.bookmarkCount -= 1;
+            }
+        },
+        error: function(xhr, status, error) {
+            alert('로그인이 필요한 서비스입니다.');
+         }
+     }); //like ajax request end
+
+});

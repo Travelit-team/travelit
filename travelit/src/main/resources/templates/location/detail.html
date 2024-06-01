@@ -32,8 +32,8 @@
                 </div>
             </div>
             <div class="stat">
-                <span id="bookmark_icon" class="icon"></span>
-                <span data-th-text="${#numbers.formatInteger(detailLocation.bookmarkCount, 0, 'COMMA')}" class="number">0</span>
+                <span id="bookmark_icon" class="icon" th:classappend="${likeExist} ? 'bookmark-checked' : 'bookmark'"></span>
+                <span id="bookmark-count" data-th-text="${#numbers.formatInteger(detailLocation.bookmarkCount, 0, 'COMMA')}" class="number">0</span>
             </div>
         </div>
     </div>
