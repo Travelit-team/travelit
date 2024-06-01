@@ -5,11 +5,10 @@
     <title>상품 등록</title>
 </head>
 <body>
-    <form id="saveForm" method="POST" autocomplete="off">
+    <form id="saveForm" method="POST" autocomplete="off" enctype="multipart/form-data">
         <!--수정일 때 게시글 전달-->
         <input type="hidden" id="PRO_ID" name="PRO_ID" th:if="${product != null}" th:value="${product.PRO_ID}" />
         <input type="hidden" id="USER_ID" name="USER_ID" value="1" />
-
 
         <div>상품명<input type="text" id="PRO_NAME" name="PRO_NAME" required/></div>
         <div>
@@ -50,7 +49,38 @@
         <div>투어시간<input type="number" id="TOUR_TIME" name="TOUR_TIME" required/></div>
         <div>투어시작일<input type="date" id="TOUR_START" name="TOUR_START" required placeholder="YYYY-MM-DD"/></div>
         <div>투어종료일<input type="date" id="TOUR_END" name="TOUR_END" required placeholder="YYYY-MM-DD"/></div>
+
+        <!-- 대표 이미지 파일 -->
+        <div class="file_list">
+            <div>
+                <div class="file_input">
+                    <input type="text" readonly />
+                    <label> 상품 소개 이미지
+                        <input type="file" name="files" onchange="selectFile(this);"/>
+                    </label>
+                </div>
+                <button type="button" onclick="removeFile(this);" class="btns del_btn"><span>삭제</span></button>
+                <button type="button" onclick="addFile();" class="btns fn_add_btn"><span>파일 추가</span></button>
+            </div>
+
+        </div>
+
+        <!-- 상세 이미지 파일 -->
+        <div class="defile_list">
+            <div>
+                <div class="defile_input">
+                    <input type="text" readonly />
+                    <label> 상품 상세 이미지
+                        <input type="file" name="defiles" onchange="selectDeFile(this);"/>
+                    </label>
+                </div>
+                <button type="button" onclick="removeDeFile(this);" class="btns dedel_btn"><span>삭제</span></button>
+                <button type="button" onclick="addDeFile();" class="btns fn_add_btn"><span>파일 추가</span></button>
+            </div>
+
+        </div>
     </form>
+
     <button type="submit" onclick="saveProduct();" id="saveBtn">저장</button>
     <a th:href="@{/product/productList}">뒤로</a>
 </body>
@@ -60,12 +90,10 @@
     // 게시글 저장(수정)
     function saveProduct() {
         const form = document.getElementById('saveForm');
+        const fields = [form.PRO_NAME, form.PRO_CATEGORY_TOTAL, form.PRO_CATEGORY_DETAIL, form.PRO_CONTENT, form.PRO_RES, form.PRO_PRICE, form.PRO_PER_MAX, form.PRO_LOCATION, form.TOUR_DATE, form.TOUR_TIME, form.TOUR_START, form.TOUR_END];
+        fields.push(document.querySelector('input[type="file"]'));
 
-        const fields = [form.PRO_NAME, form.PRO_CATEGORY_TOTAL, form.PRO_CATEGORY_DETAIL, form.PRO_CONTENT,
-                        form.PRO_RES, form.PRO_PRICE, form.PRO_PER_MAX, form.PRO_LOCATION,
-                        form.TOUR_DATE, form.TOUR_TIME, form.TOUR_START, form.TOUR_END];
-        const fieldNames = ['상품명', '카테고리1', '카테고리2', '상품 설명', '예약 가능 여부', '가격',
-                            '구매 가능 수량', '지역', '소요일', '소요시간', '투어시작일', '투어종료일'];
+        const fieldNames = ['상품명', '카테고리1', '카테고리2', '상품 설명', '예약 가능 여부', '가격', '구매 가능 수량', '지역', '소요일', '소요시간', '투어시작일', '투어종료일', '상품 이미지'];
 
         for (let i = 0, len = fields.length; i < len; i++) {
             isValid(fields[i], fieldNames[i]);
@@ -81,6 +109,14 @@
     }
 
     function isValid(target, fieldName, focusTarget) {
+        if (target.type === 'file') {
+            if (!target.value) {
+                alert('상품 이미지를 첨부해 주세요.');
+                throw new Error(`"${fieldName}" is required...`)
+            }
+            return true;
+        }
+
         if (target.value.trim()) {
             return true;
         }
@@ -88,12 +124,120 @@
         const particle = (hasCoda(fieldName)) ? '을' : '를';
         const elementType = (target.type === 'text' || target.type === 'password' || target.type === 'search' || target.type === 'textarea') ? '입력' : '선택';
         alert(`${fieldName + particle} ${elementType}해 주세요.`);
-
         target.value = '';
         (!focusTarget ? target : focusTarget).focus();
-        throw new Error(`"${target.PRO_ID}" is required...`)
+        throw new Error(`"${fieldName}" is required...`)
     }
+    /*]]>*/
     /*]]>*/
 </script>
 
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    //대표 이미지
+    //파일 선택
+    function selectFile(element) {
+
+        const file = element.files[0];
+        const filename = element.closest('.file_input').firstElementChild;
+
+        //파일 선택 취소
+        if ( !file ) {
+            filename.value = '';
+            return false;
+        }
+
+        //파일 크기
+        const fileSize = Math.floor(file.size / 1024 / 1024);
+        if (fileSize > 50) {
+            alert('50MB 이하의 파일로 업로드해 주세요.');
+            filename.value = '';
+            element.value = '';
+            return false;
+        }
+
+        //파일명 지정
+        filename.value = file.name;
+    }
+
+    //파일 추가
+    function addFile() {
+        const fileDiv = document.createElement('div');
+        fileDiv.innerHTML =`
+            <div class="file_input">
+                <input type="text" readonly />
+                <label> 상품 소개 이미지
+                    <input type="file" name="files" onchange="selectFile(this);" />
+                </label>
+            </div>
+            <button type="button" onclick="removeFile(this);" class="btns del_btn"><span>삭제</span></button>
+        `;
+        document.querySelector('.file_list').appendChild(fileDiv);
+    }
+
+    // 파일 삭제
+    function removeFile(element) {
+        const fileAddBtn = element.nextElementSibling;
+        if (fileAddBtn) {
+            const inputs = element.previousElementSibling.querySelectorAll('input');
+            inputs.forEach(input => input.value = '')
+            return false;
+        }
+        element.parentElement.remove();
+    }
+
+    //상세 이미지
+    //파일 선택
+    function selectDeFile(element) {
+
+        const file = element.files[0];
+        const filename = element.closest('.defile_input').firstElementChild;
+
+        //파일 선택 취소
+        if ( !file ) {
+            filename.value = '';
+            return false;
+        }
+
+        //파일 크기
+        const fileSize = Math.floor(file.size / 1024 / 1024);
+        if (fileSize > 50) {
+            alert('50MB 이하의 파일로 업로드해 주세요.');
+            filename.value = '';
+            element.value = '';
+            return false;
+        }
+
+        //파일명 지정
+        filename.value = file.name;
+    }
+
+    //파일 추가
+    function addDeFile() {
+        const fileDiv = document.createElement('div');
+        fileDiv.innerHTML =`
+            <div class="defile_input">
+                <input type="text" readonly />
+                <label> 상품 상세 이미지
+                    <input type="file" name="defiles" onchange="selectDeFile(this);" />
+                </label>
+            </div>
+            <button type="button" onclick="removeDeFile(this);" class="btns dedel_btn"><span>삭제</span></button>
+        `;
+        document.querySelector('.defile_list').appendChild(fileDiv);
+    }
+
+    // 파일 삭제
+    function removeDeFile(element) {
+        const fileAddBtn = element.nextElementSibling;
+        if (fileAddBtn) {
+            const inputs = element.previousElementSibling.querySelectorAll('input');
+            inputs.forEach(input => input.value = '')
+            return false;
+        }
+        element.parentElement.remove();
+    }
+    /*]]>*/
+</script>
 </html>

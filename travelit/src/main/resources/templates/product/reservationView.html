@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>예약 정보</title>
+</head>
+<body>
+    예약번호:<div th:text="${response.RES_ID}"></div>
+    유저아이디:<div th:text="${response.USER_ID}"></div>
+    상품명:<div th:text="${response.PRO_NAME}"></div>
+    예약자명:<div th:text="${response.RES_NAME}"></div>
+    연락처:<div th:text="${response.RES_PHONE}"></div>
+    결제일:<div th:text="${response.RES_DATE}"></div>
+    예약일:<div th:text="${response.USE_DATE}"></div>
+    예약상태:<div th:text="${response.RES_STATE}"></div>
+    수량:<div th:text="${response.RES_NUM}"></div>
+    요청사항:<div th:text="${response.RES_REQUEST}"></div>
+    결제수단:<div th:text="${response.PAYMENT}"></div>
+    가격:<div th:text="${response.PRO_PRICE}"></div>
+    <button type="button" onclick="DeleteReservation();"><span>예약 취소</span></button>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //예약 취소
+    function DeleteReservation() {
+        const RES_ID = [[${response.RES_ID}]];
+        const PRO_NAME = [[${response.PRO_NAME}]];
+        if ( !confirm(RES_ID + '번 ' + PRO_NAME + ' 예약을 삭제할까요?') ) {
+            return false;
+        }
+        let inputHtml = '';
+        new URLSearchParams(location.search).forEach((value, key) => {
+            inputHtml += `<input type="hidden" name="${key}" value="${value}" />`;
+        })
+        const formHtml = `
+                        <form id="deleteForm" action="/product/reservationDelete" method="post">
+                                ${inputHtml}
+                        </form>
+                `;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        document.getElementById('deleteForm').submit();
+    }
+    /*]]>*/
+</script>
+</html>

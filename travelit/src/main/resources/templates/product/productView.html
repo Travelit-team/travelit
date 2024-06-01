@@ -1,55 +1,413 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
         <meta charset="UTF-8">
         <title>Title</title>
+        <link th:href="@{/css/product/productView.css}" rel="stylesheet">
+        <link th:href="@{/css/product/content.css}" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+        <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+        <th:block th:replace="fragments/header :: head"></th:block>
+        <th:block th:replace="fragments/footer :: head"></th:block>
 </head>
 <body>
-        <h2>상품 상세 페이지</h2>
-        <div th:text="${product.PRO_ID}">상품ID</div>
-        <div th:text="${product.USER_ID}">관리자ID</div>
-        <div th:text="${product.PRO_NAME}">상품명</div>
-        <div th:text="${product.PRO_CATEGORY_TOTAL}">카테고리 01</div>
-        <div th:text="${product.PRO_CATEGORY_DETAIL}">카테고리 02</div>
-        <div th:text="${product.PRO_CONTENT}">내용</div>
-        <div th:text="${product.PRO_RES}">예약가능여부</div>
-        <div th:text="${product.PRO_PRICE}">가격</div>
-        <div th:text="${product.PRO_PER_MAX}">최대 인원수</div>
-        <div th:text="${#dates.format(product.PRO_DATE, 'yyyy-MM-dd')}">생성일</div>
-        <div th:text="${product.PRO_LOCATION}">위치</div>
-        <div th:text="${product.PRO_VIEW}">조회수</div>
-        <div th:text="${product.TOUR_DATE}">투어일</div>
-        <div th:text="${product.TOUR_TIME}">투어 시간</div>
-        <div th:text="${#dates.format(product.TOUR_START, 'yyyy-MM-dd')}">투어 시작일</div>
-        <div th:text="${#dates.format(product.TOUR_END, 'yyyy-MM-dd')}">투어 종료일</div>
-        <br/>
-        <a th:href="@{/product/productWrite(PRO_ID=${product.PRO_ID})}">수정</a>
-        <button type="button" onclick="deleteProduct();">삭제</button>
-        <a th:href="@{/poproductst/productList}">뒤로</a>
+        <header th:replace="fragments/header :: header"></header>
+
+        <!-- 상품 상세 이미지 -->
+        <div class="slider">
+                <div th:each="url : ${productImageUrl}">
+                        <img th:src="${url}" th:alt="${url}" class="img_size"/>
+                </div>
+        </div>
+        <!-- 상품 간략 정보 및 구매 버튼 -->
+        <div class="productInfo-container">
+                <!-- 상품 정보 -->
+                <div class="productInfo">
+                        <div class="productInfo-top">
+                                <div class="productInfo-top-category">
+                                        <span th:text="${product.PRO_CATEGORY_TOTAL}" class="productInfo-top-category-total">카테고리</span>
+                                        <span class="productInfo-top-category-symbol"> > </span>
+                                        <span th:text="${product.PRO_CATEGORY_DETAIL}"  class="productInfo-top-category-detail">상세 카테고리</span>
+                                </div>
+                                <div th:text="${product.PRO_NAME}" class="product-title">상품명</div>
+                                <!--<div th:text="${product.PRO_VIEW}">조회수</div>-->
+                                <div th:text="'판매기간 ' + ${#dates.format(product.TOUR_START, 'MM-dd')} + ' ~ ' + ${#dates.format(product.TOUR_END, 'MM-dd')}" class="productInfo-top-period"></div>
+                                <div th:text="'지역 ' + ${product.PRO_LOCATION}" class="productInfo-top-location">위치</div>
+                        </div>
+                        <div class="productInfo-bottom">
+                                <div>
+                                        <div class="productInfo-bottom-title">상품정보</div>
+                                        <div class="productInfo-bottom-item">
+                                                <div th:if="${product.PRO_RES == 'Y'}">구매 가능</div>
+                                                <div th:unless="${product.PRO_RES == 'Y'}">구매 불가능</div>
+                                        </div>
+                                        <div class="productInfo-bottom-item">취소 가능</div>
+                                        <div class="productInfo-bottom-item">최소 1명</div>
+                                        <div th:text="'단체  ' + ${product.PRO_PER_MAX} + '명'" class="productInfo-bottom-item">최대 인원수</div>
+                                        <div th:text="'소요일  ' + ${product.TOUR_DATE} + '일'" class="productInfo-bottom-item">소요 투어일</div>
+                                        <div th:text="'소요시간  ' + ${product.TOUR_TIME} + '시간'" class="productInfo-bottom-item">소요 투어시간</div>
+                                </div>
+                        </div>
+                </div>
+                <!-- 상품 구매 및 약관 -->
+                <div class="productPurchase">
+                        <!-- 구매 약관 -->
+                        <div  class="productPurchase-top">
+                                <ul class="productPurchase-top-content">
+                                        <li>이용 기준 24시간 전까지 통보 시 요금 100% 전액 환불 가능합니다.</li>
+                                        <li>이용 기준 24시간 이내 통보 시 취소/환불 불가합니다.</li>
+                                </ul>
+                        </div>
+                        <!-- 가격 -->
+                        <div class="productPurchase-mid">
+                                <div th:text="'￦ ' + ${#numbers.formatDecimal(product.PRO_PRICE, 0, 'COMMA', 0, 'POINT')}" class="productPurchase-mid-price">가격</div>
+                        </div>
+                        <!-- 구매 페이지 이동 버튼 -->
+                        <div class="productPurchase-bottom">
+                                <a th:href="@{/product/reservationWrite(PRO_ID=${product.PRO_ID})}" class="purchase-bnt">
+                                        <div class="purchase-bnt-text">구 매 하 기</div>
+                                </a>
+                        </div>
+                </div>
+        </div>
+        <hr class="horizon"/>
+        <!-- 상품 상세 설명 -->
+        <div class="productDetail-container">
+                <div class="productDetail-title">매력 포인트</div>
+                <div class="productDetail-content" th:text="${product.PRO_CONTENT}"></div>
+        </div>
+
+        <!-- 상품 상세 이미지 -->
+        <div class="productDetailImage-container">
+                <div th:each="url : ${productDeImageUrl}">
+                        <img th:src="${url}" th:alt="${url}" class="productDetailImage_size"/>
+                </div>
+        </div>
+
+        <div class=" ">
+                <button type="button" onclick="productWritePage();">수정</button>
+                <button type="button" onclick="DeleteProduct();">삭제</button>
+                <button type="button" onclick="productListPage();">뒤로</button><br/>
+        </div>
+
+        <!-- 리뷰 작성 -->
+        <div class="review-container">
+                <div class="review-title">이용후기</div>
+                <div class="review-input-container">
+                        <br/>
+                        <div>
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1">1점</label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2">2점</label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3">3점</label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4">4점</label>
+                                <input type="radio" id="star5" name="rating" value="5">
+                                <label for="star5">5점</label>
+                        </div>
+                        <br/>
+                        <textarea id="content" name="content" onkeyup="countingLength(this);" cols="50" rows="4" placeholder="리뷰를 입력해 주세요." class="review-input"></textarea>
+                        <span><button type="button" onclick="saveReview();" class="review-submit-bnt">등 록</button></span>
+                        <i id="counter" class="review-length">0/300자</i>
+                </div>
+        </div>
+
+        <!-- 리뷰 렌더링 영역 -->
+        <div class="review-content-container">
+                <div class="review_list"></div>
+        </div>
+
+        <!-- 댓글 수정 -->
+        <div id="reviewUpdatePopup" class="popLayer">
+                <h3>댓글 수정</h3>
+                <div class="pop_container">
+                        <div scope="row">내용<span>필수 입력</span></div>
+                        <textarea id="modalContent" name="modalContent" cols="90" rows="10" placeholder="수정할 내용을 입력해 주세요." style="width:70%;"></textarea><br/>
+                        <button type="button" id="commentUpdateBtn">수정</button>
+                        <button type="button" onclick="closeUpdatePopup();">취소</button>
+                </div>
+                <button type="button" class="btn_close" onclick="closeUpdatePopup();"><span><i></i></span></button>
+        </div>
+        <footer th:replace="fragments/footer :: footer"></footer>
+
 </body>
 
 <script th:inline="javascript">
         /*<![CDATA[*/
 
-        // 게시글 삭제
-        function deleteProduct() {
-                const PRO_ID = [[ ${product.PRO_ID} ]];
-                const PRO_NAME = [[ ${product.PRO_NAME} ]];
-
+        //상품 영역
+        //상품 삭제
+        function DeleteProduct() {
+                const PRO_ID = [[${product.PRO_ID}]];
+                const PRO_NAME = [[${product.PRO_NAME}]];
                 if ( !confirm(PRO_ID + '번 ' + PRO_NAME + ' 상품을 삭제할까요?') ) {
                         return false;
                 }
-
+                let inputHtml = '';
+                new URLSearchParams(location.search).forEach((value, key) => {
+                        inputHtml += `<input type="hidden" name="${key}" value="${value}" />`;
+                })
                 const formHtml = `
-                    <form id="deleteForm" action="/product/delete" method="post">
-                        <input type="hidden" id="PRO_" name="PRO_ID" value="${PRO_ID}" />
-                    </form>
+                        <form id="deleteForm" action="/product/delete" method="post">
+                                ${inputHtml}
+                        </form>
                 `;
                 const doc = new DOMParser().parseFromString(formHtml, 'text/html');
                 const form = doc.body.firstChild;
                 document.body.append(form);
                 document.getElementById('deleteForm').submit();
         }
+        //페이지 이동 버튼
+        function productWritePage() {
+                location.href = '/product/productWrite' + location.search;
+        }
+        function productListPage() {
+                const queryString = new URLSearchParams(location.search);
+                <!-- 상품 번호가 필요하지 않아 삭제 -->
+                queryString.delete('pro_ID');
+                location.href = '/product/productList' + '?' + queryString.toString();
+        }
+        /*]]>*/
+</script>
+
+<script>
+        //슬라이더
+
+                $('.slider').bxSlider({
+                        auto: true,
+                        speed: 500,
+                        pause: 5000,
+                        mode: 'fade',
+                        pager: false,
+                        adaptiveHeight: true
+                });
+
+                function showControls() {
+                        $('.bx-prev, .bx-next').css('display', 'inline-block');
+                }
+
+                function hideControls() {
+                        $('.bx-prev, .bx-next').css('display', 'none');
+                }
+
+                $('.bx-viewport').hover(showControls, hideControls);
+                $('.bx-prev, .bx-next').hover(showControls, showControls);
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+        /*<![CDATA[*/
+
+        // 리뷰 영역
+        window.onload = () => {
+                findAllReview();
+        }
+
+        // 리뷰 길이
+        function countingLength(content) {
+                if (content.value.length > 300) {
+                        alert('리뷰를 300자 이하로 입력해 주세요.');
+                        content.value = content.value.substring(0, 300);
+                        content.focus();
+                }
+                document.getElementById('counter').innerText = content.value.length + '/300자';
+        }
+
+        function isValid(target, fieldName, focusTarget) {
+                if (target.value.trim()) {
+                        return true;
+                }
+
+                const particle = (hasCoda(fieldName)) ? '을' : '를';
+                const elementType = (target.type === 'text' || target.type === 'password' || target.type === 'search' || target.type === 'textarea') ? '입력' : '선택';
+                alert(`${fieldName + particle} ${elementType}해 주세요.`);
+
+                target.value = '';
+                (!focusTarget ? target : focusTarget).focus();
+                throw new Error(`"${target.PRO_ID}" is required...`)
+        }
+
+        //리뷰 목록 조회
+        function findAllReview() {
+                const PRO_ID = [[${product.PRO_ID}]];
+                $.ajax({
+                        url : `/product/${PRO_ID}/reviews`,
+                        type : 'get',
+                        dataType : 'json',
+                        async : false,
+                        success : function (response) {
+                                if ( !response.length ) {
+                                        document.querySelector('.review_list').innerHTML = '<div><p>등록된 댓글이 없습니다.</p></div>';
+                                        $('.slider').bxSlider(); //아작스와의 충돌로 인해 아작스 응답 후 실행
+                                        return false;
+                                }
+                //HTML
+                let reviewHtml = '';
+
+                //리뷰 HTML 추가
+                response.forEach(row => {
+
+                        const reviewDate = new Date(row.pro_REVIEW_DATE);
+                        //날짜를 "YYYY-MM-DD"변환
+                        const formattedDate = reviewDate.toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+                        //시간을 "HH:MM:SS" 변환
+                        const formattedTime = reviewDate.toLocaleString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+                        reviewHtml += `
+                <div class="review-box">
+                        <div class="review-card">
+                                <div class="review-card-member">${row.nickname}</div><!-- 강조 -->
+                                <div class="review-card-content-containaer">
+                                    <div class="review-card-content">${row.pro_REVIEW_CONTENT}</div>
+                                </div>
+                                <div class="review-card-date">${formattedDate} ${formattedTime} &nbsp;&nbsp;&nbsp;&nbsp; 평점 &nbsp; ${row.pro_SCORE}점</div>
+                        </div>
+                        <button type="button" onclick="openUpdatePopup(${row.pro_REVIEW_ID} );" class="review-btn"><span>수정</span></button>
+                        <button type="button" onclick="deleteReview(${row.pro_REVIEW_ID});" class="review-btn"><span>삭제</span></button>
+                </div>
+                `;
+                })
+
+                        //class가 "reviewHtml"인 요소 HTML을 렌더링
+                        document.querySelector('.review_list').innerHTML = reviewHtml;},
+                        error : function (request, status, error) {
+                                console.log(error)
+                                console.log("목록 안들어와유")
+                        }
+                })
+        }
+
+        // 리뷰 작성
+        function saveReview() {
+                const content = document.getElementById('content');
+                const PRO_ID = [[${product.PRO_ID}]]; //PRO_ID 값
+
+                const rating = document.querySelector('input[name="rating"]:checked');
+                const ratingValue = rating ? parseInt(rating.value) : null;
+                const params = {
+                        proId: PRO_ID, //PRO_ID를 요청 포함
+                        proReviewContent: content.value,
+                        proScore: ratingValue
+                };
+                console.log(params);
+
+                if (confirm('리뷰를 등록하시겠습니까?')) {
+                        $.ajax({
+                                url: `/product/${PRO_ID}/reviews`,
+                                type: 'post',
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                data: JSON.stringify(params),
+                                async: false,
+                                success: function (response) {
+                                        console.log(response);
+                                        alert('저장되었습니다.');
+                                        content.value = '';
+                                        document.getElementById('counter').innerText = '0/300자';
+                                        findAllReview();
+                                },
+                                error: function (request, status, error) {
+                                        console.log(error);
+                                }
+                        });
+                }
+        }
+
+
+        //리뷰 수정 팝업 열기
+        function openUpdatePopup(pro_REVIEW_ID) {
+                const PRO_ID = [[${product.PRO_ID}]];
+                console.log(pro_REVIEW_ID)
+                $.ajax({
+                        url : `/product/${PRO_ID}/reviews/${pro_REVIEW_ID}`,
+                        type : 'get',
+                        dataType : 'json',
+                        async : false,
+                        success : function (response) {
+                                document.getElementById('commentUpdateBtn').setAttribute('onclick', `updateReview(${pro_REVIEW_ID})`);
+                                layerPop('reviewUpdatePopup');
+                        },
+                        error : function (request, status, error) {
+                                console.log(error)
+                        }
+                })
+        }
+
+        //리뷰 수정 팝업 닫기
+        function closeUpdatePopup() {
+                document.querySelectorAll('#modalContent').forEach(element => element.value = '');
+                document.getElementById('commentUpdateBtn').removeAttribute('onclick');
+                layerPopClose('reviewUpdatePopup');
+        }
+        function layerPop(popName){
+                var $layer = $("#"+ popName);
+                $layer.fadeIn(500).css('display', 'inline-block').wrap( '<div class="overlay_t"></div>');
+                $('body').css('overflow','hidden');
+        }
+        function layerPopClose(){
+                $(".popLayer").hide().unwrap( '');
+                $('body').css('overflow','auto');
+                $(".popLayer video").each(function() { this.pause(); this.load(); });
+        }
+
+        //리뷰 수정
+        function updateReview(pro_REVIEW_ID) {
+                if ( !confirm('선택하신 댓글을 수정할까요?') ) {
+                        return false;
+                }
+                const content = document.getElementById('modalContent');
+                isValid(content, '수정할 내용');
+                const PRO_ID = [[${product.PRO_ID}]];
+                const params = {
+                        proReviewId: pro_REVIEW_ID,
+                        postId : PRO_ID,
+                        proReviewContent : content.value,
+                }
+                console.log(params)
+                $.ajax({
+                        url : `/product/${PRO_ID}/reviews/${pro_REVIEW_ID}`,
+                        type : 'patch',
+                        contentType : 'application/json; charset=utf-8',
+                        dataType : 'json',
+                        data : JSON.stringify(params),
+                        async : false,
+                        success : function (response) {
+                                alert('수정되었습니다.');
+                                closeUpdatePopup();
+                                findAllReview();
+                        },
+                        error : function (request, status, error) {
+                                console.log(error)
+                        }
+                })
+        }
+
+        //리뷰 삭제
+        function deleteReview(pro_REVIEW_ID) {
+                if ( !confirm('선택하신 댓글을 삭제할까요?') ) {
+                        return false;
+                }
+                const PRO_ID = [[${product.PRO_ID}]];
+                $.ajax({
+                        url : `/product/${PRO_ID}/reviews/${pro_REVIEW_ID}`,
+                        type : 'delete',
+                        dataType : 'json',
+                        async : false,
+                        success : function (response) {
+                                alert('삭제되었습니다.');
+                                findAllReview();
+                        },
+                        error : function (request, status, error) {
+                                console.log(error)
+                        }
+                })
+        }
+
+        /*]]>*/
 </script>
 
 </html>

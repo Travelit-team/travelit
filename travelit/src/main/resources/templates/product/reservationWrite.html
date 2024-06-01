@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>예약하기</title>
+    <th:block th:replace="fragments/header :: head"></th:block>
+    <th:block th:replace="fragments/footer :: head"></th:block>
+</head>
+<body>
+    <header th:replace="fragments/header :: header"></header>
+
+    <form id="saveForm" method="post" autocomplete="off">
+
+        <div><input type="hidden" id="RES_ID" name="RES_ID" th:if="${reservation != null}" th:value="${reservation.RES_ID}"/></div>
+        <input type="hidden" id="PRO_ID" name="PRO_ID" th:value="${PRO_ID}"/><!-- PRO_ID 값을 받아옴 -->
+
+        <div>예약자명<input type="text" id="RES_NAME" name="RES_NAME" maxlength="50" placeholder="예약자명을 입력해 주세요." /></div>
+        <div>전화번호<input type="text" id="RES_PHONE" name="RES_PHONE" maxlength="15" placeholder="전화번호를 입력해 주세요." /></div>
+        <div>사용일<input type="date" id="USE_DATE" name="USE_DATE" maxlength="20"/></div>
+        <div>수량<input type="number" id="RES_NUM" name="RES_NUM" maxlength="2"/></div>
+        <div>
+            <label for="PAYMENT">결제수단</label>
+            <select id="PAYMENT" name="PAYMENT" required>
+                <option value="카카오페이">카카오페이</option>
+                <option value="무통장 입금">무통장 입금</option>
+            </select>
+        </div>
+        <div>요청사항<br/><textarea id="RES_REQUEST" name="RES_REQUEST" cols="50" rows="10" placeholder="요청사항을 입력해 주세요."></textarea></div>
+    </form>
+
+        <button type="button" id="saveBtn" onclick="saveReservation();">저장</button>
+        <a th:href="@{/product/reservationList}">뒤로</a>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    //예약 입력
+    function saveReservation() {
+        const form = document.getElementById('saveForm');
+        const fields = [form.RES_NAME, form.RES_PHONE, form.USE_DATE, form.RES_NUM, form.PAYMENT, form.RES_REQUEST];
+        const fieldNames = ['예약자명', '전화번호', '사용일', '수량', '결제수단', '요청사항'];
+
+        for (let i = 0, len = fields.length; i < len; i++) {
+            isValid(fields[i], fieldNames[i]);
+        }
+
+        document.getElementById('saveBtn').disabled = true;
+        form.action = [[${reservation == null}]] ? '/product/reservationSave' : '/product/reservationWrite';
+        form.submit();
+    }
+
+    function hasCoda(value) {
+        return ((value.charCodeAt(value.length - 1) - 0xAC00) % 28) > 0;
+    }
+
+    function isValid(target, fieldName, focusTarget) {
+        if (target.value.trim()) {
+            return true;
+        }
+
+        const particle = (hasCoda(fieldName)) ? '을' : '를';
+        const elementType = (target.type === 'text' || target.type === 'password' || target.type === 'search' || target.type === 'textarea') ? '입력' : '선택';
+        alert(`${fieldName + particle} ${elementType}해 주세요.`);
+        target.value = '';
+        (!focusTarget ? target : focusTarget).focus();
+        throw new Error(`"${fieldName}" is required...`)
+    }
+
+    /*]]>*/
+</script>
+
+</html>

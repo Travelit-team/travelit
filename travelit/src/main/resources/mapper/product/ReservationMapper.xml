@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.back.travelit.mapper.product.ReservationMapper">
+
+    <!-- 예약정보 조회 -->
+    <select id="findAllRes" resultType="com.back.travelit.dto.response.product.ReservationResponse">
+        SELECT R.RES_ID, R.RES_NAME, R.RES_PHONE, R.RES_DATE, R.USE_DATE, R.RES_STATE, R.RES_NUM, R.RES_REQUEST, R.PAYMENT, P.PRO_PRICE, U.USER_ID, P.PRO_NAME
+        FROM RESERVATION R
+        INNER JOIN USER U
+        ON R.USER_ID = U.USER_ID
+        INNER JOIN PRODUCT P
+        ON R.PRO_ID = P.PRO_ID
+        WHERE U.USER_ID = 1
+        ORDER BY R.RES_ID DESC
+    </select>
+
+    <!-- 예약 정보 상세 조회 -->
+    <select id="findByResId" parameterType="int" resultType="com.back.travelit.dto.response.product.ReservationResponse">
+        SELECT R.RES_ID, R.RES_NAME, R.RES_PHONE, R.RES_DATE, R.USE_DATE, R.RES_STATE, R.RES_NUM, R.RES_REQUEST, R.PAYMENT, P.PRO_PRICE, U.USER_ID, P.PRO_NAME
+        FROM RESERVATION R
+        INNER JOIN USER U
+        ON R.USER_ID = U.USER_ID
+        INNER JOIN PRODUCT P
+        ON R.PRO_ID = P.PRO_ID
+        WHERE R.RES_ID = #{value};
+    </select>
+
+    <!-- 예약정보 입력 -->
+    <insert id="saveRes" parameterType="com.back.travelit.dto.request.product.ReservationRequest" useGeneratedKeys="true" keyProperty="RES_ID">
+        INSERT INTO RESERVATION (RES_ID, USER_ID, PRO_ID, RES_NAME, RES_PHONE, RES_DATE, USE_DATE, RES_STATE, RES_NUM, RES_REQUEST, PAYMENT)
+        VALUES (#{RES_ID}, 1, #{PRO_ID}, #{RES_NAME}, #{RES_PHONE}, DEFAULT, #{USE_DATE}, DEFAULT, #{RES_NUM}, #{RES_REQUEST}, #{PAYMENT})
+    </insert>
+
+    <!-- 예약정보 삭제 -->
+    <delete id="deleteByResId" parameterType="int">
+        DELETE
+        FROM RESERVATION
+        WHERE RES_ID = #{RES_ID}
+        AND USER_ID = 1
+    </delete>
+
+</mapper>

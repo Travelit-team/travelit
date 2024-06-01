@@ -1,20 +1,13 @@
-package com.back.travelit.dto.request.product;
+package com.back.travelit.dto.response.product;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class ProductRequest {
+@Builder
+public class ProductViewResponse {
     private int PRO_ID; //상품 아이디
     private int USER_ID; //유저 아이디
     private String PRO_NAME; //상품명
@@ -29,18 +22,12 @@ public class ProductRequest {
     private int PRO_VIEW; //조회수
     private int TOUR_DATE; //이용 일 수
     private int TOUR_TIME; //이용 시간
-    private LocalDate TOUR_START; //시작일
-    private LocalDate TOUR_END; //종료일
-    private List<MultipartFile> files; //첨부파일
-    private List<MultipartFile> deiles;
-
-    public void setPRO_ID(int PRO_ID) {
-        this.PRO_ID = PRO_ID;
-    }
+    private Date TOUR_START; //시작일
+    private Date TOUR_END; //종료일
 
     @Override
     public String toString() {
-        return "ProductRequest{" +
+        return "ProductResponse{" +
                 "PRO_ID=" + PRO_ID +
                 ", USER_ID=" + USER_ID +
                 ", PRO_NAME='" + PRO_NAME + '\'' +
@@ -57,8 +44,6 @@ public class ProductRequest {
                 ", TOUR_TIME=" + TOUR_TIME +
                 ", TOUR_START=" + TOUR_START +
                 ", TOUR_END=" + TOUR_END +
-                ", files=" + files +
                 '}';
     }
-
 }

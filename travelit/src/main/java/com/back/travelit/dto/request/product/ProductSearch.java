@@ -16,7 +16,8 @@ public class ProductSearch{
 
     public ProductSearch() {
         this.page = 1;
-        this.recordSize = 5;
+        this.recordSize = 20;
         this.pageSize = 5;
     }
+
 }

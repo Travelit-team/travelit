@@ -1,12 +1,16 @@
 package com.back.travelit.dto.response.product;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductResponse {
     private int PRO_ID; //상품 아이디
     private int USER_ID; //유저 아이디
@@ -24,4 +28,30 @@ public class ProductResponse {
     private int TOUR_TIME; //이용 시간
     private Date TOUR_START; //시작일
     private Date TOUR_END; //종료일
+    private String PRO_IMG_NAME;
+    private String PRO_DEIMG_NAME;
+
+    @Override
+    public String toString() {
+        return "ProductResponse{" +
+                "PRO_ID=" + PRO_ID +
+                ", USER_ID=" + USER_ID +
+                ", PRO_NAME='" + PRO_NAME + '\'' +
+                ", PRO_CATEGORY_TOTAL='" + PRO_CATEGORY_TOTAL + '\'' +
+                ", PRO_CATEGORY_DETAIL='" + PRO_CATEGORY_DETAIL + '\'' +
+                ", PRO_CONTENT='" + PRO_CONTENT + '\'' +
+                ", PRO_RES='" + PRO_RES + '\'' +
+                ", PRO_PRICE=" + PRO_PRICE +
+                ", PRO_PER_MAX=" + PRO_PER_MAX +
+                ", PRO_DATE=" + PRO_DATE +
+                ", PRO_LOCATION='" + PRO_LOCATION + '\'' +
+                ", PRO_VIEW=" + PRO_VIEW +
+                ", TOUR_DATE=" + TOUR_DATE +
+                ", TOUR_TIME=" + TOUR_TIME +
+                ", TOUR_START=" + TOUR_START +
+                ", TOUR_END=" + TOUR_END +
+                ", PRO_IMG_NAME='" + PRO_IMG_NAME +
+                ", PRO_DEIMG_NAME='" + PRO_DEIMG_NAME +
+                '}';
+    }
 }

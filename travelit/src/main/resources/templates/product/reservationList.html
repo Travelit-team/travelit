@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>예약목록</title>
+    <th:block th:replace="fragments/header :: head"></th:block>
+    <th:block th:replace="fragments/footer :: head"></th:block>
+</head>
+<body>
+    <header th:replace="fragments/header :: header"></header>
+
+    <div th:if="${not #lists.isEmpty(response)}" th:each="row, status : ${response}">
+        예약번호:<div><a href="javascript:void(0);" th:text="${row.RES_ID}" th:onclick="'goViewPage(\'' + ${row.RES_ID} + '\');'"></a></div>
+        상품명:<div><a href="javascript:void(0);" th:text="${row.PRO_NAME}" th:onclick="'goViewPage(\'' + ${row.RES_ID} + '\');'"></a></div>
+        예약자명:<div th:text="${row.RES_NAME}"></div>
+        예약일:<div th:text="${row.USE_DATE}"></div>
+        예약상태:<div th:text="${row.RES_STATE}"></div>
+        수량:<div th:text="${row.RES_NUM}"></div>
+        가격:<div th:text="${row.PRO_PRICE}"></div>
+    </div>
+
+    <div th:unless="${not #lists.isEmpty(response)}">
+        <div class="no_data_msg">검색된 결과가 없습니다.</div>
+    </div>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function goViewPage(RES_ID) {
+    const queryString = (location.search) ? location.search + `&RES_ID=${RES_ID}` : `?RES_ID=${RES_ID}`;
+    location.href = '/product/reservationView' + queryString;
+    }
+    /*]]>*/
+</script>
+
+</html>

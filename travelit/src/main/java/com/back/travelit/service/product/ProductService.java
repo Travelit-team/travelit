@@ -5,6 +5,7 @@ import com.back.travelit.dto.request.product.ProductSearch;
 import com.back.travelit.dto.response.product.ProductPagination;
 import com.back.travelit.dto.response.product.ProductPagingResponse;
 import com.back.travelit.dto.response.product.ProductResponse;
+import com.back.travelit.dto.response.product.ProductViewResponse;
 import com.back.travelit.mapper.product.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class ProductService {
     }
 
     //상품 상세 조회
-    public ProductResponse findProductById(final int PRO_ID) {
+    public ProductViewResponse findProductById(final int PRO_ID) {
         return productMapper.findById(PRO_ID);
     }
 
@@ -61,4 +62,15 @@ public class ProductService {
         return PRO_ID;
     }
 
+    //상품 대표 이미지
+    @Transactional
+    public List<String> productImageUrl(int PRO_ID) {
+        return productMapper.productImageUrl(PRO_ID);
+    }
+
+    //상품 상세 이미지
+    @Transactional
+    public List<String> productDeImageUrl(int PRO_ID) {
+        return productMapper.productDeImageUrl(PRO_ID);
+    }
 }
