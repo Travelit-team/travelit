@@ -4,10 +4,7 @@ import com.back.travelit.domain.common.PagingSearchCriteria;
 import com.back.travelit.dto.request.planner.PlanCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleReplaceReq;
-import com.back.travelit.dto.response.planner.PlanDetail;
-import com.back.travelit.dto.response.planner.PlanLocCodeRes;
-import com.back.travelit.dto.response.planner.PlanLocInfo;
-import com.back.travelit.dto.response.planner.PlannerList;
+import com.back.travelit.dto.response.planner.*;
 import com.back.travelit.mapper.planner.PlanMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -88,20 +85,21 @@ public class PlanService {
     }
 
     //플래너 상세 보기
+    //플래너 기본 정보
     @Transactional(readOnly = true)
-    public List<PlanDetail> getPlanDetail(int planId) {
+    public List <DetailPlan> getPlanDetail(int planId) {
         return planMapper.selectPlanDetail(planId);
+    }
+    //플래너 스케줄
+    @Transactional(readOnly = true)
+    public List <DetailSched>  getSchedDetail(int planId) {
+        return planMapper.selectSchedDetail(planId);
     }
 
     //내 플래너 리스트
     @Transactional(readOnly = true)
-    public List<PlannerList> getMyPlanList(int userId) {
+    public List <PlannerList> getMyPlanList(int userId) {
         return planMapper.selectMyPlan(userId);
-    }
-    //전체 플래너 리스트
-    @Transactional(readOnly = true)
-    public List<PlannerList> getAllPlanList(PagingSearchCriteria pagingSearchCriteria) {
-        return planMapper.selectAllPlan (pagingSearchCriteria);
     }
 
     //페이징처리

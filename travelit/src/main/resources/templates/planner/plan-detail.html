@@ -1,32 +1,85 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
+<html
+  lang="ko"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <head>
     <th:block th:replace="fragments/header :: head"></th:block>
     <th:block th:replace="fragments/footer :: head"></th:block>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Planner</title>
-    <link rel="stylesheet" type="text/css" href="/css/planner/plan-second.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/css/planner/plan-detail.css"
+    />
+  </head>
+  <body>
     <header th:replace="fragments/header :: header"></header>
-    <form action="#" method="post" class="submit">
-        <div class="plan-second-display">
-            <div class="plan-second-wrap">
-                <div class="top-nav">
-                    <div class="plan-title">제목<span th:text="${createReqDTO.getTitle()}"></span></div>
-                    <div class="startDate">시작일<span th:text="${createReqDTO.getStartDate()}"></div>
-                    <div class="endDate">종료일<span th:text="${createReqDTO.getEndDate()}"></div>
-                    <div class="plan-state">여행지<span th:each="state : ${states}">
-                    <span th:text="${state.getLocName()}"</div>
-                </div>
-                    <input type="hidden" value=""/>
+    <div class="container">
+      <header>
+        <div class="header-center">
+          <h1>제목<span th:text="${planInfos.get(0).plTitle}"/></h1>
+          <div class="trip-info">
+            <div class="trip-duration">
+              <img src="calendar_icon.png" alt="일정" />
+              <span th:text="${planInfos.get(0).startDate}"/>
+                <span th:text="${planInfos.get(0).endDate}"/>
             </div>
+            <div class="trip-location">
+              <img src="location_icon.png" alt="지역" />
+              <span>여행지
+                <span th:each="planLoc : ${planInfos.get(0).getPlLocNames()}">
+                  <span th:text="${planLoc.getLocNames().locName}"/>
+                </span>
+              </span>
+            </div>
+          </div>
         </div>
-    </form>
+        <div class="header-right">
+          <div class="date"><span th:text="${planInfos.get(0).createAt}"/></div>
+        </div>
+      </header>
+      <section class="content">
+        <div class="location">
+          <img src="dongmyo.jpg" alt="동묘앞역" />
+          <h2>동묘앞역</h2>
+          <p>
+            지하철 1호선 동묘앞역에는 동묘시장, 황학동 도깨비 시장이 위치하여
+            서울의 레트로 감성을 느낄 수 있다.
+          </p>
+        </div>
+        <div class="location">
+          <img src="dongmyo_market.jpg" alt="동묘 구제시장" />
+          <h2>동묘 구제시장</h2>
+          <p>
+            K-아이돌 홍중 활동하며 국내외 팬들로부터 사랑받는 장소로 서울의
+            대표적인 빈티지 마켓인 동묘 구제시장은 의류, 전자제품, 그리고 중고
+            다양한 물건이 모여있는 장소이다.
+          </p>
+        </div>
+        <div class="location">
+          <img src="naksan_park.jpg" alt="낙산공원" />
+          <h2>낙산공원</h2>
+          <p>
+            서울 주요산들과 군장산이 매우 높고 그저 서울을 지키는 성곽을 따라
+            걸어볼 수 있다.
+          </p>
+        </div>
+        <div class="location">
+          <img src="retro_cafe.jpg" alt="대학로 레트로 카페" />
+          <h2>대학로 레트로 카페</h2>
+          <p>
+            정소과 낭만이 가득한 대학로 동화풍의 분위기로 옛 감성을 느낄수 있는
+            레트로 카페를 방문해보자.
+          </p>
+        </div>
+      </section>
+    </div>
     <footer th:replace="fragments/footer :: footer"></footer>
-    <script src="/js/planner/plan-second-day.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
-</body>
+  </body>
 </html>

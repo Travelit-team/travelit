@@ -5,10 +5,7 @@ import com.back.travelit.dto.request.location.SearchRequest;
 import com.back.travelit.dto.request.planner.PlanCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleReplaceReq;
-import com.back.travelit.dto.response.planner.PlanDetail;
-import com.back.travelit.dto.response.planner.PlanLocCodeRes;
-import com.back.travelit.dto.response.planner.PlanLocInfo;
-import com.back.travelit.dto.response.planner.PlannerList;
+import com.back.travelit.dto.response.planner.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,7 +19,7 @@ public interface PlanMapper {
     void insertMakePlan(PlanCreateReq createReqDTO);
 
     //플래너 생성 (여행지 지역코드 insert)
-    void insertMakePlanLoc(@Param("strArr") List<String> strArr, @Param("planId") int planId);
+    void insertMakePlanLoc(@Param("locCodes") List<String> strArr, @Param("planId") int planId);
 
     //지역 코드로 지역명 값 조회 for 플래너 여행지역
     List<PlanLocCodeRes> selectAllLocCode(@Param("locCodes") List<String> strArr);
@@ -55,13 +52,13 @@ public interface PlanMapper {
     List<PlanLocInfo> selectAllLocInfo(PagingSearchCriteria pagingSearchCriteria);
 
     //플래너 상세 보기
-    List<PlanDetail> selectPlanDetail(@Param("planId") int planId);
+    //플래너 기본 정보
+    List <DetailPlan> selectPlanDetail(@Param("planId") int planId);
+    //플래너 스케줄
+    List <DetailSched>  selectSchedDetail(@Param("planId") int planId);
 
     //내 플래너 리스트
     List<PlannerList> selectMyPlan(@Param("userId") int userId);
-
-    //전체 플래너 리스트
-    List<PlannerList> selectAllPlan(PagingSearchCriteria pagingSearchCriteria);
 
     //페이징처리
     int count(SearchRequest params);

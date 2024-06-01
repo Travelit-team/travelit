@@ -24,14 +24,15 @@ public class PlanCreateReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate  endDate;
 
-    private String LocCode;
+    private String locCode;
 
-    public PlanCreateReq(String title, LocalDate startDate, LocalDate endDate, String LocCode) {
+    public PlanCreateReq(String title, LocalDate startDate, LocalDate endDate, String locCode) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.LocCode = LocCode;
+        this.locCode = locCode;
     }
+
 
 
 }
