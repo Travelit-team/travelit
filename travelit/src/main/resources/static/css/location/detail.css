@@ -64,8 +64,13 @@ a {
     background: url(/images/icon/view_ico.png) 0 0 / 100% 100% no-repeat;
 }
 
-#bookmark_icon {
+.bookmark {
     background: url(/images/icon/bookmark_ico.png) 0 0 / 100% 100% no-repeat;
+    cursor: pointer;
+}
+.bookmark-checked {
+    background: url(/images/icon/bookmark_icon_check.png) 0 0 / 100% 100% no-repeat;
+    cursor: pointer;
 }
 
 .stat {

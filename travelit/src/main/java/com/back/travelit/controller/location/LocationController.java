@@ -6,6 +6,7 @@ import com.back.travelit.dto.request.location.SearchRequest;
 import com.back.travelit.dto.response.common.PagingResponse;
 import com.back.travelit.dto.response.location.LocationCode;
 import com.back.travelit.dto.response.location.LocationDetailResponse;
+import com.back.travelit.dto.response.location.LocationLikeResponse;
 import com.back.travelit.dto.response.location.LocationPostResponse;
 import com.back.travelit.security.LoginUser;
 import com.back.travelit.security.oauth.UserDTO;
@@ -13,6 +14,7 @@ import com.back.travelit.service.location.LocationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -71,16 +73,27 @@ public class LocationController {
     }
 
     @GetMapping("/detail/{locationInfoId}")
-    public String detail(@PathVariable("locationInfoId") int locationInfoId, Model model) {
+    public String detail(@LoginUser UserDTO user, @PathVariable("locationInfoId") int locationInfoId, Model model) {
         LocationDetailResponse detailLocation = locationService.findDetailLocation(locationInfoId);
         List<String> detailLocationImgUrls = locationService.findDetailLocationImgUrls(locationInfoId);
         List<LocationSubInfo> subLocationInfo = locationService.findSubLocationInfo(locationInfoId);
+
+        if(user != null) {
+            model.addAttribute("likeExist", locationService.locationDetailExistsUser(user.getUserId(), locationInfoId));
+        }
 
         model.addAttribute("detailLocation", detailLocation);
         model.addAttribute("detailLocationImgUrls", detailLocationImgUrls);
         model.addAttribute("subLocationInfo", subLocationInfo);
 
         return "location/detail";
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @ResponseBody
+    @PostMapping("/like/{locationInfoId}")
+    public LocationLikeResponse locationInfoLike(@LoginUser UserDTO user, @PathVariable("locationInfoId") int locationInfoId) {
+        return locationService.locationToggleLike(user.getUserId(), locationInfoId);
     }
 
 }

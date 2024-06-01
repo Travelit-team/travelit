@@ -1,5 +1,7 @@
 package com.back.travelit.config;
 
+import com.back.travelit.security.handler.CustomAccessDeniedHandler;
+import com.back.travelit.security.handler.CustomAuthenticationEntryPoint;
 import com.back.travelit.security.jwt.JWTFilter;
 import com.back.travelit.security.jwt.JWTUtil;
 import com.back.travelit.security.oauth.handler.CustomSuccessHandler;
@@ -46,7 +48,9 @@ public class SecurityConfig {
                         .successHandler(customSuccessHandler)
                 )
                 .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(handler -> handler.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
+                .exceptionHandling((handler) -> handler.accessDeniedHandler(new CustomAccessDeniedHandler()));
 
         return http.build();
     }
