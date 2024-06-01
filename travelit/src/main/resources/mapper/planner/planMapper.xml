@@ -18,8 +18,8 @@
     <insert id="insertMakePlanLoc" parameterType="map">
         insert into PLAN_LOC(PLAN_ID, LOCATION_CODE)
             values
-        <foreach item="state" collection="strArr" separator=",">
-               (#{planId},#{state})
+        <foreach item="locCode" collection="locCodes" separator=",">
+               (#{planId},#{locCode})
         </foreach>
     </insert>
 
@@ -55,7 +55,7 @@
     <!-- 일정 삭제 -->
     <delete id="deleteSched" parameterType="int">
         delete from SCHED
-            where PLAN_ID = ${planId};
+            where PLAN_ID = #{planId};
     </delete>
 
     <!-- 새로운 일차 생성 -->
@@ -78,7 +78,7 @@
     <!-- 플래너 삭제 -->
     <delete id="deletePlan" parameterType="int">
         delete from PLAN
-            where PLAN_ID = ${planId};
+            where PLAN_ID = #{planId};
     </delete>
 
 </mapper>
