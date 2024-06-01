@@ -1,19 +1,18 @@
 package com.back.travelit.controller.planner;
 
+import com.back.travelit.domain.common.PagingSearchCriteria;
 import com.back.travelit.dto.request.planner.PlanCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleReplaceReq;
 import com.back.travelit.dto.response.planner.PlanLocCodeRes;
+import com.back.travelit.dto.response.planner.PlanLocInfo;
 import com.back.travelit.service.planner.PlanService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -54,6 +53,14 @@ public class PlanController {
         return "/planner/plan-second";
     }
 
+    //전체 지역 정보 불러오기
+    @GetMapping("/all-location")
+    @ResponseBody
+    public List<PlanLocInfo> allLocation(PagingSearchCriteria pagingSearchCriteria){
+        return planService.getLocInfo(pagingSearchCriteria);
+    }
+
+
     //스케줄 생성
     @PostMapping("/make-sched")
     public String makeShed(@ModelAttribute("schedCreateReq") ScheduleCreateReq schedCreateReq, Model model){
@@ -64,9 +71,17 @@ public class PlanController {
     }
 
     //스케줄 수정
-    @GetMapping("/edit-plan/{plan_id}")
+    @GetMapping("/plan-edit/{plan_id}")
     public String editPlan(@ModelAttribute("scheduleReplaceReq") ScheduleReplaceReq scheduleReplaceReq, Model model){
         planService.setReschedule(scheduleReplaceReq);
-        return "/planner/plan-detail";
+        return "planner/plan-detail";
+    }
+
+    //플래너 상세보기
+    @GetMapping("/plan-detail/{planId}")
+    public String detailPlan(@PathVariable("planId") int planId, Model model){
+        model.addAttribute("planInfos",planService.getPlanDetail(planId));
+        model.addAttribute("schedInfos",planService.getSchedDetail(planId));
+        return "planner/plan-detail";
     }
 }

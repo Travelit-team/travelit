@@ -11,7 +11,7 @@
         from LOCATION_BOOKMARK MARK
             left join LOCATION_INFO LOC
                 on MARK.LOCATION_INFO_ID = LOC.LOCATION_INFO_ID
-        where MARK.USER_ID = ${userId};
+        where MARK.USER_ID = #{userId};
     </select>
 
     <!--전체 지역 정보 조회 -->
@@ -29,15 +29,85 @@
     </select>
 
     <!-- 플래너 상세 보기 -->
-    <select id="selectPlanDetail" parameterType="int" resultMap="PlanDetail">
-        select U.NICKNAME as nickname, P.PL_TITLE as plTitle, P.PL_STR_DATE as startDate,
+    <!-- 플래너 기본 정보 -->
+    <select id="selectPlanDetail" parameterType="int" resultMap="detailPlan">
+        select P.PL_TITLE, P.PL_STR_DATE,
+               P.PL_END_DATE, P.PL_CREATE_AT,
+               C.LOCATION_NAME
+        from PLAN P
+                 left join PLAN_LOC PLOC
+                           on P.PLAN_ID = PLOC.PLAN_ID
+                 left join LOCATION_CODE C
+                           on PLOC.LOCATION_CODE = C.LOCATION_CODE
+        where P.PLAN_ID = #{planId};
+    </select>
+
+    <!-- 플래너 스케줄 -->
+    <select id="selectSchedDetail" parameterType="int" resultMap="detailSched">
+        select S.PL_DAY, LOC.TITLE,
+               LOC.SUB_TITLE, LOC.ADDRESS
+        from SCHED S
+                 left join SCHED_INFO SI
+                           on S.SCHED_ID = SI.SCHED_ID
+                 left join LOCATION_INFO LOC
+                           on SI.LOCATION_INFO_ID = LOC.LOCATION_INFO_ID
+        where S.PLAN_ID = #{planId};
+    </select>
+
+    <!-- resultMap -->
+    <!-- 플래너 상세 보기 -->
+    <!-- 플래너 기본 정보 -->
+    <resultMap id="detailPlan" type="com.back.travelit.dto.response.planner.DetailPlan">
+        <result column="PL_TITLE" property="plTitle"></result>
+        <result column="PL_STR_DATE" property="startDate"></result>
+        <result column="PL_END_DATE" property="endDate"></result>
+        <result column="PL_CREATE_AT" property="createAt"></result>
+        <collection property="plLocNames" ofType="com.back.travelit.dto.response.planner.DetailPlanLoc">
+            <collection property="locNames" ofType="com.back.travelit.dto.response.planner.DetailLocationCode">
+                <result column="LOCATION_NAME" property="locName"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <!-- 플래너 스케줄 -->
+    <resultMap id="detailSched" type="com.back.travelit.dto.response.planner.DetailSched">
+        <result column="PL_DAY" property="plDay"/>
+        <collection property="schedInfos" ofType="com.back.travelit.dto.response.planner.DetailSchedInfo">
+            <collection property="locationInfos" ofType="com.back.travelit.dto.response.planner.DetailLocationInfo">
+                <result column="TITLE" property="locTitle"/>
+                <result column="SUB_TITLE" property="locSubTitle"/>
+                <result column="ADDRESS" property="address"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <!--<resultMap id="detailPlan" type="com.back.travelit.dto.response.planner.DetailPlan">
+        <result column="P.PL_TITLE" property="plTitle"/>
+        <result column="P.PL_STR_DATE" property="startDate"/>
+        <result column="P.PL_END_DATE" property="endDate"/>
+        <result column="P.PL_CREATE_AT" property="createAt"/>
+        <collection property="planLocs" ofType="com.back.travelit.dto.response.planner.DetailPlanLoc">
+            <collection property="locName" ofType="com.back.travelit.dto.response.planner.DetailLocationCode">
+                <result column="C.LOCATION_NAME" property="locName"/>
+            </collection>
+        </collection>
+        <collection property="plDays" ofType="com.back.travelit.dto.response.planner.DetailSched">
+            <result column="S.PL_DAY" property="plDays"/>
+            <collection property="schedInfos" ofType="com.back.travelit.dto.response.planner.DetailSchedInfo">
+                <collection property="locationInfos" ofType="com.back.travelit.dto.response.planner.DetailLocationInfo">
+                    <result column="LOC.TITLE" property="locTitle"/>
+                    <result column="LOC.SUB_TITLE" property="locSubTitle"/>
+                    <result column="LOC.ADDRESS" property="address"/>
+                </collection>
+            </collection>
+        </collection>
+    </resultMap>-->
+    <!--<select id="selectPlanDetail" parameterType="int" resultMap="detailPlan">
+        select P.PL_TITLE as plTitle, P.PL_STR_DATE as startDate,
                P.PL_END_DATE as endDate, P.PL_CREATE_AT as createAt,
-               C.LOCATION_NAME as locName,S.PL_DAY as plDay,
-               SI.LOCATION_INFO_ID as locId, LOC.TITLE as locTitle,
+               C.LOCATION_NAME as locName,S.PL_DAY as plDay, LOC.TITLE as locTitle,
                LOC.SUB_TITLE as locSubTitle, LOC.ADDRESS as address
         from PLAN P
-            inner join USER U
-                on U.USER_ID = P.USER_ID
             left join PLAN_LOC PLOC
                 on P.PLAN_ID = PLOC.PLAN_ID
             left join LOCATION_CODE C
@@ -48,47 +118,23 @@
                 on S.SCHED_ID = SI.SCHED_ID
             left join LOCATION_INFO LOC
                 on SI.LOCATION_INFO_ID = LOC.LOCATION_INFO_ID
-        where P.PLAN_ID = ${planId};
-    </select>
+        where P.PLAN_ID = #{planId};
+    </select>-->
 
     <!-- 내 플래너 리스트 -->
     <select id="selectMyPlan" parameterType="int" resultType="com.back.travelit.dto.response.planner.PlannerList">
         SELECT
-            P.PLAN_ID AS planId, U.NICKNAME AS nickname,
-            P.PL_STR_DATE AS startDate, P.PL_END_DATE AS endDate,
-            P.PL_TITLE AS plTitle, P.PL_CREATE_AT AS createAt,
+            P.PLAN_ID AS planId, P.PL_STR_DATE AS startDate,
+            P.PL_END_DATE AS endDate, P.PL_TITLE AS plTitle,
+            P.PL_CREATE_AT AS createAt,
             GROUP_CONCAT(DISTINCT CODE.LOCATION_NAME ORDER BY CODE.LOCATION_NAME SEPARATOR ',') AS locations
         FROM PLAN P
-                 INNER JOIN USER U ON P.USER_ID = U.USER_ID
-                 LEFT JOIN PLAN_LOC PLOC ON P.PLAN_ID = PLOC.PLAN_ID
-                 LEFT JOIN LOCATION_CODE CODE ON PLOC.LOCATION_CODE = CODE.LOCATION_CODE
-                 LEFT JOIN LOCATION_INFO LOC ON CODE.LOCATION_CODE = LOC.LOCATION_CODE
-        WHERE U.USER_ID = ${userId}
+            LEFT JOIN PLAN_LOC PLOC ON P.PLAN_ID = PLOC.PLAN_ID
+            LEFT JOIN LOCATION_CODE CODE ON PLOC.LOCATION_CODE = CODE.LOCATION_CODE
+            LEFT JOIN LOCATION_INFO LOC ON CODE.LOCATION_CODE = LOC.LOCATION_CODE
+        WHERE P.USER_ID = #{userId}
         GROUP BY
-            P.PLAN_ID, U.NICKNAME,
-            P.PL_STR_DATE, P.PL_END_DATE,
-            P.PL_TITLE, P.PL_CREATE_AT
-    </select>
-
-    <!-- 전체 플래너 리스트 -->
-    <select id="selectAllPlan" parameterType="com.back.travelit.domain.common.PagingSearchCriteria" resultType="com.back.travelit.dto.response.planner.PlannerList">
-        SELECT
-        P.PLAN_ID AS planId, U.NICKNAME AS nickname,
-        P.PL_STR_DATE AS startDate, P.PL_END_DATE AS endDate,
-        P.PL_TITLE AS plTitle, P.PL_CREATE_AT AS createAt,
-        GROUP_CONCAT(DISTINCT CODE.LOCATION_NAME ORDER BY CODE.LOCATION_NAME SEPARATOR ',') AS locations
-        FROM PLAN P
-        INNER JOIN USER U ON P.USER_ID = U.USER_ID
-        LEFT JOIN PLAN_LOC PLOC ON P.PLAN_ID = PLOC.PLAN_ID
-        LEFT JOIN LOCATION_CODE CODE ON PLOC.LOCATION_CODE = CODE.LOCATION_CODE
-        LEFT JOIN LOCATION_INFO LOC ON CODE.LOCATION_CODE = LOC.LOCATION_CODE
-        GROUP BY
-        P.PLAN_ID, U.NICKNAME,
-        P.PL_STR_DATE, P.PL_END_DATE,
-        P.PL_TITLE, P.PL_CREATE_AT
-        <include refid="search"/>
-        <include refid="sort"/>
-        LIMIT #{pagination.limitStart}, #{searchRequest.recordSize}
+            P.PLAN_ID, P.USER_ID, P.PL_STR_DATE, P.PL_END_DATE, P.PL_TITLE, P.PL_CREATE_AT
     </select>
 
     <!-- 페이징 처리 -->
@@ -131,23 +177,5 @@
         </if>
     </sql>
 
-<!-- resultMap -->
-    <!-- 플래너 상세 보기 -->
-    <resultMap id="planDetail" type="com.back.travelit.dto.response.planner.PlanDetail">
-        <result column="U.NICKNAME" property="nickname"/>
-        <result column="P.PL_TITLE" property="plTitle"/>
-        <result column="P.PL_STR_DATE" property="startDate"/>
-        <result column="P.PL_END_DATE" property="endDate"/>
-        <result column="P.PL_CREATE_AT" property="createAt"/>
-        <collection property="planDetailInfo" ofType="java.util.Map">
-            <result column="PLOC.LOCATION_CODE" property="locCode"/>
-            <result column="C.LOCATION_NAME" property="locName"/>
-            <result column="S.PL_DAY" property="plDay"/>
-            <result column="SI.LOCATION_INFO_ID" property="locId"/>
-            <result column="LOC.TITLE" property="locTitle"/>
-            <result column="LOC.SUB_TITLE" property="locSubTitle"/>
-            <result column="LOC.ADDRESS" property="address"/>
-        </collection>
-    </resultMap>
 
 </mapper>
