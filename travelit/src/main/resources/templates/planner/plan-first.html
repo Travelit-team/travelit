@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragments/header :: head"></th:block>
+    <th:block th:replace="fragments/footer :: head"></th:block>
+    <meta charset="UTF-8">
+    <title>Planner Frist Step</title>
+    <link rel="stylesheet" type="text/css" href="/css/planner/plan-first.css">
+</head>
+<body>
+    <header th:replace="fragments/header :: header"></header>
+    <form action="/planner/plan-make" method="post" class="submit">
+        <div class="plan-first-display">
+            <div class="plan-first-wrap">
+                <div class="left-wrap">
+                    <div id="calendar"></div>
+                </div>
+                <div class="right-wrap">
+                    <div class="plan-title-wrap">
+                        <label for="title" class="plan-title">여행 제목</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div class="plan-state">
+                        <div class="plan-state-title">여행 지역 선택</div>
+                        <div class="card-list">
+                            <div class="card" data-id="L001">서울</div>
+                            <div class="card" data-id="L002">경기도</div>
+                            <div class="card" data-id="L003">인천</div>
+                            <div class="card" data-id="L004">강원도</div>
+                            <div class="card" data-id="L005">전라도</div>
+                            <div class="card" data-id="L006">충청도</div>
+                            <div class="card" data-id="L007">경상도</div>
+                            <div class="card" data-id="L008">제주도</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="startDate" name="startDate"/>
+                    <input type="hidden" id="endDate" name="endDate"/>
+                    <input type="hidden" id="state" name="state"/>
+                    <input type="submit" id="make-plan" name="make-plan" value="일정만들기"/>
+                </div>
+            </div>
+        </div>
+    </form>
+    <footer th:replace="fragments/footer :: footer"></footer>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <script src="/js/planner/plan-first-calender.js"></script>
+    <script src="/js/planner/plan-first-location.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+</body>
+</html>

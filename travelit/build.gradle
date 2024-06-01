@@ -28,6 +28,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' //thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-web' //spring boot Web
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3' //mybatis
+	implementation 'org.springframework.boot:spring-boot-starter-validation' //Bean Validation
+	implementation group: 'org.bgee.log4jdbc-log4j2', name:'log4jdbc-log4j2-jdbc4.1', version: '1.16'//MyBatis Query Logging
 	compileOnly 'org.projectlombok:lombok' //lombok
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j' //mysql

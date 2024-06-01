@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.back.travelit.mapper.location.LocationMapper">
+    <insert id="insertLocation" parameterType="map" useGeneratedKeys="true"
+            keyProperty="writeRequest.locationInfoId">
+        INSERT INTO LOCATION_INFO (USER_ID, LOCATION_CODE, TITLE, SUB_TITLE, ADDRESS, DESCRIPTION, LATITUDE, LONGITUDE)
+        VALUES (
+                #{userid},
+                #{writeRequest.locationCode},
+                #{writeRequest.title},
+                #{writeRequest.subTitle},
+                #{writeRequest.address},
+                #{writeRequest.description},
+                #{writeRequest.latitude},
+                #{writeRequest.longitude}
+               )
+    </insert>
+
+    <select id="selectAllLocationCode" resultType="com.back.travelit.dto.response.location.LocationCode">
+        SELECT *
+        FROM LOCATION_CODE;
+    </select>
+
+    <insert id="insertLocationSubInfo" parameterType="map">
+        INSERT INTO LOCATION_DETAILS (LOCATION_INFO_ID, DETAIL_TITLE, DETAIL_CONTENTS)
+        VALUES
+        <foreach item="subInfo" collection="subInfoList" separator=",">
+            (#{locationInfoId}, #{subInfo.infoKey}, #{subInfo.infoValue})
+        </foreach>
+    </insert>
+
+    <insert id="insertLocationImgs" parameterType="map">
+        INSERT INTO LOCATION_INFO_IMG (LOCATION_INFO_ID, IMG_SRC)
+        VALUES
+        <foreach item="imgUrl" collection="imgUrls" separator=",">
+            (#{locationInfoId}, #{imgUrl})
+        </foreach>
+    </insert>
+
+    <select id="findAll" parameterType="com.back.travelit.domain.common.PagingSearchCriteria" resultType="com.back.travelit.dto.response.location.LocationPostResponse">
+        SELECT L.LOCATION_INFO_ID AS locationInfoId, L.TITLE, L.ADDRESS, I.IMG_SRC AS profileUrl, L.VIEWS, L.CREATE_AT AS createAt  <include refid="dynamicColumns"/>
+        FROM LOCATION_INFO L
+                 INNER JOIN (
+            SELECT I1.LOCATION_INFO_ID, I1.IMG_SRC
+            from LOCATION_INFO_IMG I1
+                     INNER JOIN (
+                SELECT LOCATION_INFO_ID, MIN(LOCATION_IMG_ID) AS LOCATION_IMG_ID
+                FROM LOCATION_INFO_IMG
+                GROUP BY LOCATION_INFO_ID
+            ) I2 ON I1.LOCATION_IMG_ID = I2.LOCATION_IMG_ID
+        ) I ON L.LOCATION_INFO_ID = I.LOCATION_INFO_ID
+        <include refid="dynamicInnerJoin"/>
+        WHERE L.LOCATION_CODE = #{searchRequest.locationCode}
+            <include refid="search"/>
+        <include refid="sort"/>
+        LIMIT #{pagination.limitStart}, #{searchRequest.recordSize}
+    </select>
+
+    <select id="count" parameterType="com.back.travelit.dto.request.location.SearchRequest" resultType="int">
+        SELECT COUNT(*)
+        FROM LOCATION_INFO L
+        WHERE L.LOCATION_CODE = #{locationCode}
+        <if test="keyword != null and keyword != ''">
+            AND (L.TITLE LIKE CONCAT('%', #{keyword}, '%')
+            OR L.DESCRIPTION LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+    </select>
+
+    <select id="findRanking" parameterType="map" resultType="com.back.travelit.dto.response.location.LocationPostResponse">
+        select L.LOCATION_INFO_ID AS locationInfoId, L.TITLE, L.DESCRIPTION, L.ADDRESS, I.IMG_SRC AS profileUrl, L.VIEWS, IFNULL(IL.LIKE_COUNT, 0) AS likeCount, L.CREATE_AT
+        from LOCATION_INFO L
+                 inner join (
+            select I1.LOCATION_INFO_ID, I1.IMG_SRC
+            from LOCATION_INFO_IMG I1
+                     inner join (
+                select LOCATION_INFO_ID, MIN(LOCATION_IMG_ID) as LOCATION_IMG_ID
+                from LOCATION_INFO_IMG
+                group by LOCATION_INFO_ID
+            ) I2 ON I1.LOCATION_IMG_ID = I2.LOCATION_IMG_ID
+        ) I on L.LOCATION_INFO_ID = I.LOCATION_INFO_ID
+         LEFT OUTER JOIN (
+            SELECT LOCATION_INFO_ID, count(LOCATION_INFO_ID) as LIKE_COUNT
+            FROM LOCATION_INFO_LIKES
+            GROUP BY LOCATION_INFO_ID
+        ) IL ON L.LOCATION_INFO_ID = IL.LOCATION_INFO_ID
+        WHERE L.LOCATION_CODE = #{locationCode}
+        order by likeCount desc
+        limit #{count};
+    </select>
+
+    <select id="getLocationName" parameterType="String" resultType="String">
+        SELECT LOCATION_NAME
+        FROM LOCATION_CODE
+        WHERE LOCATION_CODE = #{locationCode}
+    </select>
+
+    <sql id="dynamicColumns">
+        <choose>
+            <when test="searchRequest.sort == 'likes'">
+                , IFNULL(IL.LIKE_COUNT, 0)  AS likeCount
+            </when>
+        </choose>
+    </sql>
+
+    <sql id="dynamicInnerJoin">
+        <choose>
+            <when test="searchRequest.sort == 'likes'">
+                LEFT OUTER JOIN (
+                SELECT LOCATION_INFO_ID, COUNT(*) AS LIKE_COUNT
+                FROM LOCATION_INFO_LIKES
+                GROUP BY LOCATION_INFO_ID
+                ) IL ON L.LOCATION_INFO_ID = IL.LOCATION_INFO_ID
+            </when>
+        </choose>
+    </sql>
+
+    <sql id="sort">
+        <choose>
+            <when test="searchRequest.sort == 'latest'">
+                ORDER BY L.CREATE_AT DESC
+            </when>
+            <when test="searchRequest.sort == 'views'">
+                ORDER BY L.VIEWS DESC
+            </when>
+            <when test="searchRequest.sort == 'likes'">
+                ORDER BY likeCount DESC
+            </when>
+            <otherwise>
+                ORDER BY L.CREATE_AT DESC
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="search">
+        <!-- 검색 키워드가 있을 때 -->
+        <if test="searchRequest.keyword != null and searchRequest.keyword != ''">
+            AND (L.TITLE LIKE CONCAT('%', #{searchRequest.keyword}, '%')
+            OR L.DESCRIPTION LIKE CONCAT('%', #{searchRequest.keyword}, '%'))
+        </if>
+    </sql>
+</mapper>

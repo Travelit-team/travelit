@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.back.travelit.mapper.planner.PlanMapper">
+
+    <insert id="insertMakePlan" parameterType="com.back.travelit.dto.request.planner.PlanCreateReqDTO">
+        insert into PLAN(USER_ID, PL_STR_DATE, PL_END_DATE, PL_TITLE)
+            values (1,#{startDate},#{endDate},#{title})
+        <selectKey keyProperty="planId" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="insertMakePlanLoc" parameterType="map">
+        insert into PLAN_LOC(PLAN_ID, LOCATION_CODE)
+            values
+        <foreach item="state" collection="strArr" separator=",">
+               (#{planId},#{state})
+        </foreach>
+    </insert>
+
+</mapper>
