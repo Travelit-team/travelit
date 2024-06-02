@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,10 +19,12 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
+    private final RedisUtil redisUtil;
 
-    public JWTFilter(JWTUtil jwtUtil) {
+    public JWTFilter(JWTUtil jwtUtil,RedisUtil redisUtil) {
 
         this.jwtUtil = jwtUtil;
+        this.redisUtil = redisUtil;
     }
 
     @Override
@@ -49,7 +53,16 @@ public class JWTFilter extends OncePerRequestFilter {
         //토큰
         String token = authorization;
 
-        if (jwtUtil.isExpired(token)) {
+        //토큰에서 username과 role 획득 이거 바꿨어야했나?? get
+        //username 저 밑에꺼 연동 돼...????
+        String username = jwtUtil.getUsername(token);
+        String role = jwtUtil.getRole(token);
+
+        String refreshToken = redisUtil.getData(username);
+
+        token = jwtUtil.validateRefreshToken(refreshToken);
+
+        if (null == token) {
 
             System.out.println("token expired");
             filterChain.doFilter(request, response);
@@ -58,10 +71,7 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        //토큰에서 username과 role 획득 이거 바꿨어야했나?? get
-        //username 저 밑에꺼 연동 돼...????
-        String username = jwtUtil.getUsername(token);
-        String role = jwtUtil.getRole(token);
+        response.addCookie(createCookie("Authorization", token));
 
         //userDTO를 생성하여 값 set
         UserDTO userDTO = new UserDTO();
@@ -79,5 +89,16 @@ public class JWTFilter extends OncePerRequestFilter {
         request.getSession().setAttribute("username",username);
 
         filterChain.doFilter(request, response);
+    }
+
+    private Cookie createCookie(String key, String value) {
+
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(60*60*60*60);
+        //cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+
+        return cookie;
     }
 }

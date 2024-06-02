@@ -60,7 +60,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:mybatis-spring-boot-starter-test'*/
 
 
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.3.0'
+
 }
 
 

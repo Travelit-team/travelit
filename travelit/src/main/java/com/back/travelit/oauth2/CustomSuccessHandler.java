@@ -1,11 +1,17 @@
 package com.back.travelit.oauth2;
 
 import com.back.travelit.dto.CustomOAuth2User;
+import com.back.travelit.dto.TokenDTO;
 import com.back.travelit.jwt.JWTUtil;
+import com.back.travelit.jwt.RedisUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.antlr.v4.runtime.Token;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -19,6 +25,12 @@ import java.util.Iterator;
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JWTUtil jwtUtil;
+
+    @Autowired
+    private RedisUtil redisUtil;
+
+    @Value("${spring.jwt.refreshMS}")
+    private Long refreshMS;
 
     public CustomSuccessHandler(JWTUtil jwtUtil) {
 
@@ -47,10 +59,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             //response.sendRedirect("http://localhost:8080/my");
 
         }*/
-        String token = jwtUtil.createJwt(username, role, 60*60*60*60L);
+        TokenDTO token = jwtUtil.createJwt(username, role);
+
+        redisUtil.setData(username,token.getRefreshToken(),refreshMS);
 
 
-        response.addCookie(createCookie("Authorization", token));
+        response.addCookie(createCookie("Authorization", token.getAccessToken()));
         response.sendRedirect("http://localhost:8080/my");
 
 

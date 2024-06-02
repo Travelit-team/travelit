@@ -28,8 +28,11 @@ public class JWTUtil {
                    @Value("${spring.jwt.refreshMS}")Long refreshMS) {
 
 
-        accessMS = accessMS;
-        refreshMS = refreshMS;
+
+        this.accessMS = accessMS;
+        this.refreshMS = refreshMS;
+        /*this.accessMS = Long.parseLong(accessMS);
+        this.refreshMS = Long.parseLong(refreshMS);*/
 
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
         refreshKey = new SecretKeySpec(refreshSecret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
@@ -45,11 +48,11 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
-    public Boolean isExpired(String token) {
-
-
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
-    }
+//    public Boolean isExpired(String token) {
+//
+//        String refreshToken = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("token", String.class);
+//        return null == validateRefreshToken(refreshToken);
+//    }
 
     public TokenDTO createJwt(String username, String role) {
 
@@ -62,7 +65,7 @@ public class JWTUtil {
                 .compact();
 
         String accessToken = Jwts.builder()
-                .claim("token", refreshToken)
+                .claim("username", username)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + accessMS))
@@ -72,10 +75,10 @@ public class JWTUtil {
         return TokenDTO.builder().accessToken(accessToken).refreshToken(refreshToken).key(username).build();
 
     }
-    public String validateRefreshToken(RefreshToken refreshTokenObj){
+    public String validateRefreshToken(String refreshTokenObj){
 
         //추출
-        String refreshToken = refreshTokenObj.getRefreshToken();
+        String refreshToken = refreshTokenObj;
 
         try{
 
@@ -85,7 +88,7 @@ public class JWTUtil {
           if (!claims.getPayload().getExpiration().before(new Date())){
 
 
-              return recreationAccessToken(refreshToken, claims.getPayload().get("role")    );
+              return recreationAccessToken(claims.getPayload().get("username") , claims.getPayload().get("role")    );
           }
         }
         catch (Exception e ){
@@ -94,14 +97,13 @@ public class JWTUtil {
             return  null ;
         }
 
-
-
+        return  null;
     }
 
 
-    public String recreationAccessToken(String refreshToken, Object role ){
+    public String recreationAccessToken(  Object username, Object role ){
         return Jwts.builder()
-                .claim("token", refreshToken)
+                .claim("username", (String) username )
                 .claim("role", (String) role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + accessMS))

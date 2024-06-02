@@ -13,6 +13,8 @@ public class KakaoResponse implements OAuth2Response{
         this.attribute = (Map<String, Object>) attribute/*.get("response")*/;
     }
 
+
+
     @Override
     public String getProvider() {
 
@@ -26,8 +28,6 @@ public class KakaoResponse implements OAuth2Response{
 
     @Override
     public String getEmail() {
-
-
 
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> map = objectMapper.convertValue(attribute.get("kakao_account"), Map.class);

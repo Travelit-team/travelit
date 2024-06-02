@@ -2,9 +2,15 @@ package com.back.travelit.config;
 
 import com.back.travelit.jwt.JWTFilter;
 import com.back.travelit.jwt.JWTUtil;
+import com.back.travelit.jwt.RedisUtil;
 import com.back.travelit.oauth2.CustomSuccessHandler;
 import com.back.travelit.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+
+
+import org.apache.http.cookie.Cookie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,12 +30,15 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomSuccessHandler customSuccessHandler;
     private final JWTUtil jwtUtil;
+    private final RedisUtil redisUtil;
 
-    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomSuccessHandler customSuccessHandler, JWTUtil jwtUtil) {
+
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomSuccessHandler customSuccessHandler, JWTUtil jwtUtil, RedisUtil redisUtil) {
 
         this.customOAuth2UserService = customOAuth2UserService;
         this.customSuccessHandler = customSuccessHandler;
         this.jwtUtil = jwtUtil;
+        this.redisUtil = redisUtil;
     }
 
     @Bean
@@ -70,7 +79,7 @@ public class SecurityConfig {
 
         //JWTFilter 추가
         http
-                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JWTFilter(jwtUtil,redisUtil), UsernamePasswordAuthenticationFilter.class);
 
         //oauth2
         http
@@ -94,6 +103,29 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+                /*.logout(logoutConfig ->
+                        logoutConfig
+                                .logoutUrl("/logout")
+                                .logoutSuccessHandler((request, response, authentication) -> {
+                                    request.getSession().invalidate();
+
+                                    javax.servlet.http.Cookie[] cookies = request.getCookies();
+                                    if (cookies != null) {
+                                        for (javax.servlet.http.Cookie cookie : cookies) {
+                                            if ("Authorization".equals(cookie.getName())) {
+                                                cookie.setMaxAge(0);
+                                                cookie.setValue(null);
+                                                cookie.setPath("/");
+                                                response.addCookie(cookie);
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    response.sendRedirect("https://localhost:8080/oauth/logout");
+                                })
+                                .invalidateHttpSession(true)
+                                .deleteCookies("Authorization"));*/
 
 
 
