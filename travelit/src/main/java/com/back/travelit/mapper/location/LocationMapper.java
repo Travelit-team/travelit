@@ -26,4 +26,7 @@ public interface LocationMapper {
     List<String> getLocationImgUrls(int locationInfoId);
     List<LocationSubInfo> getLocationSubInfos(int locationInfoId);
     void increaseViews(int locationInfoId);
+    int locationLikeExists(int userId, int locationInfoId);
+    void locationLikeInsert(int userId, int locationInfoId);
+    void locationLikeDelete(int userId, int locationInfoId);
 }

@@ -11,6 +11,7 @@ import com.back.travelit.dto.response.common.PagingResponse;
 import com.back.travelit.dto.response.location.LocationCode;
 import com.back.travelit.dto.request.location.LocationWriteRequest;
 import com.back.travelit.dto.response.location.LocationDetailResponse;
+import com.back.travelit.dto.response.location.LocationLikeResponse;
 import com.back.travelit.dto.response.location.LocationPostResponse;
 import com.back.travelit.mapper.location.LocationMapper;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class LocationService {
     private final LocationMapper locationMapper;
     private final S3Service s3Service;
 
-    public void saveLocationInfo(LocationWriteRequest writeRequest) {
+    public int saveLocationInfo(LocationWriteRequest writeRequest) {
         locationMapper.insertLocation(1, writeRequest);
         int locationInfoId = writeRequest.getLocationInfoId();
         log.info("insert after pk value : {}", locationInfoId);
@@ -40,6 +41,8 @@ public class LocationService {
         isExistsSubInfo(writeRequest, locationInfoId);
 
         locationImageUpload(writeRequest, locationInfoId);
+
+        return locationInfoId;
     }
 
     @Transactional(readOnly = true)
@@ -94,6 +97,30 @@ public class LocationService {
     @Transactional(readOnly = true)
     public List<LocationSubInfo> findSubLocationInfo(int locationInfoId) {
         return locationMapper.getLocationSubInfos(locationInfoId);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean locationDetailExistsUser(int userId, int locationInfoId) {
+        return locationMapper.locationLikeExists(userId, locationInfoId) > 0 ? true : false;
+    }
+
+    public LocationLikeResponse locationToggleLike(int userId, int locationInfoId) {
+        int existsLike = locationMapper.locationLikeExists(userId, locationInfoId);
+
+        if(existsLike > 0) {
+            locationMapper.locationLikeDelete(userId, locationInfoId);
+            return LocationLikeResponse.builder()
+                    .isLiked(false)
+                    .message("즐겨찾기를 취소하셨습니다.")
+                    .build();
+        }else {
+            locationMapper.locationLikeInsert(userId, locationInfoId);
+            return LocationLikeResponse.builder()
+                    .isLiked(true)
+                    .message("즐겨찾기를 누르셨습니다.")
+                    .build();
+        }
+
     }
 
     private void locationImageUpload(LocationWriteRequest writeRequest, int locationInfoId) {

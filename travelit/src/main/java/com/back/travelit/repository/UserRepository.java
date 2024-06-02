@@ -7,5 +7,4 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     UserEntity findByLoginID(String LOGIN_ID);
 
-
 }

@@ -5,11 +5,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PlanLocCodeRes {
-
-    private String locCode;
-
+public class DetailLocationCode {
     private String locName;
-
-
 }

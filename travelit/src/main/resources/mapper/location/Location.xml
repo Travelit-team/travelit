@@ -129,6 +129,27 @@
         WHERE L.LOCATION_INFO_ID = #{locationInfoId};
     </select>
 
+    <select id="locationLikeExists" parameterType="map" resultType="int">
+        SELECT count(*)
+        FROM USER U
+            INNER JOIN LOCATION_BOOKMARK B
+                ON U.USER_ID = B.USER_ID
+        WHERE U.USER_ID = #{userId} AND B.LOCATION_INFO_ID = #{locationInfoId};
+    </select>
+
+    <insert id="locationLikeInsert" parameterType="map">
+        INSERT INTO LOCATION_BOOKMARK (USER_ID, LOCATION_INFO_ID)
+        VALUES (
+                    #{userId},
+                    #{locationInfoId}
+               )
+    </insert>
+
+    <delete id="locationLikeDelete" parameterType="map">
+        DELETE FROM LOCATION_BOOKMARK
+               WHERE USER_ID = #{userId} AND LOCATION_INFO_ID = #{locationInfoId};
+    </delete>
+
     <update id="increaseViews" parameterType="int">
         UPDATE LOCATION_INFO
         SET VIEWS = VIEWS + 1
