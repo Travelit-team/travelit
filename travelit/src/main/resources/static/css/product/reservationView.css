@@ -1,0 +1,194 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/*voucher ------------------------*/
+
+.voucher-container{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 700px; /* 화면 전체 높이로 설정 */
+}
+
+.voucher-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333333;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.voucher-content {
+    border: 1px solid rgba(120, 120, 120, 0.3);
+    border-radius: 10px;
+    width: 600px;
+    height: 800px;
+    padding: 30px 50px;
+}
+
+.voucher-reservation-info {
+    display: grid;
+    grid-template-columns: 90px 1fr 90px 1fr;
+    grid-template-rows: repeat(7, 1fr);
+    gap: 10px;
+    height: 350px;
+    padding: 20px;
+    border: 6px solid rgba(180, 180, 180, 0.3);
+    border-radius: 10px;
+}
+.voucher-reservation-info > div {
+    align-self: center;
+}
+
+.voucher-info-state01 {
+    font-size: 16px;
+    font-weight: bold;
+    grid-column: 1;
+    grid-row: 1;
+}
+.voucher-info-state02 {
+    font-size: 15px;
+    font-weight: bold;
+    color: rgba(120, 120, 120, 1);
+    grid-column: 2;
+    grid-row: 1;
+}
+.voucher-info-number01 {
+    font-size: 16px;
+    font-weight: bold;
+    grid-column: 3;
+    grid-row: 1;
+}
+.voucher-info-number02 {
+    font-size: 15px;
+    font-weight: bold;
+    color: rgba(120, 120, 120, 1);
+    grid-column: 4;
+    grid-row: 1;
+}
+.voucher-info-product01 {
+    font-size: 16px;
+    font-weight: bold;
+    grid-column: 1;
+    grid-row: 2;
+}
+.voucher-info-product02 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #097a86;
+    grid-column: 2 / span 3;
+    grid-row: 2;
+}
+.voucher-info-name01 {
+    font-size: 16px;
+    font-weight: bold;
+    grid-column: 1;
+    grid-row: 3;
+}
+.voucher-info-name02 {
+    font-size: 15px;
+    font-weight: bold;
+    color: rgba(120, 120, 120, 1);
+    grid-column: 2;
+    grid-row: 3;
+}
+.voucher-info-phone01 {
+    font-size: 16px;
+    font-weight: bold;
+    grid-column: 3;
+    grid-row: 3;
+}
+.voucher-info-phone02 {
+    font-size: 15px;
+    font-weight: bold;
+    color: rgba(120, 120, 120, 1);
+    grid-column: 4;
+    grid-row: 3;
+}
+.voucher-info-use01 {
+    font-size: 16px;
+    font-weight: bold;
+    grid-column: 1;
+    grid-row: 4;
+}
+.voucher-info-use02 {
+    font-size: 15px;
+    font-weight: bold;
+    color: rgba(120, 120, 120, 1);
+    grid-column: 2;
+    grid-row: 4;
+}
+.voucher-info-date01 {
+    font-size: 16px;
+    font-weight: bold;
+    grid-column: 3;
+    grid-row: 4;
+}
+.voucher-info-date02 {
+    font-size: 15px;
+    font-weight: bold;
+    color: rgba(120, 120, 120, 1);
+    grid-column: 4;
+    grid-row: 4;
+}
+.voucher-info-count01 {
+    font-size: 16px;
+    font-weight: bold;
+    grid-column: 1;
+    grid-row: 5;
+}
+.voucher-info-count02 {
+    font-size: 15px;
+    font-weight: bold;
+    color: rgba(120, 120, 120, 1);
+    grid-column: 2;
+    grid-row: 5;
+}
+.voucher-info-price01 {
+    font-size: 16px;
+    font-weight: bold;
+    grid-column: 3;
+    grid-row: 5;
+}
+.voucher-info-price02 {
+    font-size: 15px;
+    font-weight: bold;
+    color: rgba(120, 120, 120, 1);
+    grid-column: 4;
+    grid-row: 5;
+}
+.voucher-info-request01 {
+    font-size: 16px;
+    font-weight: bold;
+    grid-row: 6;
+}
+.voucher-info-request02 {
+    font-size: 15px;
+    font-weight: bold;
+    color: rgba(120, 120, 120, 1);
+    grid-column: 1 / span 4;
+    grid-row: 7;
+}
+
+.voucher-total-info {
+    margin: 30px 20px 0;
+    font-size: 13px;
+    font-weight: bold;
+    color: rgba(120, 120, 120, 1);
+}
+
+
+
+
+
+.reservation-cancel-btn {
+    z-index: 2;
+}

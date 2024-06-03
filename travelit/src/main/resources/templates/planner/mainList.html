@@ -59,24 +59,47 @@
         </div>
     </div>
 </div>
-<div id="planner-list-container">
-    <div class="my-planner-list-container">
-        <div class="my-planner">
-            나의 플래너
-        </div>
-        <div class="plan-card-container">
-            <div class="plan-card" th:each="planList : ${myPlanList}">
-                <div class="plan-title" th:text="${planList.plTitle}"></div>
-                <div class="plan-date">
-                    <span th:text="${planList.startDate}"></span>
-                    ~
-                    <span th:text="${planList.endDate}"></span>
+<div id="all-list-container">
+    <div id="planner-list-container">
+        <div class="my-planner-list-container">
+            <div class="my-planner">
+                나의 플래너
+            </div>
+            <div class="plan-card-container">
+                <div class="plan-card" th:each="planList : ${myPlanList}">
+                    <div class="plan-title" th:text="${planList.plTitle}"></div>
+                    <div class="plan-date">
+                        <span th:text="${planList.startDate}"></span>
+                        ~
+                        <span th:text="${planList.endDate}"></span>
+                    </div>
+                    <div class="plan-locations" th:text="${planList.locations}"></div>
                 </div>
-                <div class="plan-locations" th:text="${planList.locations}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="rank-background">
+        <div class="rank-outer-div">
+            <div  class="title">여행지 TOP 8 </div>
+            <div class="rank-container">
+                <div th:each="viewLocation : ${locList}" th:onclick="moveToLocationDetail([[${viewLocation.locationInfoId}]])" th:class="rank-card">
+                    <img th:src="@{${viewLocation.profileUrl}}" th:alt="${viewLocation.title}">
+                    <div class="rank-content">
+                        <h2 th:text="${viewLocation.title}">제목</h2>
+                        <div class="rank-content-inner">
+                            <p th:text="${viewLocation.address}">지역 설명 </p>
+                            <div class="rank-content-inner">
+                                <i class="fas fa-heart" style="color: red; margin-right: 10px"></i>
+                                <p th:text="${viewLocation.likeCount}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 <script type="text/javascript" src="/js/location/list.js"></script>
 </body>
 </html>

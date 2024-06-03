@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:replace="fragments/header :: head"></th:block>
+    <th:block th:replace="fragments/footer :: head"></th:block>
+    <link th:href="@{/css/product/productList.css}" rel="stylesheet">
+    <link th:href="@{/css/product/paging.css}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header th:replace="fragments/header :: header"></header>
+
+    <!-- 검색 -->
+    <!-- onsubmit은 폼 실행 시 실행할 js를 지정 , 하지만 실행하지 않을 것이므로 false -->
+    <form id="searchForm" onsubmit="return false;" autocomplete="off">
+        <div class="search-container">
+            <div class="title">휴가는 만드는 것이다!</div></br>
+            <div class="subTitle">티켓, 투어, 액티비티, 교통</div>
+            <div class="search-area">
+                <select id="searchType" name="searchType" title="검색 유형 선택" class="search-filter">
+                    <option value="">전체 검색</option>
+                    <option value="PRO_NAME">제목</option>
+                    <option value="PRO_CONTENT">내용</option>
+                    <option value="PRO_LOCATION">지역</option>
+                    <option value="PRO_CATEGORY_TOTAL">카테고리</option>
+                </select>
+                <input type="text" id="keyword" name="keyword" class="search-input" placeholder="오늘은 어디로 떠나볼까요?" title="키워드 입력" onkeydown="searchOnEnter(event)"/>
+                <!-- movePage()는 페이지 이동 클릭 이벤트 페이지 번호 1로 지정 -->
+                <button type="button" onclick="movePage(1);" class="search-btn"><span>검색</span></button>
+            </div>
+        </div>
+    </form>
+
+    <!--카테고리-->
+    <div class="category-container">
+        <select id="searchCategory" title="검색 유형 선택" class="search-filter-category">
+            <option value="PRO_CATEGORY_TOTAL">카테고리</option>
+            <option value="입장권">입장권</option>
+            <option value="액티비티">액티비티</option>
+            <option value="투어">투어</option>
+            <option value="교통">교통</option>
+        </select>
+    </div>
+
+    <!-- slider -->
+    <div>
+        <div class="slider">
+            <div><img class="img_size" src="/images/product/slider/Seoul.jpeg" alt=""></div>
+            <div><img class="img_size" src="/images/product/slider/Gyeonggi.jpeg" alt=""></div>
+            <div><img class="img_size" src="/images/product/slider/Gangwon.jpeg" alt=""></div>
+            <div><img class="img_size" src="/images/product/slider/Chungcheongnam-do.jpeg" alt=""></div>
+            <div><img class="img_size" src="/images/product/slider/Daejeon.jpeg" alt=""></div>
+            <div><img class="img_size" src="/images/product/slider/Gyeongsangbuk-do.jpeg" alt=""></div>
+            <div><img class="img_size" src="/images/product/slider/Gyeongsangnam-do.jpeg" alt=""></div>
+            <div><img class="img_size" src="/images/product/slider/Jeju.jpeg" alt=""></div>
+        </div>
+    </div>
+
+    <!-- 자역 -->
+    <div id="location-list-container">
+        <div class="region-container">
+            <div class="region" onclick="selectRegion('전국')">
+                <div class="circle" style="background-image: url('/images/product/localCategory/korea.png');"></div>
+                <div class="label">전국</div>
+            </div>
+
+            <div class="region" onclick="selectRegion('서울')">
+                <div class="circle" style="background-image: url('/images/product/localCategory/seoul1.jpeg');"></div>
+                <div class="label">서울</div>
+            </div>
+            <div class="region" onclick="selectRegion('경기도')">
+                <div class="circle" style="background-image: url('/images/product/localCategory/gyeong-gi-do1.jpeg');"></div>
+                <div class="label">경기도</div>
+            </div>
+            <div class="region" onclick="selectRegion('인천')">
+                <div class="circle" style="background-image: url('/images/product/localCategory/incheon1.jpeg');"></div>
+                <div class="label">인천</div>
+            </div>
+            <div class="region" onclick="selectRegion('충청도')">
+                <div class="circle" style="background-image: url('/images/product/localCategory/Chungcheong-do1.jpeg');"></div>
+                <div class="label">충청도</div>
+            </div>
+            <div class="region" onclick="selectRegion('강원도')">
+                <div class="circle" style="background-image: url('/images/product/localCategory/Gangwon-do1.jpeg');"></div>
+                <div class="label">강원도</div>
+            </div>
+            <div class="region" onclick="selectRegion('전라도')">
+                <div class="circle" style="background-image: url('/images/product/localCategory/Jeolla-do1.jpeg');"></div>
+                <div class="label">전라도</div>
+            </div>
+            <div class="region" onclick="selectRegion('경상도')">
+                <div class="circle" style="background-image: url('/images/product/localCategory/Gyeongsang-do1.jpeg');"></div>
+                <div class="label">경상도</div>
+            </div>
+            <div class="region" onclick="selectRegion('제주도')">
+                <div class="circle" style="background-image: url('/images/product/localCategory/Jeju-do1.jpeg');"></div>
+                <div class="label">제주도</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 조회수 상위 5개 상품 -->
+    <div class="view-produrt-title">🤩 인기 TOP 4</div>
+    <div class="product-container">
+        <div th:each="product : ${fiveProduct}">
+            <div class="card" th:onclick="'goViewPage(' + ${product.PRO_ID} + ')'">
+                <img th:src="${product.PRO_IMG_NAME}" th:alt="${product.PRO_NAME}" class="card-img"/>
+                <div class="card-content">
+                    <div class="card-content-group01">
+                        <div class="card-content-01">
+                            판매기간 <span th:text="${#dates.format(product.TOUR_START, 'MM-dd')}"></span> ~ <span th:text="${#dates.format(product.TOUR_END, 'MM-dd')}"></span></span>
+                        </div>
+                        <div class="card-content-02">조회 <span th:text="${product.PRO_VIEW}"></span></div>
+                    </div>
+                    <div class="card-content-03" th:text="${product.PRO_NAME}"></div>
+                    <div class="card-content-04">₩ <span th:text="${product.PRO_PRICE}"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 목록 영역 -->
+    <div class="produrt-title">상품목록</div>
+    <div id="list" class="product-container"></div>
+
+    <!-- 페이지네이션 -->
+    <div class="paging"></div>
+
+    <a th:href="@{/product/productWrite}">상품 등록</a>
+
+    <!-- footer -->
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    window.onload = () => {
+        findAllProduct();
+        setQueryStringParams();
+    }
+
+    //게시글 리스트 조회
+    function findAllProduct() {
+        //ProductPagingResponse의 list
+        const list = [[${response.list}]];
+        //값 없으면 메시지
+        if (!list.length) {
+            document.getElementById('list').innerHTML = '<div>검색된 결과가 없습니다.</div>';
+            drawPage();
+        }
+        //ProductPagingResponse의 productPagination(response는 컨트롤러)
+        const pagination = [[${response.productPagination}]];
+        //@ModelAttribute ProductSearch의 params
+        const params = [[${params}]];
+        //게시글 번호 처리
+        let num = pagination.totalRecordCount - ((params.page - 1) * params.recordSize);
+        //리스트 렌더링
+        drawList(list, num);
+        //페이지 번호 렌더링
+        drawPage(pagination, params);
+    }
+
+    //리스트 HTML
+    function drawList(list, num) {
+        //HTML 저장 변수
+        let html = '';
+        //(전체 데이터 수 - ((현재 페이지 번호 - 1) * 페이지당 출력할 데이터 개수))
+        list.forEach(row => {
+            const startDate = new Date(row.tour_START);
+            const endDate = new Date(row.tour_END);
+
+            //날짜 포맷
+            const formattedStartDate = `${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`;
+            const formattedEndDate = `${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`;
+            const formattedPrice = formatPrice(row.pro_PRICE);
+
+
+            html += `
+                        <div class="card" onclick="goViewPage(${row.pro_ID});">
+                            <img src="${row.pro_IMG_NAME}" alt="${row.pro_Name}" th:alt="${row.pro_Name}" class="card-img"/>
+                            <div class="card-content">
+                            <div class="card-content-group01">
+                                <div class="card-content-01">판매기간 ${formattedStartDate} ~ ${formattedEndDate}</div>
+                                <div class="card-content-02">조회 ${row.pro_VIEW}</div>
+                            </div>
+                            <div class="card-content-03">${row.pro_NAME}</div>
+                            <div class="card-content-04">₩ <span id="formattedPrice_${row.pro_ID}">${formattedPrice}</span></div>
+                        </div>
+                            </div>
+                        </div>
+                `;
+        })
+        //list 요소 HTML 배치
+        document.getElementById('list').innerHTML = html;
+    }
+
+    //가격 포맷팅 함수
+    function formatPrice(price) {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // 페이지 HTML
+    function drawPage(pagination, params) {
+        //파라미터가 없는 경우, 페이지 번호 제거
+        if (!pagination || !params) {
+            document.querySelector('.paging').innerHTML = '';
+            throw new Error('없슈');
+        }
+        //HTML 저장
+        let html = '';
+        // 시작 페이지(startPage)가 1이 아닌 경우 시작 페이지 버튼, 이전 페이지 버튼 추가
+        if (pagination.existPrevPage) {
+            html += `
+                    <a href="javascript:void(0);" onclick="movePage(1)" class="page_bt first">시작 페이지</a>
+                    <a href="javascript:void(0);" onclick="movePage(${pagination.startPage - 1})" class="page_bt prev">이전 페이지</a>
+                `;
+        }
+        //시작 페이지 마지막 페이지 사이 페이지 번호 넘버링
+        html += '<p>';
+        for (let i = pagination.startPage; i <= pagination.endPage; i++) {
+            html += (i !== params.page)
+                ? `<a href="javascript:void(0);" onclick="movePage(${i});">${i}</a>`
+                : `<span class="on">${i}</span>`
+        }
+        html += '</p>';
+        //다음 페이지 버튼과 끝 페이지 버튼 추가
+        if (pagination.existNextPage) {
+            html += `
+                    <a href="javascript:void(0);" onclick="movePage(${pagination.endPage + 1});" class="page_bt next">다음 페이지</a>
+                    <a href="javascript:void(0);" onclick="movePage(${pagination.totalPageCount});" class="page_bt last">마지막 페이지</a>
+                `;
+        }
+        //class "paging"인 요소 렌더링
+        document.querySelector('.paging').innerHTML = html;
+    }
+
+    //페이지 이동
+    function movePage(page) {
+        //검색폼
+        const form = document.getElementById('searchForm');
+        //drawPage( ) onclick 이벤트를 통해 전달받은 페이지 번호로 객체 생성
+        const queryParams = {
+            page: (page) ? page : 1,
+            recordSize: 20,
+            pageSize: 5,
+            searchType: form.searchType.value,
+            keyword: form.keyword.value
+        }
+        //location.pathname: product/list
+        //new URLSearchParams(queryParams).toString() : queryParams의 모든 프로퍼티(key-value) 쿼리 스트링으로 변환
+        location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
+    }
+
+    //검색 파라미터 유지: 파라미터 객체화 후 searchForm에 세팅
+    function setQueryStringParams() {
+        if (!location.search) {
+            return false;
+        }
+        const form = document.getElementById('searchForm');
+        new URLSearchParams(location.search).forEach((value, key) => {
+            if (form[key]) {
+                form[key].value = value;
+            }
+        })
+    }
+
+    // 게시글 상세 페이지
+    function goViewPage(pro_ID) {
+        const queryString = (location.search) ? location.search + `&PRO_ID=${pro_ID}` : `?PRO_ID=${pro_ID}`;
+        location.href = '/product/productView' + queryString;
+    }
+
+
+    //슬라이더
+    $(document).ready(function () {
+        $('.slider').bxSlider({
+            auto: true,
+            speed: 500,
+            pause: 5000,
+            mode: 'fade',
+            pager: false,
+            adaptiveHeight: true
+        });
+
+        function showControls() {
+            $('.bx-prev, .bx-next').css('display', 'inline-block');
+        }
+
+        function hideControls() {
+            $('.bx-prev, .bx-next').css('display', 'none');
+        }
+
+        $('.bx-viewport').hover(showControls, hideControls);
+        $('.bx-prev, .bx-next').hover(showControls, showControls);
+    });
+
+
+</script>
+
+<script th:inline="javascript">
+    //지역 선택
+    function selectRegion(regionName) {
+        // 전국"을 선택, 검색어는 유지, 지역 초기화
+        if (regionName === "전국") {
+            findAllProduct(); //모든 결과 호출
+            return; //
+        }
+
+        //현재 검색 결과 필터링
+        const filteredList = filterByRegion(regionName);
+
+        //필터링된 결과 리스트 렌더링
+        drawList(filteredList);
+    }
+
+    //현재 검색 결과에서 지역 필터링
+    function filterByRegion(regionName) {
+        const currentList = [[${response.list}]]; // 현재 검색 결과
+
+        //필터링된 결과 저장
+        let filteredList = [];
+
+        //현재 검색 결과 지역 일치
+        currentList.forEach(item => {
+            if (item.pro_LOCATION === regionName) {
+                filteredList.push(item);
+            }
+        });
+
+        return filteredList;
+    }
+
+    //검색 엔터
+    function searchOnEnter(event) {
+        if (event.key === "Enter") {
+            movePage(1);
+        }
+    }
+
+    //카테고리 선택 필터링
+    document.getElementById('searchCategory').addEventListener('change', function () {
+        const selectedCategory = this.value; // 선택한 카테고리 값 가져오기
+        const currentList = [[${response.list}]]; // 현재 검색 결과
+
+        //카테고리 선택 모든 상품
+        if (selectedCategory === "PRO_CATEGORY_TOTAL") {
+            drawList(currentList); // 현재 검색 결과를 그대로 보여줌
+            return; // 함수 종료
+        }
+
+        //현재 검색 결과에서 카테고리에 필터링
+        const filteredList = filterByCategory(currentList, selectedCategory);
+
+        //결과 리스트 렌더링
+        drawList(filteredList);
+    });
+
+    //현재 검색 결과 카테고리 필터링
+    function filterByCategory(currentList, selectedCategory) {
+        //필터링된 결과 저장
+        let filteredList = [];
+
+        //현재 검색 결과에서카테고리필터링
+        currentList.forEach(item => {
+            if (item.pro_CATEGORY_TOTAL === selectedCategory) {
+                filteredList.push(item);
+            }
+        });
+
+        return filteredList;
+    }
+
+</script>
+
+</html>
