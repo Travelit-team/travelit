@@ -2,7 +2,7 @@ package com.back.travelit.mapper.planner;
 
 import com.back.travelit.dto.request.location.SearchRequest;
 import com.back.travelit.dto.request.planner.PlanCreateReq;
-import com.back.travelit.dto.request.planner.ScheduleCreateReq;
+import com.back.travelit.dto.request.planner.ScheduleDayRequest;
 import com.back.travelit.dto.request.planner.ScheduleReplaceReq;
 import com.back.travelit.dto.response.planner.*;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,7 +15,7 @@ public interface PlanMapper {
 
 //planMapper.xml
     //플래너 생성 (플래너제목,여행일정 insert)
-    void insertMakePlan(PlanCreateReq createReqDTO);
+    void insertMakePlan(@Param("userId") int userId, @Param("createReqDTO") PlanCreateReq createReqDTO);
 
     //플래너 생성 (여행지 지역코드 insert)
     void insertMakePlanLoc(@Param("locCodes") List<String> strArr, @Param("planId") int planId);
@@ -25,10 +25,10 @@ public interface PlanMapper {
 
     //유저 여행 상세 스케줄 생성
     //여행 일차 저장
-    void insertMakeSched(ScheduleCreateReq schedCreateReqDTO);
+    void insertMakeSched(int planId, @Param("scheduleDay") ScheduleDayRequest scheduleDay);
 
     //유저 스케줄 일정 저장
-    void insertMakeSchedLocInfo(@Param("locInfoIds")List<Integer> locInfoIds, @Param("schedId") int schedId);
+    void insertMakeSchedLocInfo( @Param("schedId") int schedId, @Param("locInfoIds")List<Integer> locInfoIds);
 
     //플래너 상세 일정 수정
     // 일정 삭제
@@ -48,7 +48,7 @@ public interface PlanMapper {
     List<PlanLocInfo> selectMarkLocInfo(@Param("userId") int userId);
 
     //전체 지역 정보 조회
-    List<PlanLocInfo> selectAllLocInfo();
+    List<PlanLocInfo> selectAllLocInfo(@Param("keyword") String keyword);
 
     //플래너 상세 보기
     //플래너 기본 정보

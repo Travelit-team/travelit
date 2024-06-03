@@ -7,6 +7,7 @@ body {
 
 h2 {
   margin:unset;
+  text-align: center;
 }
 
 .plan-second-display {
@@ -86,6 +87,10 @@ h2 {
   height: 680px;
 }
 
+.schedule {
+  overflow: auto;
+}
+
 .schedule, .my-list{
   border: 1px solid #ccc;
   border-radius: 15px;
@@ -95,6 +100,13 @@ h2 {
 
 .schedule-list-card {
   padding-top: 10px;
+}
+
+.day-content {
+  font-size: 0.9em;
+  color: #555;
+  width: 80%;
+  padding-left: 10px;
 }
 
 .details {
@@ -155,4 +167,20 @@ button.generate-btn {
 .small {
   color:#828282;
   font-size: small;
+}
+
+.day-card {
+  display: flex;
+  margin: 10px 0px;
+}
+
+.day-card:first-child {
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.selected {
+  color: red;
 }

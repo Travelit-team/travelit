@@ -6,12 +6,14 @@
 <mapper namespace="com.back.travelit.mapper.planner.PlanMapper">
 
     <!-- 유저 플래너 기본 정보 생성 (유저아이디,시작일,종료일,플래너 제목) -->
-    <insert id="insertMakePlan" parameterType="com.back.travelit.dto.request.planner.PlanCreateReq">
+    <insert id="insertMakePlan" parameterType="map" useGeneratedKeys="true"
+            keyProperty="createReqDTO.planId">
         insert into PLAN(USER_ID, PL_STR_DATE, PL_END_DATE, PL_TITLE)
-            values (2,#{startDate},#{endDate},#{title})
-        <selectKey keyProperty="planId" resultType="int" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
+            values (#{userId},
+                    #{createReqDTO.startDate},
+                    #{createReqDTO.endDate},
+                    #{createReqDTO.title}
+        )
     </insert>
 
     <!-- 유저 플래너 여행지역 생성 (지역 코드) -->
@@ -35,17 +37,16 @@
     </select>
 
     <!-- 유저 스케줄 여행 일차 생성 -->
-    <insert id="insertMakeSched" parameterType="com.back.travelit.dto.request.planner.ScheduleCreateReq">
+    <insert id="insertMakeSched" parameterType="map" useGeneratedKeys="true"
+            keyProperty="scheduleDay.schedId">
         insert into SCHED (PLAN_ID, PL_DAY)
-        values (#{planId},#{planDay})
-        <selectKey keyProperty="schedId" resultType="int" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
+        values (#{planId}, #{scheduleDay.plDay})
     </insert>
 
     <!-- 유저 스케줄 일정 생성 -->
-    <insert id="insertMakeSchedLocInfo" parameterType="java.util.List">
+    <insert id="insertMakeSchedLocInfo" parameterType="map">
         insert into SCHED_INFO (SCHED_ID, LOCATION_INFO_ID)
+        VALUES
         <foreach item="locInfoId" collection="locInfoIds" separator=",">
             (#{schedId},#{locInfoId})
         </foreach>
