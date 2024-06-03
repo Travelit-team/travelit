@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragments/header :: head"></th:block>
     <th:block th:replace="fragments/footer :: head"></th:block>
@@ -9,22 +9,88 @@
 </head>
 <body>
     <header th:replace="fragments/header :: header"></header>
-    <form action="/planner/plan-make" method="post" class="submit">
-        <div class="plan-second-display">
+    <form action="/planner/make-sched" method="post" class="submit">
+        <div class="container">
             <div class="plan-second-wrap">
-                <div class="left">
-
+                <div class="left-wrap">
+                    <div class="top-wrap">
+                        <div class="top-left-wrap">
+                            <div class="top-title">
+                                <h2>제목</h2>
+                                <div class="top-data" th:text="${createReqDTO.getTitle()}"/>
+                            </div>
+                            <div class="top-date">
+                                <h2>일정</h2>
+                                <div class="top-data" th:text="${createReqDTO.getStartDate()}"/>
+                                <div class="top-data" th:text="' - ' + ${createReqDTO.getEndDate()}"/>
+                            </div>
+                        </div>
+                        <div class="top-location">
+                            <h2>여행지</h2>
+                            <div class="top-data">
+                                <span th:each="state : ${states}">
+                                    <span th:text="${state.getLocName()}"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <input type="hidden" value="${createReqDTO.getPlanId()}"/>
+                    </div>
+                    <div class="content">
+                        <div class="schedule">
+                            <h2>일정표</h2>
+                            <div class="schedule-list-card">
+                                <div th:each="date, iterStat : ${dates}">
+                                    <div th:text="'Day '+${iterStat.index + 1}"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-list">
+                            <h2>나의 찜 리스트</h2>
+                            <div class="details">
+                                <div th:each="mark : ${allMarks}">
+                                    <div class="mark-list-card">
+                                        <div class="mark-card-text-container">
+                                            <div class="medium" th:text="${mark.locTitle}"></div>
+                                            <div class="small" th:text="${mark.locAddress}"></div>
+                                        </div>
+                                        <div class="mark-card-button-container">
+                                            <button>+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="center">
-
-                </div>
-                <div class="right">
-                <input type="submit" id="save-shed" name="save-shed" value="일정 저장"/>
+                <div class="right-wrap">
+                    <div class="search-bar">
+                        <input type="text" name="keyword" class="keyword"/>
+                        <input type="button" id="search" value="검색"/>
+                    </div>
+                    <div class="details">
+                        <div th:each="location : ${allLocations}">
+                            <div class="location-list-card">
+                                <div class="location-card-text-container">
+                                    <div class="medium" th:text="${location.locTitle}"></div>
+                                    <div class="small" th:text="${location.locAddress}"></div>
+                                </div>
+                                <div class="location-card-button-container">
+                                    <button>+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="generate-btn">일정 생성</button>
+                    </div>
                 </div>
             </div>
         </div>
-
     </form>
     <footer th:replace="fragments/footer :: footer"></footer>
+    <script src="/js/planner/plan-second-day.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 </body>
 </html>

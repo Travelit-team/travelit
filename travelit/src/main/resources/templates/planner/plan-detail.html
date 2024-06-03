@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html
+  lang="ko"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <head>
+    <th:block th:replace="fragments/header :: head"></th:block>
+    <th:block th:replace="fragments/footer :: head"></th:block>
+    <meta charset="UTF-8" />
+    <title>Planner</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/css/planner/plan-detail.css"
+    />
+  </head>
+  <body>
+    <header th:replace="fragments/header :: header"></header>
+    <div class="container">
+      <div class="top">
+        <div class="top-center">
+          <h1 class="plan-title"><span th:text="${planInfos.get(0).plTitle}"/></h1>
+          <div class="trip-info">
+            <div class="trip-duration">
+              <img src="/images/planner/calendar_icon.png" alt="일정" />
+              <span th:text="${planInfos.get(0).startDate}"/>
+              ~
+              <span th:text="${planInfos.get(0).endDate}"/>
+            </div>
+            <div class="trip-location">
+              <img src="/images/planner/map_icon.png" alt="지역" />
+                <span th:each="planLoc : ${planInfos.get(0).getPlLocNames()}">
+                  <span th:text="${planLoc.getLocNames().locName}"/>
+                </span>
+            </div>
+          </div>
+        </div>
+        <div class="top-right">
+          <div class="date"><span th:text="${planInfos.get(0).createAt}"/></div>
+        </div>
+      </div>
+      <section class="content">
+        <div th:if="${scheds != null}">
+          <div th:each="sched : ${scheds}">
+            <h1><span th:text="${sched.plDay} + '일차'"></span></h1>
+              <div class="location" th:each="loc : ${sched.schedInfos}">
+                <img th:src="@{${loc.locationInfos.imgSrcs.imgSrc}}" th:alt="${loc.locationInfos.locTitle}"/>
+                <div class="location-info">
+                <div class="location-title" th:text="${loc.locationInfos.locTitle}"></div>
+                <div class="address" th:text="${loc.locationInfos.address}"></div>
+                <div class="sub-title" th:text="${loc.locationInfos.locSubTitle}"></div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer th:replace="fragments/footer :: footer"></footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+  </body>
+</html>

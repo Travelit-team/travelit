@@ -97,6 +97,65 @@
         WHERE LOCATION_CODE = #{locationCode}
     </select>
 
+    <select id="getDetailLocation" parameterType="int" resultType="com.back.travelit.dto.response.location.LocationDetailResponse">
+        SELECT L.LOCATION_INFO_ID AS locationInfoId, L.TITLE, L.SUB_TITLE AS subTitle, L.DESCRIPTION, L.ADDRESS, L.LATITUDE, L.LONGITUDE,  L.VIEWS, IL.LIKE_COUNT AS likeCount, B.BOOKMARK_COUNT AS bookmarkCount, L.CREATE_AT AS createAt
+        FROM LOCATION_INFO L
+                 LEFT OUTER JOIN (
+            SELECT LOCATION_INFO_ID, COUNT(*) AS LIKE_COUNT
+            FROM LOCATION_INFO_LIKES
+            GROUP BY LOCATION_INFO_ID
+        ) IL ON L.LOCATION_INFO_ID = IL.LOCATION_INFO_ID
+                 LEFT OUTER JOIN (
+            SELECT LOCATION_INFO_ID, COUNT(*) AS BOOKMARK_COUNT
+            FROM LOCATION_BOOKMARK
+            GROUP BY LOCATION_INFO_ID
+        ) B ON L.LOCATION_INFO_ID = B.LOCATION_INFO_ID
+        WHERE L.LOCATION_INFO_ID = #{locationInfoId};
+    </select>
+
+    <select id="getLocationImgUrls" parameterType="int" resultType="String">
+        SELECT I.IMG_SRC
+        FROM LOCATION_INFO L
+        INNER JOIN LOCATION_INFO_IMG I
+        ON L.LOCATION_INFO_ID = I.LOCATION_INFO_ID
+        WHERE L.LOCATION_INFO_ID = #{locationInfoId};
+    </select>
+
+    <select id="getLocationSubInfos" parameterType="int" resultType="com.back.travelit.dto.response.location.LocationSubInfoResponse">
+        SELECT DETAIL_TITLE AS detailTitle, DETAIL_CONTENTS AS detailContents
+        FROM LOCATION_INFO L
+                 INNER JOIN LOCATION_DETAILS D
+                            ON L.LOCATION_INFO_ID = D.LOCATION_INFO_ID
+        WHERE L.LOCATION_INFO_ID = #{locationInfoId};
+    </select>
+
+    <select id="locationLikeExists" parameterType="map" resultType="int">
+        SELECT count(*)
+        FROM USER U
+            INNER JOIN LOCATION_BOOKMARK B
+                ON U.USER_ID = B.USER_ID
+        WHERE U.USER_ID = #{userId} AND B.LOCATION_INFO_ID = #{locationInfoId};
+    </select>
+
+    <insert id="locationLikeInsert" parameterType="map">
+        INSERT INTO LOCATION_BOOKMARK (USER_ID, LOCATION_INFO_ID)
+        VALUES (
+                    #{userId},
+                    #{locationInfoId}
+               )
+    </insert>
+
+    <delete id="locationLikeDelete" parameterType="map">
+        DELETE FROM LOCATION_BOOKMARK
+               WHERE USER_ID = #{userId} AND LOCATION_INFO_ID = #{locationInfoId};
+    </delete>
+
+    <update id="increaseViews" parameterType="int">
+        UPDATE LOCATION_INFO
+        SET VIEWS = VIEWS + 1
+        WHERE LOCATION_INFO_ID = #{locationInfoId}
+    </update>
+
     <sql id="dynamicColumns">
         <choose>
             <when test="searchRequest.sort == 'likes'">

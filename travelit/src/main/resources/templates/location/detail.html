@@ -1,14 +1,153 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <link rel="stylesheet" href="/css/location/detail.css" />
+    <script type="text/javascript" th:src="@{'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${@environment.getProperty('kakao-javaScript-key')} + '&libraries=services'} "></script>
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+    <th:block th:replace="fragments/header :: head"></th:block>
+    <th:block th:replace="fragments/footer :: head"></th:block>
+    <meta charset="UTF-8">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <header th:replace="fragments/header :: header"></header>
+<div id="location-detail-contents-div">
+    <div class="location-header">
+        <h1 th:text="${detailLocation.title}" class="location-title">제목</h1>
+        <span th:text="${detailLocation.address}" class="location-address">주소</span>
+        <p class="location-sub-title"><em th:text="${detailLocation.subTitle}">부제목</em></p>
+        <div class="stats">
+            <div class="like_and_view">
+                <div class="stat margin-right">
+                    <span id="like_icon" class="icon"></span>
+                    <span data-th-text="${#numbers.formatInteger(detailLocation.likeCount, 0, 'COMMA')}" class="number">0</span>
+                </div>
+                <div class="stat">
+                    <span id="view_icon" class="icon"></span>
+                    <span data-th-text="${#numbers.formatInteger(detailLocation.views, 0, 'COMMA')}" class="number">0</span>
+                </div>
+            </div>
+            <div class="stat">
+                <span id="bookmark_icon" class="icon" th:classappend="${likeExist} ? 'bookmark-checked' : 'bookmark'"></span>
+                <span id="bookmark-count" data-th-text="${#numbers.formatInteger(detailLocation.bookmarkCount, 0, 'COMMA')}" class="number">0</span>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="slider">
+            <div th:each="url : ${detailLocationImgUrls}">
+                <img class="img_size" th:src="@{${url}}" th:alt="${detailLocation.title}">
+            </div>
+        </div>
+    </div>
+    <div id="location-description-div">
+        <div id="location-description-header">
+            <h3>상세정보</h3>
+        </div>
+        <div id="location-description-contents">
+            <p th:utext="${detailLocation.description}">
+                상세정보 내용
+            </p>
+        </div>
+    </div>
+    <div id="map"></div>
+    <div id="location-detail-info-container">
+        <ul>
+            <li class="location-info-list" th:each="info : ${subLocationInfo}">
+                <strong class="detail-title" th:text="${info.detailTitle}">문의 및 안내</strong>
+                <span class="detail-contents" th:text="${info.detailContents}">02-967-8721</span>
+            </li>
+        </ul>
+    </div>
 
-    <div>hello</div>
+    <div class="user-expression">
+        <div class="txt">
+            <strong id="uriTitle">해당 여행지가 마음에 드시나요?</strong>
+            <p>평가를 해주시면 개인화 추천 시 활용하여 최적의 여행지를 추천해 드리겠습니다.</p>
+        </div>
+        <div class="form">
+            <span class="good">
+                    <input type="radio" id="expressionForm01" name="userExpression">
+                    <label for="expressionForm01">좋아요!</label>
+            </span>
+        </div>
+    </div>
+
+    <div class="location-reply">
+        <h3 class="tit_reply">
+            여행톡<span>25</span>
+        </h3>
+        <div class="write" id="writeReview">
+            <div class="location-replay-form">
+                <form name="tform" id="tform">
+                    <span class="writeForm"><textarea name="" rows="" id="comment" placeholder="로그인 후 소중한 댓글을 남겨주세요." cols="" onkeydown="commentresize(this);"></textarea></span>
+                    <div class="fileRegbtn_wrap">
+                        <span class="fileRegbtn">
+                            <a href="javascript:" class="btn_apply ContentComment">작성</a>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="location-reply-list-container">
+        <div class="location-reply-contents-div">
+            <div class="reply-profile">
+                <div class="reply-user-photo"></div>
+            </div>
+            <div class="replay-text-div">
+                <p>서울 도심속 힐링장소입니다. 커피한잔하면서 이야기나누기에는 너무나 좋은장소입니다 봄에 여유를 만끽하러 꼭 가보세요</p>
+                <div class="reply-info-div">
+                    <em>nickname</em>
+                    <div>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+                    <span>2024.5.28</span>
+                </div>
+            </div>
+        </div>
+        <div class="location-reply-contents-div">
+            <div class="reply-profile">
+                <div class="reply-user-photo"></div>
+            </div>
+            <div class="replay-text-div">
+                <p>서울 도심속 힐링장소입니다. 커피한잔하면서 이야기나누기에는 너무나 좋은장소입니다 봄에 여유를 만끽하러 꼭 가보세요</p>
+                <div class="reply-info-div">
+                    <em>nickname</em>
+                    <div>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+                    <span>2024.5.28</span>
+                </div>
+            </div>
+        </div>
+        <div class="location-reply-contents-div">
+            <div class="reply-profile">
+                <div class="reply-user-photo"></div>
+            </div>
+            <div class="replay-text-div">
+                <p>서울 도심속 힐링장소입니다. 커피한잔하면서 이야기나누기에는 너무나 좋은장소입니다 봄에 여유를 만끽하러 꼭 가보세요</p>
+                <div class="reply-info-div">
+                    <em>nickname</em>
+                    <div>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+                    <span>2024.5.28</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Bootstrap JavaScript dependencies (optional) -->
+<script  th:inline="javascript">
+    //ThymeLeaf Value Settings
+
+    /*<![CDATA[*/
+    const detailLocation = [[ ${detailLocation} ]];
+    /*]]>*/
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/location/detail.js"></script>
 </body>
 </html>

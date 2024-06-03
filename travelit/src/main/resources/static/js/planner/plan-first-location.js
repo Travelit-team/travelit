@@ -1,14 +1,3 @@
-const regions = [
-    { name: '서울'},
-    { name: '경기도'},
-    { name: '인천'},
-    { name: '강원도'},
-    { name: '전라도'},
-    { name: '충청도'},
-    { name: '경상도'},
-    { name: '제주도'},
-];
-
 document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.card'); //'.card'클래스를 가진 모든 요소를 저장.cards는 NodeList
     const selectedCardIds = new Set();
@@ -27,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // 선택된 데이터 ID 목록 출력
-            $("#state").val(Array.from(selectedCardIds).join(','));
+            $("#locCode").val(Array.from(selectedCardIds).join(','));
             console.log(`Selected card IDs: ${Array.from(selectedCardIds).join(',')}`);
         });
     });
