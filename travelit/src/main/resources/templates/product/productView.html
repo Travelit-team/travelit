@@ -14,6 +14,12 @@
 <body>
         <header th:replace="fragments/header :: header"></header>
 
+        <div class=" ">
+                <button type="button" onclick="productWritePage();" class="product-update">수정</button>
+                <button type="button" onclick="DeleteProduct();" class="product-delete">삭제</button>
+                <button type="button" onclick="productListPage();" class="product-back">뒤로</button><br/>
+        </div>
+
         <!-- 상품 상세 이미지 -->
         <div class="slider">
                 <div th:each="url : ${productImageUrl}">
@@ -85,12 +91,6 @@
                 </div>
         </div>
 
-        <div class=" ">
-                <button type="button" onclick="productWritePage();">수정</button>
-                <button type="button" onclick="DeleteProduct();">삭제</button>
-                <button type="button" onclick="productListPage();">뒤로</button><br/>
-        </div>
-
         <!-- 리뷰 작성 -->
         <div class="review-container">
                 <div class="review-title">이용후기</div>
@@ -122,10 +122,11 @@
         <div id="reviewUpdatePopup" class="popLayer">
                 <h3>댓글 수정</h3>
                 <div class="pop_container">
-                        <div scope="row">내용<span>필수 입력</span></div>
-                        <textarea id="modalContent" name="modalContent" cols="90" rows="10" placeholder="수정할 내용을 입력해 주세요." style="width:70%;"></textarea><br/>
-                        <button type="button" id="commentUpdateBtn">수정</button>
-                        <button type="button" onclick="closeUpdatePopup();">취소</button>
+                        <textarea id="modalContent" name="modalContent" cols="90" rows="10" placeholder="수정할 내용을 입력해 주세요." style="width:70%;" class="review-update-textarea"></textarea><br/>
+                        <div class="review-btn-container">
+                                <button type="button" id="commentUpdateBtn" class="review-update-btn">수정</button>
+                                <button type="button" onclick="closeUpdatePopup();" class="review-cancel-btn">취소</button>
+                        </div>
                 </div>
                 <button type="button" class="btn_close" onclick="closeUpdatePopup();"><span><i></i></span></button>
         </div>
