@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<!--    <link rel="stylesheet" href="/css/location/mainList.css" />-->
+    <link rel="stylesheet" href="/css/planner/mainList.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+    <th:block th:replace="fragments/header :: head"></th:block>
+    <th:block th:replace="fragments/footer :: head"></th:block>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div>
+    <div class="slider">
+        <div><img class="img_size" src="/images/location/list/slider/slide1.png" alt=""></div>
+        <div><img class="img_size" src="/images/location/list/slider/slide2.png" alt=""></div>
+        <div><img class="img_size" src="/images/location/list/slider/slide3.png" alt=""></div>
+        <div><img class="img_size" src="/images/location/list/slider/slide4.png" alt=""></div>
+        <div><img class="img_size" src="/images/location/list/slider/slide_sub1.jpg" alt=""></div>
+    </div>
+</div>
+<div id="location-list-container">
+    <div class="region-container">
+        <div class="region" data-location-code="L001">
+            <div class="circle" style="background-image: url('/images/location/list/banner/seoul1.jpeg');"></div>
+            <div class="label">서울</div>
+        </div>
+        <div class="region" data-location-code="L002">
+            <div class="circle" style="background-image: url('/images/location/list/banner/gyeong-gi-do1.jpeg');"></div>
+            <div class="label">경기도</div>
+        </div>
+        <div class="region" data-location-code="L003">
+            <div class="circle" style="background-image: url('/images/location/list/banner/incheon1.jpeg');"></div>
+            <div class="label">인천</div>
+        </div>
+        <div class="region" data-location-code="L004">
+            <div class="circle" style="background-image: url('/images/location/list/banner/Chungcheong-do1.jpeg');"></div>
+            <div class="label">충청도</div>
+        </div>
+        <div class="region" data-location-code="L005">
+            <div class="circle" style="background-image: url('/images/location/list/banner/Gangwon-do1.jpeg');"></div>
+            <div class="label">강원도</div>
+        </div>
+        <div class="region" data-location-code="L006">
+            <div class="circle" style="background-image: url('/images/location/list/banner/Jeolla-do1.jpeg');"></div>
+            <div class="label">전라도</div>
+        </div>
+        <div class="region" data-location-code="L007">
+            <div class="circle" style="background-image: url('/images/location/list/banner/Gyeongsang-do1.jpeg');"></div>
+            <div class="label">경상도</div>
+        </div>
+        <div class="region" data-location-code="L008">
+            <div class="circle" style="background-image: url('/images/location/list/banner/Jeju-do1.jpeg');"></div>
+            <div class="label">제주도</div>
+        </div>
+    </div>
+</div>
+<div id="planner-list-container">
+    <div class="my-planner-list-container">
+        <div class="my-planner">
+            나의 플래너
+        </div>
+        <div class="plan-card-container">
+            <div class="plan-card" th:each="planList : ${myPlanList}">
+                <div class="plan-title" th:text="${planList.plTitle}"></div>
+                <div class="plan-date">
+                    <span th:text="${planList.startDate}"></span>
+                    ~
+                    <span th:text="${planList.endDate}"></span>
+                </div>
+                <div class="plan-locations" th:text="${planList.locations}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/js/location/list.js"></script>
+</body>
+</html>

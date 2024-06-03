@@ -8,7 +8,7 @@
     <!-- 유저 플래너 기본 정보 생성 (유저아이디,시작일,종료일,플래너 제목) -->
     <insert id="insertMakePlan" parameterType="com.back.travelit.dto.request.planner.PlanCreateReq">
         insert into PLAN(USER_ID, PL_STR_DATE, PL_END_DATE, PL_TITLE)
-            values (1,#{startDate},#{endDate},#{title})
+            values (2,#{startDate},#{endDate},#{title})
         <selectKey keyProperty="planId" resultType="int" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -24,8 +24,8 @@
     </insert>
 
     <!-- 지역 코드로 지역명 값 조회 for 플래너 여행지역 -->
-    <select id="selectAllLocCode" parameterType="java.util.List" resultType="com.back.travelit.dto.response.planner.PlanLocCodeRes">
-        select LOCATION_CODE AS stateCode, LOCATION_NAME AS stateName
+    <select id="selectAllLocName" parameterType="java.util.List" resultType="com.back.travelit.dto.response.planner.PlanLocCodeRes">
+        select LOCATION_CODE AS locCode, LOCATION_NAME AS locName
         from LOCATION_CODE
         where LOCATION_CODE in (
         <foreach item="locCode" collection="locCodes" separator=",">

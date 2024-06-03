@@ -4,12 +4,27 @@ html, body {
 }
 .plan-first-display{
     width: 100vw;
-    height: 740px;
+    height: 920px;
     display: block;
 }
 
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: white;
+}
+
+.fc-day-sun a {
+    color: red;
+    text-decoration: none;
+}
+
+/* 토요일 날짜 파란색 */
+.fc-day-sat a {
+    color: blue;
+    text-decoration: none;
+}
+
 .plan-first-wrap{
-    height: 740px;
+    height: 100%;
     margin: 3vh 15vw 6vh 15vw;
     display: flex;
     border: 1px solid #24292D;
@@ -22,59 +37,76 @@ html, body {
     height: auto;
 }
 
-#calendar{
-    width: auto;
-    height:100%;
+.plan-first-wrap {
+  height: 740px;
+  margin: 3vh 15vw 6vh 15vw;
+  display: flex;
+  border: 1px solid #24292d;
+  border-radius: 15px;
+  padding: 15px;
+}
+.left-wrap {
+  margin: 20px;
+  width: 70%;
+  height: auto;
 }
 
-.right-wrap{
-    margin: 20px 20px 20px 0px ;
-    width:  30%;
-    height: 100%;
+#calendar {
+  width: auto;
+  height: 100%;
 }
 
-
-.plan-title-wrap{
-    width: 100%;
-    height: 50px;
-    display: flex;
-    justify-content: flex-start;
-    border: 1px solid #24292D;
-    border-radius: 15px;
-    align-items: center;
-}
-.plan-title{
-    margin-left:10px;
-    width:40%;
-    font-size: 18px;
-}
-#title{
-    width: 100%;
-    height: 30px;
-    border: none;
-    outline: none;
-    font-size: 18px;
+.right-wrap {
+  margin: 20px 20px 20px 0px;
+  width: 30%;
+  height: 100%;
 }
 
-.plan-state{
-    width: 100%;
-    height: 560px;
+.plan-title-wrap {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: flex-start;
+  border: 1px solid #24292d;
+  border-radius: 15px;
+  align-items: center;
+}
+.plan-title {
+  margin-left: 10px;
+  width: 40%;
+  font-size: 18px;
+}
+#title {
+  width: 100%;
+  height: 30px;
+  border: none;
+  outline: none;
+  font-size: 18px;
+}
+
+.plan-state {
+  width: 100%;
+  height: 560px;
 }
 
 .plan-state-title{
     font-size:26px;
     height:40px;
     width: 100%;
-    margin-top: 30px;
     text-align: center;
+    margin-bottom: 10px;
+}
+
+.plan-state-title-margin {
+    margin-top: 20px;
 }
 
 .card-list {
-    margin: 0px 0px 20px 0px;
-    display: block;
-    flex-wrap: wrap;
-    gap: 10px;
-    height: 520px;
+  margin: 0px 0px 20px 0px;
+  display: block;
+  flex-wrap: wrap;
+  gap: 10px;
+  height: 520px;
 }
 
 .card {
@@ -90,16 +122,16 @@ html, body {
     text-align: center;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-    }
+}
 
 .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .card.selected {
-    border-color: #007bff;
-    background-color: #e7f3ff;
+  border-color: #007bff;
+  background-color: #e7f3ff;
 }
 #make-plan {
     background-color: #24292D;
@@ -110,4 +142,33 @@ html, body {
     margin: 10px 10px 20px 10px;
     padding:10px;
     font-size: 22px;
+}
+
+
+.date-picker {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    justify-content: center;
+}
+
+.date-picker input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    text-align: center;
+    width: 40%;
+    margin: 0 5px;
+    outline: none;
+    font-size: 16px;
+}
+
+.date-picker .separator {
+    margin: 0 5px;
+}
+
+.selected-range {
+    background-color: #e7e7e7;
 }

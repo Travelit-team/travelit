@@ -8,9 +8,9 @@
     </appender>
 
     <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>C:\Users\coconut\heegeneloggingtest\info.log</file>
+        <file>logginginfo.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>C:\Users\coconut\heegeneloggingtest\error%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <fileNamePattern>logging\error%d{yyyy-MM-dd}.log.zip</fileNamePattern>
             <maxHistory>15</maxHistory>
         </rollingPolicy>
         <encoder>
