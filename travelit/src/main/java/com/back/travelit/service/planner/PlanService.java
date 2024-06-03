@@ -1,6 +1,5 @@
 package com.back.travelit.service.planner;
 
-import com.back.travelit.domain.common.PagingSearchCriteria;
 import com.back.travelit.dto.request.planner.PlanCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleReplaceReq;
@@ -27,7 +26,6 @@ public class PlanService {
         planMapper.insertMakePlan(createReqDTO);
         int planId = createReqDTO.getPlanId();
         setMakePlanLoc(createReqDTO.getLocCode(), planId);
-
         return planId;
     }
 
@@ -38,9 +36,9 @@ public class PlanService {
     }
 
     //지역 코드로 지역명 값 조회 for 플래너 여행지역
-    public List<PlanLocCodeRes> selectAllLocCode(String str) {
+    public List<PlanLocCodeRes> selectAllLocName(String str) {
         List<String> strArr = Arrays.stream(str.split(",")).collect(Collectors.toList());
-        return planMapper.selectAllLocCode(strArr);
+        return planMapper.selectAllLocName(strArr);
     }
 
     ;
@@ -74,13 +72,12 @@ public class PlanService {
     //유저 즐겨찾기 지역 정보 조회
     @Transactional(readOnly = true)
     public List<PlanLocInfo> getMarkLocInfo(int userId){
-        List<PlanLocInfo> userMark = planMapper.selectMarkLocInfo(userId);
-        return userMark;
+        return planMapper.selectMarkLocInfo(userId);
     }
     //전체 지역 정보 조회
     @Transactional(readOnly = true)
-    public List<PlanLocInfo> getLocInfo(PagingSearchCriteria pagingSearchCriteria) {
-        List<PlanLocInfo> planLocInfos = planMapper.selectAllLocInfo(pagingSearchCriteria);
+    public List<PlanLocInfo> getLocInfo() {
+        List<PlanLocInfo> planLocInfos = planMapper.selectAllLocInfo();
         return planLocInfos;
     }
 

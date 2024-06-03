@@ -1,6 +1,5 @@
 package com.back.travelit.mapper.planner;
 
-import com.back.travelit.domain.common.PagingSearchCriteria;
 import com.back.travelit.dto.request.location.SearchRequest;
 import com.back.travelit.dto.request.planner.PlanCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleCreateReq;
@@ -22,7 +21,7 @@ public interface PlanMapper {
     void insertMakePlanLoc(@Param("locCodes") List<String> strArr, @Param("planId") int planId);
 
     //지역 코드로 지역명 값 조회 for 플래너 여행지역
-    List<PlanLocCodeRes> selectAllLocCode(@Param("locCodes") List<String> strArr);
+    List<PlanLocCodeRes> selectAllLocName(@Param("locCodes") List<String> strArr);
 
     //유저 여행 상세 스케줄 생성
     //여행 일차 저장
@@ -49,13 +48,13 @@ public interface PlanMapper {
     List<PlanLocInfo> selectMarkLocInfo(@Param("userId") int userId);
 
     //전체 지역 정보 조회
-    List<PlanLocInfo> selectAllLocInfo(PagingSearchCriteria pagingSearchCriteria);
+    List<PlanLocInfo> selectAllLocInfo();
 
     //플래너 상세 보기
     //플래너 기본 정보
     List <DetailPlan> selectPlanDetail(@Param("planId") int planId);
     //플래너 스케줄
-    List <DetailSched>  selectSchedDetail(@Param("planId") int planId);
+    List <DetailSched> selectSchedDetail(@Param("planId") int planId);
 
     //내 플래너 리스트
     List<PlannerList> selectMyPlan(@Param("userId") int userId);
