@@ -6,6 +6,7 @@ import com.back.travelit.dto.request.planner.ScheduleDayRequest;
 import com.back.travelit.dto.request.planner.ScheduleReplaceReq;
 import com.back.travelit.dto.response.location.LocationPostResponse;
 import com.back.travelit.dto.response.planner.*;
+import com.back.travelit.dto.response.product.ProductResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -58,10 +59,13 @@ public interface PlanMapper {
     List <DetailSched> selectSchedDetail(@Param("planId") int planId);
 
     //내 플래너 리스트
-    List<PlannerList> selectMyPlan(@Param("userId") int userId);
+    List <PlannerList> selectMyPlan(@Param("userId") int userId);
 
     //지역정보 리스트(조회수순 6개)
-    List<LocationPostResponse> selectLocList(@Param("count") int count);
+    List <LocationPostResponse> selectLocList(@Param("count") int count);
+
+    //상품정보 리스트(조회수순 8개)
+    List <ProductResponse> selectProductList();
 
     //페이징처리
     int count(SearchRequest params);
