@@ -5,11 +5,12 @@
     <th:block th:replace="fragments/footer :: head"></th:block>
     <meta charset="UTF-8">
     <title>Planner Second Step</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/planner/plan-second.css">
 </head>
 <body>
     <header th:replace="fragments/header :: header"></header>
-    <form action="/planner/make-sched" method="post" class="submit">
+    <form  onsubmit="return false;" class="submit">
         <div class="container">
             <div class="plan-second-wrap">
                 <div class="left-wrap">
@@ -33,14 +34,17 @@
                                 </span>
                             </div>
                         </div>
-                        <input type="hidden" value="${createReqDTO.getPlanId()}"/>
+                        <input id="current-planId" type="hidden" th:value="${createReqDTO.getPlanId()}"/>
                     </div>
                     <div class="content">
                         <div class="schedule">
                             <h2>일정표</h2>
-                            <div class="schedule-list-card">
+                            <div class="schedule-list-card" id="schedule-list-card">
                                 <div th:each="date, iterStat : ${dates}">
-                                    <div th:text="'Day '+${iterStat.index + 1}"></div>
+                                    <div class="day-card" th:attr="data-day-index=${iterStat.index + 1}">
+                                        <div th:text="'Day '+${iterStat.index + 1}"></div>
+                                        <div class="day-content"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -52,9 +56,10 @@
                                         <div class="mark-card-text-container">
                                             <div class="medium" th:text="${mark.locTitle}"></div>
                                             <div class="small" th:text="${mark.locAddress}"></div>
+                                            <input type="hidden" th:value="${mark.locInfoId}"/>
                                         </div>
                                         <div class="mark-card-button-container">
-                                            <button>+</button>
+                                            <button type="button" class="add-btn">+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -67,30 +72,29 @@
                         <input type="text" name="keyword" class="keyword"/>
                         <input type="button" id="search" value="검색"/>
                     </div>
-                    <div class="details">
+                    <div id="location-search-div" class="details">
                         <div th:each="location : ${allLocations}">
                             <div class="location-list-card">
                                 <div class="location-card-text-container">
                                     <div class="medium" th:text="${location.locTitle}"></div>
                                     <div class="small" th:text="${location.locAddress}"></div>
+                                    <input type="hidden" th:value="${location.locInfoId}"/>
                                 </div>
                                 <div class="location-card-button-container">
-                                    <button>+</button>
+                                    <button type="button" class="add-btn">+</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <button class="generate-btn">일정 생성</button>
+                        <button type="button" id="generate-btn" class="generate-btn">일정 생성</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
     <footer th:replace="fragments/footer :: footer"></footer>
-    <script src="/js/planner/plan-second-day.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+
+    <script type="text/javascript" src="/js/planner/plan-second-day.js"></script>
 </body>
 </html>

@@ -1,8 +1,9 @@
 package com.back.travelit.service.planner;
 
 import com.back.travelit.dto.request.planner.PlanCreateReq;
-import com.back.travelit.dto.request.planner.ScheduleCreateReq;
+import com.back.travelit.dto.request.planner.ScheduleDayRequest;
 import com.back.travelit.dto.request.planner.ScheduleReplaceReq;
+import com.back.travelit.dto.request.planner.ScheduleRequest;
 import com.back.travelit.dto.response.location.LocationPostResponse;
 import com.back.travelit.dto.response.planner.*;
 import com.back.travelit.mapper.planner.PlanMapper;
@@ -24,8 +25,8 @@ public class PlanService {
 
     //planMapper.xml
     //플래너 생성 (플래너제목,여행일정 insert)
-    public int setMakePlan(PlanCreateReq createReqDTO) {
-        planMapper.insertMakePlan(createReqDTO);
+    public int setMakePlan(int userId, PlanCreateReq createReqDTO) {
+        planMapper.insertMakePlan(userId, createReqDTO);
         int planId = createReqDTO.getPlanId();
         setMakePlanLoc(createReqDTO.getLocCode(), planId);
         return planId;
@@ -43,14 +44,19 @@ public class PlanService {
         return planMapper.selectAllLocName(strArr);
     }
 
-    ;
-
     //유저 여행 상세 스케줄 생성
-    public void setMakeSched(ScheduleCreateReq schedCreateReqDTO) {
-        planMapper.insertMakeSched(schedCreateReqDTO);
-        int schedId = schedCreateReqDTO.getSchedId();
-//        List<Integer> locInfoIds = schedCreateReqDTO.getLocInfoId();
-//        planMapper.insertMakeSchedLocInfo(locInfoIds,schedId);
+    public void setMakeSched(ScheduleRequest scheduleRequest) {
+        List<ScheduleRequest.DaySchedule> schedule = scheduleRequest.getSchedule();
+
+        for (ScheduleRequest.DaySchedule daySchedule : schedule) {
+            ScheduleDayRequest scheduleDay = new ScheduleDayRequest(daySchedule.getDay());
+            planMapper.insertMakeSched(scheduleRequest.getPlanId(), scheduleDay);
+
+            if(!daySchedule.getLocationInfoIds().isEmpty()) {
+                planMapper.insertMakeSchedLocInfo(scheduleDay.getSchedId(), daySchedule.getLocationInfoIds());
+            }
+        }
+
     }
 
     //플래너 상세 일정 수정
@@ -79,7 +85,14 @@ public class PlanService {
     //전체 지역 정보 조회
     @Transactional(readOnly = true)
     public List<PlanLocInfo> getLocInfo() {
-        List<PlanLocInfo> planLocInfos = planMapper.selectAllLocInfo();
+        List<PlanLocInfo> planLocInfos = planMapper.selectAllLocInfo(null);
+        return planLocInfos;
+    }
+
+    //키워드 지역 정보 조회
+    @Transactional(readOnly = true)
+    public List<PlanLocInfo> getLocInfoInKeyword(String keyword) {
+        List<PlanLocInfo> planLocInfos = planMapper.selectAllLocInfo(keyword);
         return planLocInfos;
     }
 

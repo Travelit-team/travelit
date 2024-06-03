@@ -1,8 +1,8 @@
 package com.back.travelit.controller.planner;
 
 import com.back.travelit.dto.request.planner.PlanCreateReq;
-import com.back.travelit.dto.request.planner.ScheduleCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleReplaceReq;
+import com.back.travelit.dto.request.planner.ScheduleRequest;
 import com.back.travelit.dto.response.planner.PlanLocCodeRes;
 import com.back.travelit.dto.response.planner.PlanLocInfo;
 import com.back.travelit.security.LoginUser;
@@ -39,12 +39,12 @@ public class PlanController {
 
     //플래너 만들기
     @PostMapping("/plan-make")
-    public String makePlan(@ModelAttribute("createReqDTO") PlanCreateReq createReqDTO, Model model){
+    public String makePlan(@LoginUser UserDTO user, @ModelAttribute("createReqDTO") PlanCreateReq createReqDTO, Model model){
 
-        int userId = 2;
+        int userId = user.getUserId();
 
         //플래너 기본 정보 값 넣고,생성된 플래너 아이디 값 받기
-        int planId = planService.setMakePlan(createReqDTO);
+        int planId = planService.setMakePlan(userId, createReqDTO);
 
         log.info("planId");
         //user가 입력한 플래너 값을 리턴하는 view에 보내기
@@ -87,14 +87,19 @@ public class PlanController {
         return planService.getMarkLocInfo(userId);
     }
 
+    @GetMapping("/location/search")
+    @ResponseBody
+    public List<PlanLocInfo> plannerLocationSerach(@RequestParam("keyword") String keyword) {
+        log.info("planner location search keyword : {}",keyword);
+        return planService.getLocInfoInKeyword(keyword);
+    }
 
-    //스케줄 생성
     @PostMapping("/make-sched")
-    public String makeShed(@ModelAttribute("schedCreateReq") ScheduleCreateReq schedCreateReq, Model model){
+    @ResponseBody
+    public int schedDetailInsert(@RequestBody ScheduleRequest scheduleRequest) {
+        planService.setMakeSched(scheduleRequest);
 
-        //상세 스케줄 값 넣기
-        planService.setMakeSched(schedCreateReq);
-        return "/planner/plan-detail";
+        return scheduleRequest.getPlanId();
     }
 
     //내 플래너 리스트
