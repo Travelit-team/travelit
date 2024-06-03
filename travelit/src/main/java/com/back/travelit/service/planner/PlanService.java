@@ -3,6 +3,7 @@ package com.back.travelit.service.planner;
 import com.back.travelit.dto.request.planner.PlanCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleReplaceReq;
+import com.back.travelit.dto.response.location.LocationPostResponse;
 import com.back.travelit.dto.response.planner.*;
 import com.back.travelit.mapper.planner.PlanMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class PlanService {
 
+    private static final int VIEWS_COUNT = 6;
     private final PlanMapper planMapper;
 
     //planMapper.xml
@@ -97,6 +99,11 @@ public class PlanService {
     @Transactional(readOnly = true)
     public List <PlannerList> getMyPlanList(int userId) {
         return planMapper.selectMyPlan(userId);
+    }
+
+    //지역정보 리스트(조회수순 6개)
+    public List<LocationPostResponse> selectLocList(){
+        return planMapper.selectLocList(VIEWS_COUNT);
     }
 
     //페이징처리
