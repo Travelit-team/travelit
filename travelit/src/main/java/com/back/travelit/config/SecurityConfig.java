@@ -85,13 +85,15 @@ public class SecurityConfig {
                         .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService))
                         .successHandler(customSuccessHandler)
+                       // .loginPage("/user/login")
                 );
 
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/").permitAll()
-                        .requestMatchers("my").hasAuthority("USER") //리다이렉이랑 머야
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/my").hasAuthority("ROLE_USER") //리다이렉이랑 머야
                         .anyRequest().authenticated());
 
         //세션 설정 : STATELESS
@@ -100,11 +102,11 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         
         //예외 설정
-        http
+       /* http
                 .exceptionHandling(handler -> handler.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
                         .exceptionHandling((handler) -> handler.accessDeniedHandler(new CustomAccessDeniedHandler()));
 
-
+*/
 
         return http.build();
     }

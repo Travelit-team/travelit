@@ -56,18 +56,24 @@ public class JWTFilter extends OncePerRequestFilter {
         String username = jwtUtil.getUsername(token);
         String role = jwtUtil.getRole(token);
 
-        String refreshToken = redisUtil.getData(username);
+        if(jwtUtil.isExpired(token)){
 
-        token = jwtUtil.validateRefreshToken(refreshToken);
+            String refreshToken = redisUtil.getData(username);
 
-        if (null == token) {
+            token = jwtUtil.validateRefreshToken(refreshToken);
 
-            System.out.println("token expired");
-            filterChain.doFilter(request, response);
 
-            //조건이 해당되면 메소드 종료 (필수)
-            return;
+            if (null == token) {
+
+                System.out.println("token expired");
+                filterChain.doFilter(request, response);
+
+                //조건이 해당되면 메소드 종료 (필수)
+                return;
+            }
+
         }
+
 
         response.addCookie(jwtUtil.createCookie("Authorization", token));
 

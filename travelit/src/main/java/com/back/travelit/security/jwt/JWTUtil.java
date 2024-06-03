@@ -48,11 +48,9 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
-//    public Boolean isExpired(String token) {
-//
-//        String refreshToken = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("token", String.class);
-//        return null == validateRefreshToken(refreshToken);
-//    }
+    public Boolean isExpired(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());    }
 
     public TokenDTO createJwt(String username, String role) {
 
