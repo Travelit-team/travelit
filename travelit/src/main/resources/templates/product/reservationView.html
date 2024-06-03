@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>예약 정보</title>
+    <th:block th:replace="fragments/header :: head"></th:block>
+    <th:block th:replace="fragments/footer :: head"></th:block>
+    <link th:href="@{/css/product/reservationView.css}" rel="stylesheet">
+
+</head>
+<body>
+    <!-- 헤더 -->
+    <header th:replace="fragments/header :: header"></header>
+
+    <div class="voucher-container">
+        <div class="voucher-title">바우처</div>
+        <div class="voucher-content">
+            <div class="voucher-reservation-info">
+                <div class="voucher-info-state01">예약상태</div>
+                <div class="voucher-info-state02" th:text="${response.RES_STATE}"></div>
+                <div class="voucher-info-number01">예약번호</div>
+                <div class="voucher-info-number02" th:text="${response.RES_ID}"></div>
+                <div class="voucher-info-product01">상품명</div>
+                <div class="voucher-info-product02" th:text="${response.PRO_NAME}"></div>
+                <div class="voucher-info-name01">예약자</div>
+                <div class="voucher-info-name02" th:text="${response.RES_NAME}"></div>
+                <div class="voucher-info-phone01">연락처</div>
+                <div class="voucher-info-phone02" th:text="${response.RES_PHONE}"></div>
+                <div class="voucher-info-use01">사용 예정일</div>
+                <div class="voucher-info-use02" th:text="${response.USE_DATE}"></div>
+                <div class="voucher-info-date01">상품 결제일</div>
+                <div class="voucher-info-date02" th:text="${response.RES_DATE}"></div>
+                <div class="voucher-info-count01">수량</div>
+                <div class="voucher-info-count02" th:text="${response.RES_NUM}"></div>
+                <div class="voucher-info-price01">가격</div>
+                <div class="voucher-info-price02" th:text="'￦ ' + ${#numbers.formatDecimal(response.PRO_PRICE * response.RES_NUM, 0, 'COMMA', 0, 'POINT')}"></div>
+                <div class="voucher-info-request01">요청사항</div>
+                <div class="voucher-info-request02" th:text="${response.RES_REQUEST}"></div>
+            </div>
+            <div class="voucher-total-info">
+                <div>이용 안내</div>
+                <div>∙ 패스 및 입장권 교환시 바우처를 제시하세요.</div>
+                <div>∙ 이벤트 또는 공휴일에 따라 영업시간이 변경될 수 있습니다.</div>
+                <br/>
+                <div>취소 정책</div>
+                <div>∙ 이용 기준 24시간 전까지 통보 시 요금 100% 전액 환불 가능합니다.</div>
+                <div>∙ 이용 기준 24시간 이내 통보 시 취소/환불 불가합니다.</div>
+        </div>
+        </div>
+    </div>
+
+    <button type="button" onclick="reservationListPage();" class="reservation-cancel-btn"><span>뒤로</span></button>
+    <button type="button" onclick="DeleteReservation();" class="reservation-cancel-btn"><span>예약 취소</span></button>
+
+    <!-- footer -->
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //예약 취소
+    function DeleteReservation() {
+        const RES_ID = [[${response.RES_ID}]];
+        const PRO_NAME = [[${response.PRO_NAME}]];
+        if ( !confirm(RES_ID + '번 ' + PRO_NAME + ' 예약을 삭제할까요?') ) {
+            return false;
+        }
+        let inputHtml = '';
+        new URLSearchParams(location.search).forEach((value, key) => {
+            inputHtml += `<input type="hidden" name="${key}" value="${value}" />`;
+        })
+        const formHtml = `
+                        <form id="deleteForm" action="/product/reservationDelete" method="post">
+                                ${inputHtml}
+                        </form>
+                `;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        document.getElementById('deleteForm').submit();
+    }
+
+    //뒤로가기
+    function reservationListPage() {
+        const queryString = new URLSearchParams(location.search);
+        queryString.delete('RES_ID');
+        location.href = '/product/reservationList' + '?' + queryString.toString();
+    }
+    /*]]>*/
+</script>
+</html>

@@ -4,7 +4,7 @@ html, body {
 }
 .plan-first-display{
     width: 100vw;
-    height: 920px;
+    height: auto;
     display: block;
 }
 
@@ -25,7 +25,7 @@ html, body {
 
 .plan-first-wrap{
     height: 100%;
-    margin: 3vh 15vw 6vh 15vw;
+    margin: 6vh 15vw 6vh 15vw;
     display: flex;
     border: 1px solid #24292D;
     border-radius: 15px;
@@ -35,20 +35,6 @@ html, body {
     margin: 20px;
     width: 70%;
     height: auto;
-}
-
-.plan-first-wrap {
-  height: 740px;
-  margin: 3vh 15vw 6vh 15vw;
-  display: flex;
-  border: 1px solid #24292d;
-  border-radius: 15px;
-  padding: 15px;
-}
-.left-wrap {
-  margin: 20px;
-  width: 70%;
-  height: auto;
 }
 
 #calendar {
@@ -63,7 +49,8 @@ html, body {
 }
 
 .plan-title-wrap {
-  width: 100%;
+  padding: 0px 10px 0px 10px;
+  margin:10px;
   height: 50px;
   display: flex;
   justify-content: flex-start;
@@ -171,4 +158,12 @@ html, body {
 
 .selected-range {
     background-color: #e7e7e7;
+}
+
+.calender-how-to {
+    font-size: 15px;
+    text-align: center;
+    font-weight: bold;
+    color: red;
+    margin:5px;
 }

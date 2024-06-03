@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.back.travelit.mapper.product.ProductFileMapper">
+    <!-- 파일 저장 -->
+    <insert id="saveAll" parameterType="list" >
+        INSERT INTO PRODUCT_IMG(PRO_ID, PRO_IMG_NAME, PRO_IMG_DATE)
+        VALUES <foreach item="file" collection="list" separator=",">
+                 (#{file.PRO_ID}, #{file.PRO_IMG_NAME}, NOW())
+               </foreach>
+    </insert>
+
+</mapper>

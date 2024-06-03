@@ -35,12 +35,14 @@
                 </span>
             </div>
           </div>
-        </div>
-        <div class="top-right">
-          <div class="date"><span th:text="${planInfos.get(0).createAt}"/></div>
+          <div class="top-right">
+            <div class="date"><span th:text="${planInfos.get(0).createAt}"/></div>
+          </div>
         </div>
       </div>
       <section class="content">
+        <button id="deleteBtn">삭제</button>
+        <input type="hidden" th:value="${planId}" id="planId">
         <div th:if="${scheds != null}">
           <div th:each="sched : ${scheds}">
             <h1><span th:text="${sched.plDay} + '일차'"></span></h1>
@@ -60,5 +62,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+    <script src="/js/planner/plan-delete.js"></script>
+
   </body>
 </html>
