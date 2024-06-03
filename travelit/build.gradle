@@ -27,15 +27,24 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web' //spring boot Web
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3' //mybatis
 	implementation 'org.springframework.boot:spring-boot-starter-validation' //Bean Validation
-	implementation group: 'org.bgee.log4jdbc-log4j2', name:'log4jdbc-log4j2-jdbc4.1', version: '1.16'//MyBatis Query Logging
-	compileOnly 'org.projectlombok:lombok' //lombok
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
+//MyBatis Query Logging
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'//lombok
 	runtimeOnly 'com.mysql:mysql-connector-j' //mysql
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	//postgresql
+	/*runtimeOnly 'org.postgresql:postgresql'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:mybatis-spring-boot-starter-test'*/
 
 	//spring security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -46,12 +55,17 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.3.0'
 
 }
+
+
 
 tasks.withType(JavaCompile) {
 	options.compilerArgs << '-parameters'
 }
+
+
 
 tasks.named('test') {
 	useJUnitPlatform()
