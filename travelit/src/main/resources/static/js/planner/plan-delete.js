@@ -6,7 +6,7 @@ $("#deleteBtn").click(function () {
         data: JSON.stringify(parseInt($("#planId").val())),
         success: function (response) {
             console.log(response);
-            window.location.href = "/planner/main";
+            window.location.href = "/travelit";
         },
         error: function (error) {
             console.error("Error sending data:", error);
