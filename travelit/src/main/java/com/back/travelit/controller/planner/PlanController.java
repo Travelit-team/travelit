@@ -102,7 +102,9 @@ public class PlanController {
     public String mainList(@LoginUser UserDTO userDTO, Model model){
         int userId = 2;
         model.addAttribute("myPlanList",planService.getMyPlanList(userId));
-        return "/planner/mainList";
+        //지역정보 리스트(조회수순 6개)
+        model.addAttribute("locList",planService.selectLocList());
+        return "planner/mainList";
     }
 
     //스케줄 수정
