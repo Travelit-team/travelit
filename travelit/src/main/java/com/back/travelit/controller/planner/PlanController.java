@@ -12,6 +12,7 @@ import com.back.travelit.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,7 @@ public class PlanController {
     private ProductService productService;
 
     //플래너 만들기 페이지
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/plan-first")
     public String makePlanPage(){
         return "/planner/plan-first";
@@ -105,18 +107,6 @@ public class PlanController {
         return scheduleRequest.getPlanId();
     }
 
-    //내 플래너 리스트
-    @GetMapping("/main")
-    public String mainList(@LoginUser UserDTO userDTO, Model model){
-        int userId = 2;
-        model.addAttribute("myPlanList",planService.getMyPlanList(userId));
-        //지역정보 리스트(조회수순 6개)
-        model.addAttribute("locList",planService.selectLocList());
-        //상품정보 리스트(조회수순 8개)
-        model.addAttribute("productList",productService.selectProductList());
-        return "planner/mainList";
-    }
-
     //스케줄 수정
     @GetMapping("/plan-edit/{plan_id}")
     public String editPlan(@ModelAttribute("scheduleReplaceReq") ScheduleReplaceReq scheduleReplaceReq, Model model){
@@ -135,7 +125,9 @@ public class PlanController {
 
     //플래너 삭제
     @DeleteMapping("/plan-delete")
+    @ResponseBody
     public void deletePlan(@RequestBody int planId){
+        planService.deletePlan(planId);
         log.info("deletePlan");
     }
 }

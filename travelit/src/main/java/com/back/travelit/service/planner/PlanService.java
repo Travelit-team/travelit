@@ -70,7 +70,7 @@ public class PlanService {
     }
 
     //플래너 삭제
-    public void deleteSched(int planId) {
+    public void deletePlan(int planId) {
         planMapper.deletePlan(planId);
     }
 
