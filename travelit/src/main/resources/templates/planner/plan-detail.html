@@ -18,62 +18,41 @@
   <body>
     <header th:replace="fragments/header :: header"></header>
     <div class="container">
-      <header>
-        <div class="header-center">
-          <h1>제목<span th:text="${planInfos.get(0).plTitle}"/></h1>
+      <div class="top">
+        <div class="top-center">
+          <h1 class="plan-title"><span th:text="${planInfos.get(0).plTitle}"/></h1>
           <div class="trip-info">
             <div class="trip-duration">
-              <img src="calendar_icon.png" alt="일정" />
+              <img src="/images/planner/calendar_icon.png" alt="일정" />
               <span th:text="${planInfos.get(0).startDate}"/>
-                <span th:text="${planInfos.get(0).endDate}"/>
+              ~
+              <span th:text="${planInfos.get(0).endDate}"/>
             </div>
             <div class="trip-location">
-              <img src="location_icon.png" alt="지역" />
-              <span>여행지
+              <img src="/images/planner/map_icon.png" alt="지역" />
                 <span th:each="planLoc : ${planInfos.get(0).getPlLocNames()}">
                   <span th:text="${planLoc.getLocNames().locName}"/>
                 </span>
-              </span>
             </div>
           </div>
         </div>
-        <div class="header-right">
+        <div class="top-right">
           <div class="date"><span th:text="${planInfos.get(0).createAt}"/></div>
         </div>
-      </header>
+      </div>
       <section class="content">
-        <div class="location">
-          <img src="dongmyo.jpg" alt="동묘앞역" />
-          <h2>동묘앞역</h2>
-          <p>
-            지하철 1호선 동묘앞역에는 동묘시장, 황학동 도깨비 시장이 위치하여
-            서울의 레트로 감성을 느낄 수 있다.
-          </p>
-        </div>
-        <div class="location">
-          <img src="dongmyo_market.jpg" alt="동묘 구제시장" />
-          <h2>동묘 구제시장</h2>
-          <p>
-            K-아이돌 홍중 활동하며 국내외 팬들로부터 사랑받는 장소로 서울의
-            대표적인 빈티지 마켓인 동묘 구제시장은 의류, 전자제품, 그리고 중고
-            다양한 물건이 모여있는 장소이다.
-          </p>
-        </div>
-        <div class="location">
-          <img src="naksan_park.jpg" alt="낙산공원" />
-          <h2>낙산공원</h2>
-          <p>
-            서울 주요산들과 군장산이 매우 높고 그저 서울을 지키는 성곽을 따라
-            걸어볼 수 있다.
-          </p>
-        </div>
-        <div class="location">
-          <img src="retro_cafe.jpg" alt="대학로 레트로 카페" />
-          <h2>대학로 레트로 카페</h2>
-          <p>
-            정소과 낭만이 가득한 대학로 동화풍의 분위기로 옛 감성을 느낄수 있는
-            레트로 카페를 방문해보자.
-          </p>
+        <div th:if="${scheds != null}">
+          <div th:each="sched : ${scheds}">
+            <h1><span th:text="${sched.plDay} + '일차'"></span></h1>
+              <div class="location" th:each="loc : ${sched.schedInfos}">
+                <img th:src="@{${loc.locationInfos.imgSrcs.imgSrc}}" th:alt="${loc.locationInfos.locTitle}"/>
+                <div class="location-info">
+                <div class="location-title" th:text="${loc.locationInfos.locTitle}"></div>
+                <div class="address" th:text="${loc.locationInfos.address}"></div>
+                <div class="sub-title" th:text="${loc.locationInfos.locSubTitle}"></div>
+                </div>
+              </div>
+          </div>
         </div>
       </section>
     </div>

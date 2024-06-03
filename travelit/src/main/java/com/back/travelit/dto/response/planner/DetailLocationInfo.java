@@ -9,4 +9,5 @@ public class DetailLocationInfo {
     private String locTitle;
     private String locSubTitle;
     private String address;
+    private DetailLocImage imgSrcs;
 }
