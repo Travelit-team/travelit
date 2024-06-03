@@ -73,4 +73,16 @@ public class ProductService {
     public List<String> productDeImageUrl(int PRO_ID) {
         return productMapper.productDeImageUrl(PRO_ID);
     }
+
+    //조회수
+    @Transactional
+    public void increaseProductViews(int PRO_ID) {
+        productMapper.increaseViews(PRO_ID);
+    }
+
+    //조회순 5개 상품 조회
+    public List<ProductResponse> findByViews() {
+        return productMapper.findByViews();
+    }
+
 }

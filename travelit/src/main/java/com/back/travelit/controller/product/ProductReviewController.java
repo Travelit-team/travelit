@@ -32,7 +32,6 @@ public class ProductReviewController {
     @PostMapping("/product/{PRO_ID}/reviews")
     public ProductReviewResponse saveProductReview(@PathVariable final int PRO_ID, @RequestBody ProductReviewRequest params) {
         int PRO_REVIEW_ID = productReviewService.saveReview(params);
-        System.out.println("params: " + params);
         return productReviewService.findReviewById(PRO_REVIEW_ID);
     }
 

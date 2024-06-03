@@ -33,4 +33,10 @@ public interface ProductMapper {
     //전체 게시글 수
     int count(ProductSearch prams);
 
+    //조회수
+    void increaseViews(int PRO_ID);
+
+    //조회순 5개 상품 조회
+    List<ProductResponse> findByViews();
+
 }

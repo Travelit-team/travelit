@@ -2,6 +2,7 @@ package com.back.travelit.service.product;
 
 import com.back.travelit.dto.request.product.ReservationRequest;
 import com.back.travelit.dto.response.product.ReservationResponse;
+import com.back.travelit.mapper.product.ProductMapper;
 import com.back.travelit.mapper.product.ReservationMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationMapper reservationMapper;
+    private final ProductMapper productMapper;
 
     //예약목록 조회
     public List<ReservationResponse> findAllRes() {
@@ -38,4 +40,8 @@ public class ReservationService {
         return RES_ID;
     }
 
+    //조회순 5개 상품 조회
+    public List<ReservationResponse> findByRand() {
+        return reservationMapper.findByRand();
+    }
 }

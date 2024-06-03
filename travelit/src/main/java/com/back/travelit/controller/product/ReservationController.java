@@ -24,7 +24,10 @@ public class ReservationController {
     @GetMapping("/product/reservationList")
     public String reservationList(Model model) {
         List<ReservationResponse> response = reservationService.findAllRes();
+        List<ReservationResponse> fiveProduct = reservationService.findByRand();
         model.addAttribute("response", response);
+        model.addAttribute("fiveProduct", fiveProduct);
+        System.out.println(model);
         return "product/reservationList";
     }
 
@@ -33,8 +36,6 @@ public class ReservationController {
     public String reservationView(@RequestParam final int RES_ID, Model model) {
         ReservationResponse response = reservationService.findByResId(RES_ID);
         model.addAttribute("response", response);
-        System.out.println(model);
-        System.out.println(response);
         return "product/reservationView";
     }
 
@@ -45,12 +46,9 @@ public class ReservationController {
         if (RES_ID != null) {
             ReservationResponse reservation = reservationService.findByResId(RES_ID);
             model.addAttribute("reservation", reservation);
-            System.out.println("Reservation"+reservation);
-            System.out.println("model"+model);
         }
         //상품번호를 가져와 model에 추가
         model.addAttribute("PRO_ID", PRO_ID);
-        System.out.println(model.toString());
         return "product/reservationWrite";
     }
 

@@ -7,7 +7,6 @@ body {
     overflow-x: hidden;
 }
 
-
 /*slider -----------------------------*/
 .bx-wrapper {
     border: none !important;
@@ -25,7 +24,6 @@ body {
 .slider {
     z-index: 1;
 }
-
 
 /*product info ------------------------*/
 .productInfo-container {
@@ -123,7 +121,6 @@ body {
     margin-right: 40px;
     box-sizing: border-box;
 }
-
 
 /**/
 .productPurchase {
@@ -231,7 +228,7 @@ body {
 
 .review-input-container {
     width: calc(100% - 50px);
-    padding: 20px 25px;
+    padding: 0 25px 20px;
     background-color: #f3f3f3;
     border-radius: 10px;
 }
@@ -315,4 +312,70 @@ body {
 .review-btn {
     border: none;
     background-color: white;
+}
+
+/*별점  ------------------------*/
+.star_rating-container {
+    display: flex;
+}
+
+.star_rating {
+    width: 200px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    display: inline-flex;
+    float: left;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.star_rating .star {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    display: inline-block;
+    background: url('/images/product/star/star01.png') no-repeat;
+    background-size: 100%;
+    box-sizing: border-box;
+}
+.star_rating .star.on {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    display: inline-block;
+    background: url('/images/product/star/star02.png') no-repeat;
+    background-size: 100%;
+    box-sizing: border-box;
+}
+
+.star_box {
+    width: 400px;
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 15px 0;
+    background: #F3F4F8;
+    border: 0;
+    border-radius: 10px;
+    height: 100px;
+    resize: none;
+    padding: 15px;
+    font-size: 13px;
+    font-family: sans-serif;
+}
+.btn02 {
+    display:block;
+    width: 400px;
+    font-weight: bold;
+    border: 0;
+    border-radius: 10px;
+    max-height: 50px;
+    padding: 15px 0;
+    font-size: 1.1em;
+    text-align: center;
+    background:bisque;
+}
+
+.star_rating_avg {
+    text-align: center;
+    font-size: 22px;
+    height: 25px;
 }

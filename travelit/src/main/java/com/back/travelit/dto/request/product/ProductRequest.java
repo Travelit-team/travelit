@@ -37,28 +37,4 @@ public class ProductRequest {
     public void setPRO_ID(int PRO_ID) {
         this.PRO_ID = PRO_ID;
     }
-
-    @Override
-    public String toString() {
-        return "ProductRequest{" +
-                "PRO_ID=" + PRO_ID +
-                ", USER_ID=" + USER_ID +
-                ", PRO_NAME='" + PRO_NAME + '\'' +
-                ", PRO_CATEGORY_TOTAL='" + PRO_CATEGORY_TOTAL + '\'' +
-                ", PRO_CATEGORY_DETAIL='" + PRO_CATEGORY_DETAIL + '\'' +
-                ", PRO_CONTENT='" + PRO_CONTENT + '\'' +
-                ", PRO_RES='" + PRO_RES + '\'' +
-                ", PRO_PRICE=" + PRO_PRICE +
-                ", PRO_PER_MAX=" + PRO_PER_MAX +
-                ", PRO_DATE=" + PRO_DATE +
-                ", PRO_LOCATION='" + PRO_LOCATION + '\'' +
-                ", PRO_VIEW=" + PRO_VIEW +
-                ", TOUR_DATE=" + TOUR_DATE +
-                ", TOUR_TIME=" + TOUR_TIME +
-                ", TOUR_START=" + TOUR_START +
-                ", TOUR_END=" + TOUR_END +
-                ", files=" + files +
-                '}';
-    }
-
 }

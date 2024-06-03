@@ -15,16 +15,4 @@ public class ProductReviewRequest {
     private LocalDateTime proReviewDate;
     private int proScore;
     private int resId;
-
-    @Override
-    public String toString() {
-        return "ProductReviewRequest{" +
-                "PRO_REVIEW_ID=" + proReviewId +
-                ", USER_ID=" + userId +
-                ", PRO_ID=" + proId +
-                ", PRO_REVIEW_CONTENT='" + proReviewContent +
-                ", PRO_REVIEW_DATE=" + proReviewDate +
-                ", PRO_SCORE=" + proScore +
-                '}';
-    }
 }

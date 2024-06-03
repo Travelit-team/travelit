@@ -5,14 +5,19 @@
 
     <!-- 예약정보 조회 -->
     <select id="findAllRes" resultType="com.back.travelit.dto.response.product.ReservationResponse">
-        SELECT R.RES_ID, R.RES_NAME, R.RES_PHONE, R.RES_DATE, R.USE_DATE, R.RES_STATE, R.RES_NUM, R.RES_REQUEST, R.PAYMENT, P.PRO_PRICE, U.USER_ID, P.PRO_NAME
+        SELECT R.RES_ID, R.RES_NAME, R.RES_PHONE, R.RES_DATE, R.USE_DATE, R.RES_STATE, R.RES_NUM, R.RES_REQUEST, R.PAYMENT,
+               P.PRO_PRICE, U.USER_ID, P.PRO_NAME, PI.PRO_IMG_NAME
         FROM RESERVATION R
-        INNER JOIN USER U
-        ON R.USER_ID = U.USER_ID
-        INNER JOIN PRODUCT P
-        ON R.PRO_ID = P.PRO_ID
+                 INNER JOIN USER U ON R.USER_ID = U.USER_ID
+                 INNER JOIN PRODUCT P ON R.PRO_ID = P.PRO_ID
+                 LEFT JOIN PRODUCT_IMG PI ON P.PRO_ID = PI.PRO_ID AND PI.PRO_IMG_ID = (
+            SELECT MIN(PRO_IMG_ID)
+            FROM PRODUCT_IMG
+            WHERE PRO_ID = P.PRO_ID
+        )
         WHERE U.USER_ID = 1
-        ORDER BY R.RES_ID DESC
+        ORDER BY R.RES_ID DESC;
+
     </select>
 
     <!-- 예약 정보 상세 조회 -->
@@ -39,5 +44,20 @@
         WHERE RES_ID = #{RES_ID}
         AND USER_ID = 1
     </delete>
+
+    <!-- 조회순 5개 상품 조회 -->
+    <select id="findByRand" resultType="com.back.travelit.dto.response.product.ReservationResponse">
+        SELECT P.PRO_ID, P.USER_ID, P.PRO_NAME, P.PRO_CATEGORY_TOTAL, P.PRO_CATEGORY_DETAIL, P.PRO_CONTENT, P.PRO_RES, P.PRO_PRICE, P.PRO_PER_MAX,
+               P.PRO_DATE, P.PRO_LOCATION, P.PRO_VIEW, P.TOUR_DATE, P.TOUR_TIME, P.TOUR_START, P.TOUR_END, PI.PRO_IMG_NAME
+        FROM PRODUCT P
+                 INNER JOIN (
+            SELECT PI.PRO_ID, MIN(PI.PRO_IMG_ID) AS MIN_PRO_IMG_ID
+            FROM PRODUCT_IMG PI
+            GROUP BY PI.PRO_ID
+        ) MIN_IMG ON P.PRO_ID = MIN_IMG.PRO_ID
+                 INNER JOIN PRODUCT_IMG PI ON MIN_IMG.MIN_PRO_IMG_ID = PI.PRO_IMG_ID
+        ORDER BY RAND()
+        LIMIT 3
+    </select>
 
 </mapper>

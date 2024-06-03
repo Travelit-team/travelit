@@ -31,22 +31,25 @@ public class ProductController {
     //상품 목록 조회
     @GetMapping("/product/productList")
     public String productList(@ModelAttribute("params") final ProductSearch params, Model model) {
+        //조회순 5개
+        List<ProductResponse> fiveProduct = productService.findByViews();
         ProductPagingResponse<ProductResponse> response = productService.findAllProduct(params);
+        model.addAttribute("fiveProduct", fiveProduct);
         model.addAttribute("response", response);
+
         return "product/productList";
     }
 
     //상품 상세 조회
     @GetMapping("/product/productView")
     public String productView(@RequestParam final int PRO_ID, Model model) {
+        productService.increaseProductViews(PRO_ID);
         ProductViewResponse product = productService.findProductById(PRO_ID);
         List<String> productImageUrl = productService.productImageUrl(PRO_ID);
         List<String> productDeImageUrl = productService.productDeImageUrl(PRO_ID);
         model.addAttribute("product", product);
         model.addAttribute("productImageUrl", productImageUrl);
         model.addAttribute("productDeImageUrl", productDeImageUrl);
-        System.out.println("productImageUrl"+productImageUrl);
-        System.out.println("productDeImageUrl"+productDeImageUrl);
         return "product/productView";
     }
 

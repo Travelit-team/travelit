@@ -21,4 +21,7 @@ public interface ReservationMapper {
     //예약 삭제
     void deleteByResId(int RES_ID);
 
+    //5개 랜덤상품
+    List<ReservationResponse> findByRand();
+
 }

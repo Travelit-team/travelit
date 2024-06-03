@@ -30,28 +30,5 @@ public class ProductResponse {
     private Date TOUR_END; //종료일
     private String PRO_IMG_NAME;
     private String PRO_DEIMG_NAME;
-
-    @Override
-    public String toString() {
-        return "ProductResponse{" +
-                "PRO_ID=" + PRO_ID +
-                ", USER_ID=" + USER_ID +
-                ", PRO_NAME='" + PRO_NAME + '\'' +
-                ", PRO_CATEGORY_TOTAL='" + PRO_CATEGORY_TOTAL + '\'' +
-                ", PRO_CATEGORY_DETAIL='" + PRO_CATEGORY_DETAIL + '\'' +
-                ", PRO_CONTENT='" + PRO_CONTENT + '\'' +
-                ", PRO_RES='" + PRO_RES + '\'' +
-                ", PRO_PRICE=" + PRO_PRICE +
-                ", PRO_PER_MAX=" + PRO_PER_MAX +
-                ", PRO_DATE=" + PRO_DATE +
-                ", PRO_LOCATION='" + PRO_LOCATION + '\'' +
-                ", PRO_VIEW=" + PRO_VIEW +
-                ", TOUR_DATE=" + TOUR_DATE +
-                ", TOUR_TIME=" + TOUR_TIME +
-                ", TOUR_START=" + TOUR_START +
-                ", TOUR_END=" + TOUR_END +
-                ", PRO_IMG_NAME='" + PRO_IMG_NAME +
-                ", PRO_DEIMG_NAME='" + PRO_DEIMG_NAME +
-                '}';
-    }
+    private int PRO_SCORE;
 }

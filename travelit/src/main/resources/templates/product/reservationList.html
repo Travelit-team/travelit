@@ -3,24 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>예약목록</title>
+    <link th:href="@{/css/product/reservationList.css}" rel="stylesheet">
     <th:block th:replace="fragments/header :: head"></th:block>
     <th:block th:replace="fragments/footer :: head"></th:block>
 </head>
 <body>
+
     <header th:replace="fragments/header :: header"></header>
 
-    <div th:if="${not #lists.isEmpty(response)}" th:each="row, status : ${response}">
-        예약번호:<div><a href="javascript:void(0);" th:text="${row.RES_ID}" th:onclick="'goViewPage(\'' + ${row.RES_ID} + '\');'"></a></div>
-        상품명:<div><a href="javascript:void(0);" th:text="${row.PRO_NAME}" th:onclick="'goViewPage(\'' + ${row.RES_ID} + '\');'"></a></div>
-        예약자명:<div th:text="${row.RES_NAME}"></div>
-        예약일:<div th:text="${row.USE_DATE}"></div>
-        예약상태:<div th:text="${row.RES_STATE}"></div>
-        수량:<div th:text="${row.RES_NUM}"></div>
-        가격:<div th:text="${row.PRO_PRICE}"></div>
-    </div>
+    <div class="page-wrapper">
 
-    <div th:unless="${not #lists.isEmpty(response)}">
-        <div class="no_data_msg">검색된 결과가 없습니다.</div>
+        <!-- 에약정보 -->
+        <div class="reserve-container">
+            <div class="reserve-title">예약 내역</div>
+            <div th:if="${not #lists.isEmpty(response)}" th:each="row, status : ${response}">
+                <div class="reserve-card" th:onclick="'goViewPage(\'' + ${row.RES_ID} + '\');'">
+                    <img th:src="${row.PRO_IMG_NAME}" th:alt="${row.PRO_NAME}" class="reserve-card-img"/>
+                    <div class="reserve-content-container">
+                        <div class="reserve-content01">
+                            <div th:text="${row.RES_STATE}" class="reserve-state"></div>
+                            <div th:text="'예약번호: ' + ${row.RES_ID}" class="reserve-number"></div>
+                        </div>
+                        <div class="reserve-content02">
+                            <div th:text="${row.PRO_NAME}" class="reserve-product"></div>
+                        </div>
+                        <div class="reserve-content03">
+                            <div th:text="'사용 예정일: ' + ${row.USE_DATE}" class="reserve-useDate"></div>
+                            <div class="reserve-content03-right">
+                                <div th:text="'수량: ' + ${row.RES_NUM}" class="reserve-count"></div>
+                                <div th:text="'￦ ' + ${#numbers.formatDecimal(row.PRO_PRICE * row.RES_NUM, 0, 'COMMA', 0, 'POINT')}" class="reserve-price"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 예약내역이 없을 때 -->
+        <div th:unless="${not #lists.isEmpty(response)}">
+            <div class="no_data_msg">검색된 결과가 없습니다.</div>
+        </div>
+
+        <!-- 랜덤 5개 상품 -->
+        <div class="product-container-wrapper">
+            <div class="product-container">
+                <div class="product-title">😘 MD 추천</div>
+                <div th:each="product : ${fiveProduct}">
+                    <div class="card" th:onclick="'goProductViewPage(' + ${product.PRO_ID} + ')'">
+                        <img th:src="${product.PRO_IMG_NAME}" th:alt="${product.PRO_NAME}" class="card-img"/>
+                        <div class="card-content">
+                            <div class="card-content-group01">
+                                <div class="card-content-01">
+                                    판매기간 <span th:text="${#dates.format(product.TOUR_START, 'MM-dd')}"></span> ~ <span th:text="${#dates.format(product.TOUR_END, 'MM-dd')}"></span></span>
+                                </div>
+                                <div class="card-content-02">조회 <span th:text="${product.PRO_VIEW}"></span></div>
+                            </div>
+                            <div class="card-content-03" th:text="${product.PRO_NAME}"></div>
+                            <div class="card-content-04">₩ <span th:text="${product.PRO_PRICE}"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <footer th:replace="fragments/footer :: footer"></footer>
@@ -31,6 +77,11 @@
     function goViewPage(RES_ID) {
     const queryString = (location.search) ? location.search + `&RES_ID=${RES_ID}` : `?RES_ID=${RES_ID}`;
     location.href = '/product/reservationView' + queryString;
+    }
+    //상품 상세
+    function goProductViewPage(pro_ID) {
+        const queryString = (location.search) ? location.search + `&PRO_ID=${pro_ID}` : `?PRO_ID=${pro_ID}`;
+        location.href = '/product/productView' + queryString;
     }
     /*]]>*/
 </script>

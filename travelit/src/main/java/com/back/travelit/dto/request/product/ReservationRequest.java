@@ -26,23 +26,4 @@ public class ReservationRequest {
     public void setRES_ID(int RES_ID) {
         this.RES_ID = RES_ID;
     }
-
-    @Override
-    public String toString() {
-        return "ReservationRequest{" +
-                "RES_ID=" + RES_ID +
-                ", USER_ID=" + USER_ID +
-                ", PRO_ID=" + PRO_ID +
-                ", RES_NAME='" + RES_NAME +
-                ", RES_PHONE='" + RES_PHONE +
-                ", RES_DATE=" + RES_DATE +
-                ", USE_DATE=" + USE_DATE +
-                ", RES_STATE='" + RES_STATE +
-                ", RES_NUM=" + RES_NUM +
-                ", RES_REQUEST='" + RES_REQUEST +
-                ", PAYMENT='" + PAYMENT +
-                ", RES_PRICE=" + RES_PRICE +
-                '}';
-    }
-
 }

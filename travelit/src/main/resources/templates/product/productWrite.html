@@ -3,86 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <title>상품 등록</title>
+    <th:block th:replace="fragments/header :: head"></th:block>
+    <th:block th:replace="fragments/footer :: head"></th:block>
+    <link th:href="@{/css/product/productWrite.css}" rel="stylesheet">
 </head>
 <body>
+    <!-- 헤더 -->
+    <header th:replace="fragments/header :: header"></header>
+
     <form id="saveForm" method="POST" autocomplete="off" enctype="multipart/form-data">
         <!--수정일 때 게시글 전달-->
         <input type="hidden" id="PRO_ID" name="PRO_ID" th:if="${product != null}" th:value="${product.PRO_ID}" />
         <input type="hidden" id="USER_ID" name="USER_ID" value="1" />
 
-        <div>상품명<input type="text" id="PRO_NAME" name="PRO_NAME" required/></div>
-        <div>
-            <label for="PRO_CATEGORY_TOTAL">카테고리01</label>
-            <select id="PRO_CATEGORY_TOTAL" name="PRO_CATEGORY_TOTAL" required>
-                <option value="입장권">입장권</option>
-                <option value="액티비티">액티비티</option>
-                <option value="투어">투어</option>
-                <option value="교통">교통</option>
-            </select>
-        </div>
-        <div>카테고리02<input type="text" id="PRO_CATEGORY_DETAIL" name="PRO_CATEGORY_DETAIL" required/></div>
-        <div>내용<br/><textarea id="PRO_CONTENT" name="PRO_CONTENT" cols="50" rows="10" placeholder="내용을 입력해 주세요." required></textarea></div>
-        <div>
-            예약가능여부
-            <input type="radio" id="PRO_RES_Y" name="PRO_RES" value="Y" required/>
-            <label for="PRO_RES_Y">가능</label>
-            <input type="radio" id="PRO_RES_N" name="PRO_RES" value="N" required/>
-            <label for="PRO_RES_N">불가</label>
-        </div>
-        <div>가격<input type="number" id="PRO_PRICE" name="PRO_PRICE" step="100" required/></div>
-        <div>1회 구매가능 수량<input type="number" id="PRO_PER_MAX" name="PRO_PER_MAX" required/></div>
-        <div>
-            <label for="PRO_LOCATION">지역</label>
-            <select id="PRO_LOCATION" name="PRO_LOCATION" required>
-                <option value="서울">서울</option>
-                <option value="경기도">경기도</option>
-                <option value="인천">인천</option>
-                <option value="충청도">충청도</option>
-                <option value="강원도">강원도</option>
-                <option value="전라도">전라도</option>
-                <option value="경상도">경상도</option>
-                <option value="제주도">제주도</option>
-                <option value="ETC">기타</option>
-            </select>
-        </div>
-        <div>투어일<input type="number" id="TOUR_DATE" name="TOUR_DATE" required/></div>
-        <div>투어시간<input type="number" id="TOUR_TIME" name="TOUR_TIME" required/></div>
-        <div>투어시작일<input type="date" id="TOUR_START" name="TOUR_START" required placeholder="YYYY-MM-DD"/></div>
-        <div>투어종료일<input type="date" id="TOUR_END" name="TOUR_END" required placeholder="YYYY-MM-DD"/></div>
+        <div class="write-wrapper">
+            <div class="write-product01">상품명</div>
+            <div class="write-product02"><input type="text" id="PRO_NAME" name="PRO_NAME" required/></div>
+            <div class="write-reservation01">예약가능여부</div>
+            <div class="write-reservation02">
+                <input type="radio" id="PRO_RES_Y" name="PRO_RES" value="Y" required/>
+                <label for="PRO_RES_Y">가능</label>
+                <input type="radio" id="PRO_RES_N" name="PRO_RES" value="N" required/>
+                <label for="PRO_RES_N">불가</label>
+            </div>
 
-        <!-- 대표 이미지 파일 -->
-        <div class="file_list">
-            <div>
-                <div class="file_input">
-                    <input type="text" readonly />
-                    <label> 상품 소개 이미지
+            <div class="write-price01">가격</div>
+            <div class="write-price02"><input type="number" id="PRO_PRICE" name="PRO_PRICE" step="100" required/></div>
+            <div class="write-count01">재고 수량</div>
+            <div class="write-count02"><input type="number" id="PRO_PER_MAX" name="PRO_PER_MAX" required/></div>
+
+
+            <div class="write-category01">카테고리01</div>
+            <div class="write-category01-1">
+                <select id="PRO_CATEGORY_TOTAL" name="PRO_CATEGORY_TOTAL" required>
+                    <option value="입장권">입장권</option>
+                    <option value="액티비티">액티비티</option>
+                    <option value="투어">투어</option>
+                    <option value="교통">교통</option>
+                </select>
+            </div>
+            <div class="write-category02">카테고리02</div>
+            <div class="write-category02-1"><input type="text" id="PRO_CATEGORY_DETAIL" name="PRO_CATEGORY_DETAIL" required/></div>
+
+            <div class="write-location01">지역</div>
+            <div class="write-location02">
+                <select id="PRO_LOCATION" name="PRO_LOCATION" required>
+                    <option value="서울">서울</option>
+                    <option value="경기도">경기도</option>
+                    <option value="인천">인천</option>
+                    <option value="충청도">충청도</option>
+                    <option value="강원도">강원도</option>
+                    <option value="전라도">전라도</option>
+                    <option value="경상도">경상도</option>
+                    <option value="제주도">제주도</option>
+                    <option value="ETC">기타</option>
+                </select>
+            </div>
+
+            <div class="write-date01">소요일</div>
+            <div class="write-date02"><input type="number" id="TOUR_DATE" name="TOUR_DATE" required/></div>
+            <div class="write-time01">소요시간</div>
+            <div class="write-time02"><input type="number" id="TOUR_TIME" name="TOUR_TIME" required/></div>
+
+            <div class="write-start01">판매 시작일</div>
+            <div class="write-start02"><input type="date" id="TOUR_START" name="TOUR_START" required placeholder="YYYY-MM-DD"/></div>
+            <div class="write-end01">판매 종료일</div>
+            <div class="write-end02"><input type="date" id="TOUR_END" name="TOUR_END" required placeholder="YYYY-MM-DD"/></div>
+
+            <div class="write-content01">내용</div>
+            <div class="write-content02"><textarea id="PRO_CONTENT" name="PRO_CONTENT" cols="50" rows="10" placeholder="내용을 입력해 주세요." required></textarea></div>
+
+            <!-- 대표 이미지 파일 -->
+            <div class="file_list">
+                <div>
+                    <div class="file_input">
+                        <div class="write-img-title">상품 소개 이미지</div>
+                        <button type="button" onclick="addFile();" class="btns fn_add_btn"><span>파일 추가</span></button>
                         <input type="file" name="files" onchange="selectFile(this);"/>
-                    </label>
+                        <button type="button" onclick="removeFile(this);" class="btns del_btn"><span>삭제</span></button>
+                    </div>
                 </div>
-                <button type="button" onclick="removeFile(this);" class="btns del_btn"><span>삭제</span></button>
-                <button type="button" onclick="addFile();" class="btns fn_add_btn"><span>파일 추가</span></button>
             </div>
 
-        </div>
-
-        <!-- 상세 이미지 파일 -->
-        <div class="defile_list">
-            <div>
-                <div class="defile_input">
-                    <input type="text" readonly />
-                    <label> 상품 상세 이미지
+            <!-- 상세 이미지 파일 -->
+            <div class="defile_list">
+                <div>
+                    <div class="defile_input">
+                        <div class="write-deimg-title">상품 상세 이미지</div>
+                        <button type="button" onclick="addDeFile();" class="btns fn_add_btn"><span>파일 추가</span></button>
                         <input type="file" name="defiles" onchange="selectDeFile(this);"/>
-                    </label>
+                        <button type="button" onclick="removeDeFile(this);" class="btns dedel_btn"><span>삭제</span></button>
+                    </div>
                 </div>
-                <button type="button" onclick="removeDeFile(this);" class="btns dedel_btn"><span>삭제</span></button>
-                <button type="button" onclick="addDeFile();" class="btns fn_add_btn"><span>파일 추가</span></button>
             </div>
-
         </div>
     </form>
 
     <button type="submit" onclick="saveProduct();" id="saveBtn">저장</button>
     <a th:href="@{/product/productList}">뒤로</a>
+
+    <!-- 푸터 -->
+    <footer th:replace="fragments/footer :: footer"></footer>
 </body>
 
 <script th:inline="javascript">

@@ -3,13 +3,13 @@
 <head>
         <meta charset="UTF-8">
         <title>Title</title>
-        <link th:href="@{/css/product/productView.css}" rel="stylesheet">
-        <link th:href="@{/css/product/content.css}" rel="stylesheet">
+        <th:block th:replace="fragments/header :: head"></th:block>
+        <th:block th:replace="fragments/footer :: head"></th:block>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
         <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
-        <th:block th:replace="fragments/header :: head"></th:block>
-        <th:block th:replace="fragments/footer :: head"></th:block>
+        <link th:href="@{/css/product/productView.css}" rel="stylesheet">
+        <link th:href="@{/css/product/content.css}" rel="stylesheet">
 </head>
 <body>
         <header th:replace="fragments/header :: header"></header>
@@ -96,17 +96,15 @@
                 <div class="review-title">이용후기</div>
                 <div class="review-input-container">
                         <br/>
-                        <div>
-                                <input type="radio" id="star1" name="rating" value="1">
-                                <label for="star1">1점</label>
-                                <input type="radio" id="star2" name="rating" value="2">
-                                <label for="star2">2점</label>
-                                <input type="radio" id="star3" name="rating" value="3">
-                                <label for="star3">3점</label>
-                                <input type="radio" id="star4" name="rating" value="4">
-                                <label for="star4">4점</label>
-                                <input type="radio" id="star5" name="rating" value="5">
-                                <label for="star5">5점</label>
+                        <div class ="star_rating-container">
+                                <div class ="star_rating">
+                                        <span class="star on" value="1" name="rating"></span>
+                                        <span class="star" value="2" name="rating"></span>
+                                        <span class="star" value="3" name="rating"></span>
+                                        <span class="star" value="4" name="rating"></span>
+                                        <span class="star" value="5" name="rating"></span>
+                                </div>
+                                <div id="averageRating" class="star_rating_avg"></div>
                         </div>
                         <br/>
                         <textarea id="content" name="content" onkeyup="countingLength(this);" cols="50" rows="4" placeholder="리뷰를 입력해 주세요." class="review-input"></textarea>
@@ -131,8 +129,8 @@
                 </div>
                 <button type="button" class="btn_close" onclick="closeUpdatePopup();"><span><i></i></span></button>
         </div>
-        <footer th:replace="fragments/footer :: footer"></footer>
 
+        <footer th:replace="fragments/footer :: footer"></footer>
 </body>
 
 <script th:inline="javascript">
@@ -175,26 +173,24 @@
 
 <script>
         //슬라이더
+        $('.slider').bxSlider({
+                auto: true,
+                speed: 500,
+                pause: 5000,
+                mode: 'fade',
+                pager: false,
+                adaptiveHeight: true
+        });
 
-                $('.slider').bxSlider({
-                        auto: true,
-                        speed: 500,
-                        pause: 5000,
-                        mode: 'fade',
-                        pager: false,
-                        adaptiveHeight: true
-                });
+        function showControls() {
+                $('.bx-prev, .bx-next').css('display', 'inline-block');
+        }
 
-                function showControls() {
-                        $('.bx-prev, .bx-next').css('display', 'inline-block');
-                }
-
-                function hideControls() {
-                        $('.bx-prev, .bx-next').css('display', 'none');
-                }
-
-                $('.bx-viewport').hover(showControls, hideControls);
-                $('.bx-prev, .bx-next').hover(showControls, showControls);
+        function hideControls() {
+                $('.bx-prev, .bx-next').css('display', 'none');
+        }
+        $('.bx-viewport').hover(showControls, hideControls);
+        $('.bx-prev, .bx-next').hover(showControls, showControls);
 
 </script>
 
@@ -247,9 +243,12 @@
                                 }
                 //HTML
                 let reviewHtml = '';
-
+                //평균 별점 초기화
+                let totalScore = 0;
                 //리뷰 HTML 추가
                 response.forEach(row => {
+                        //별점 저장
+                        totalScore += row.pro_SCORE;
 
                         const reviewDate = new Date(row.pro_REVIEW_DATE);
                         //날짜를 "YYYY-MM-DD"변환
@@ -271,7 +270,11 @@
                 </div>
                 `;
                 })
-
+                        const averageScore = totalScore / response.length;
+                        const averageScoreHtml = `<div>평점: ${averageScore.toFixed(1)}</div>`;
+                        //평균 별점 HTML 추가
+                        document.getElementById('averageRating').innerHTML = averageScoreHtml;
+                        document.getElementById('averageRating').innerHTML = averageScoreHtml;
                         //class가 "reviewHtml"인 요소 HTML을 렌더링
                         document.querySelector('.review_list').innerHTML = reviewHtml;},
                         error : function (request, status, error) {
@@ -281,17 +284,25 @@
                 })
         }
 
+        //별점
+        var selectedRating = 0;
+
+        //별점 클릭 이벤트
+        $('.star_rating > .star').click(function() {
+                $(this).parent().children('span').removeClass('on');
+                $(this).addClass('on').prevAll('span').addClass('on');
+                selectedRating = parseInt($(this).attr('value')); //변수 저장
+        })
+
         // 리뷰 작성
         function saveReview() {
                 const content = document.getElementById('content');
                 const PRO_ID = [[${product.PRO_ID}]]; //PRO_ID 값
 
-                const rating = document.querySelector('input[name="rating"]:checked');
-                const ratingValue = rating ? parseInt(rating.value) : null;
                 const params = {
                         proId: PRO_ID, //PRO_ID를 요청 포함
                         proReviewContent: content.value,
-                        proScore: ratingValue
+                        proScore: selectedRating
                 };
                 console.log(params);
 
@@ -300,7 +311,7 @@
                                 url: `/product/${PRO_ID}/reviews`,
                                 type: 'post',
                                 contentType: 'application/json; charset=utf-8',
-                                dataType: 'json',
+                                dataType: 'text',
                                 data: JSON.stringify(params),
                                 async: false,
                                 success: function (response) {
@@ -311,12 +322,11 @@
                                         findAllReview();
                                 },
                                 error: function (request, status, error) {
-                                        console.log(error);
+                                        console.log("ㅁㄴㅇ"+error);
                                 }
                         });
                 }
         }
-
 
         //리뷰 수정 팝업 열기
         function openUpdatePopup(pro_REVIEW_ID) {
