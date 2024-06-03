@@ -2,11 +2,16 @@ package com.back.travelit.security.jwt;
 
 
 import com.back.travelit.security.dto.TokenDTO;
+import com.back.travelit.security.oauth.CustomOAuth2User;
+import com.back.travelit.security.oauth.service.CustomOAuth2UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -17,10 +22,20 @@ import java.util.Date;
 @Component
 public class JWTUtil {
 
+
+    @Autowired
+    private  CustomOAuth2UserService customOAuth2UserService;
+
     private SecretKey secretKey;
     private SecretKey refreshKey;
     private Long accessMS;
     private Long refreshMS;
+
+
+    public Authentication getAuthentication(String accessToken) {
+        CustomOAuth2User oAuth2User = customOAuth2UserService.loadUserByUsername(this.getLoginId(accessToken));
+        return new UsernamePasswordAuthenticationToken(oAuth2User, null, oAuth2User.getAuthorities());
+    }
 
     public JWTUtil(@Value("${spring.jwt.secret}")String secret,
                    @Value("${spring.jwt.refreshSecret}")String refreshSecret,
@@ -50,12 +65,19 @@ public class JWTUtil {
 
     public Boolean isExpired(String token) {
 
+
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());    }
 
+
+
+    public String getLoginId(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("loginId", String.class);
+    }
     public TokenDTO createJwt(String username, String role) {
 
         String refreshToken = Jwts.builder()
-                .claim("username", username)
+                .claim("loginId", username)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + refreshMS))
@@ -63,7 +85,7 @@ public class JWTUtil {
                 .compact();
 
         String accessToken = Jwts.builder()
-                .claim("username", username)
+                .claim("loginId", username)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + accessMS))
