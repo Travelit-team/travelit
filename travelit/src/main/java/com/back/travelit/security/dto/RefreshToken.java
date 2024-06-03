@@ -1,5 +1,4 @@
-/*
-package com.back.travelit.dto;
+/*package com.back.travelit.security.token;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

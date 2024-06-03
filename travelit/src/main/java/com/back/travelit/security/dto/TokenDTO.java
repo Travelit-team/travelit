@@ -1,4 +1,4 @@
-package com.back.travelit.dto;
+package com.back.travelit.security.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

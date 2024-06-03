@@ -1,9 +1,10 @@
-package com.back.travelit.jwt;
+package com.back.travelit.security.jwt;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
+
 @Service
 public class RedisUtil {
 

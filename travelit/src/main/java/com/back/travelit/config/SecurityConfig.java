@@ -1,20 +1,21 @@
 package com.back.travelit.config;
 
-import com.back.travelit.jwt.JWTFilter;
-import com.back.travelit.jwt.JWTUtil;
-import com.back.travelit.jwt.RedisUtil;
-import com.back.travelit.oauth2.CustomSuccessHandler;
-import com.back.travelit.service.CustomOAuth2UserService;
+import com.back.travelit.security.jwt.JWTFilter;
+import com.back.travelit.security.jwt.JWTUtil;
+import com.back.travelit.security.jwt.RedisUtil;
+import com.back.travelit.security.oauth.handler.CustomSuccessHandler;
+import com.back.travelit.security.oauth.service.CustomOAuth2UserService;
+import com.back.travelit.security.handler.CustomAccessDeniedHandler;
+import com.back.travelit.security.handler.CustomAuthenticationEntryPoint;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 
-import org.apache.http.cookie.Cookie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -46,37 +47,33 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+                .cors(corsCustomizer -> corsCustomizer.configurationSource((request) -> {
 
-                    @Override
-                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                    CorsConfiguration configuration = new CorsConfiguration();
 
-                        CorsConfiguration configuration = new CorsConfiguration();
+                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:8080"));
+                    configuration.setAllowedMethods(Collections.singletonList("*"));
+                    configuration.setAllowCredentials(true);
+                    configuration.setAllowedHeaders(Collections.singletonList("*"));
+                    configuration.setMaxAge(3600L);
 
-                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:8080"));
-                        configuration.setAllowedMethods(Collections.singletonList("*"));
-                        configuration.setAllowCredentials(true);
-                        configuration.setAllowedHeaders(Collections.singletonList("*"));
-                        configuration.setMaxAge(3600L);
+                    configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
+                    configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
-                        configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
-                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-
-                        return configuration;
-                    }
+                    return configuration;
                 }));
 
         //csrf disable
         http
-                .csrf((auth) -> auth.disable());
+                .csrf(AbstractHttpConfigurer::disable);
 
         //From 로그인 방식 disable
         http
-                .formLogin((auth) -> auth.disable());
+                .formLogin(AbstractHttpConfigurer::disable);
 
         //HTTP Basic 인증 방식 disable
         http
-                .httpBasic((auth) -> auth.disable());
+                .httpBasic(AbstractHttpConfigurer::disable);
 
         //JWTFilter 추가
         http
@@ -95,38 +92,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/").permitAll()
                         .requestMatchers("my").hasAuthority("USER") //리다이렉이랑 머야
-                        //.requestMatchers("/login/oauth2/code/kakao")
-                        //.permitAll()
                         .anyRequest().authenticated());
 
         //세션 설정 : STATELESS
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-                /*.logout(logoutConfig ->
-                        logoutConfig
-                                .logoutUrl("/logout")
-                                .logoutSuccessHandler((request, response, authentication) -> {
-                                    request.getSession().invalidate();
-
-                                    javax.servlet.http.Cookie[] cookies = request.getCookies();
-                                    if (cookies != null) {
-                                        for (javax.servlet.http.Cookie cookie : cookies) {
-                                            if ("Authorization".equals(cookie.getName())) {
-                                                cookie.setMaxAge(0);
-                                                cookie.setValue(null);
-                                                cookie.setPath("/");
-                                                response.addCookie(cookie);
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    response.sendRedirect("https://localhost:8080/oauth/logout");
-                                })
-                                .invalidateHttpSession(true)
-                                .deleteCookies("Authorization"));*/
+        
+        //예외 설정
+        http
+                .exceptionHandling(handler -> handler.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
+                        .exceptionHandling((handler) -> handler.accessDeniedHandler(new CustomAccessDeniedHandler()));
 
 
 
