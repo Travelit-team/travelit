@@ -105,19 +105,6 @@ public class PlanController {
         return scheduleRequest.getPlanId();
     }
 
-    //내 플래너 리스트
-    @GetMapping("/main")
-    public String mainList(@LoginUser UserDTO userDTO, Model model){
-        if(userDTO != null) {
-            model.addAttribute("myPlanList", planService.getMyPlanList(userDTO.getUserId()));
-        }
-        //지역정보 리스트(조회수순 6개)
-        model.addAttribute("locList",planService.selectLocList());
-        //상품정보 리스트(조회수순 8개)
-        model.addAttribute("productList",productService.selectProductList());
-        return "planner/mainList";
-    }
-
     //스케줄 수정
     @GetMapping("/plan-edit/{plan_id}")
     public String editPlan(@ModelAttribute("scheduleReplaceReq") ScheduleReplaceReq scheduleReplaceReq, Model model){
@@ -136,7 +123,9 @@ public class PlanController {
 
     //플래너 삭제
     @DeleteMapping("/plan-delete")
+    @ResponseBody
     public void deletePlan(@RequestBody int planId){
+        planService.deletePlan(planId);
         log.info("deletePlan");
     }
 }
