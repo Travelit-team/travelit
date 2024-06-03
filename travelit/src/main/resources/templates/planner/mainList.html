@@ -60,27 +60,52 @@
     </div>
 </div>
 <div id="all-list-container">
-    <div id="planner-list-container">
+    <div class="planner-list-container">
         <div class="my-planner-list-container">
             <div class="my-planner">
                 나의 플래너
             </div>
-            <div class="plan-card-container">
-                <div class="plan-card" th:each="planList : ${myPlanList}">
-                    <div class="plan-title" th:text="${planList.plTitle}"></div>
-                    <div class="plan-date">
-                        <span th:text="${planList.startDate}"></span>
-                        ~
-                        <span th:text="${planList.endDate}"></span>
+            <div>
+                <div class="plan-card-container">
+                    <div class="plan-card" th:each="planList : ${myPlanList}">
+                        <div class="plan-title" th:text="${planList.plTitle}"></div>
+                        <div class="plan-date">
+                            <span th:text="${planList.startDate}"></span>
+                            ~
+                            <span th:text="${planList.endDate}"></span>
+                        </div>
+                        <div class="plan-locations" th:text="${planList.locations}"></div>
                     </div>
-                    <div class="plan-locations" th:text="${planList.locations}"></div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- 조회수 상위 5개 상품 -->
+    <div class="product-list-container">
+        <div class="view-produrt-title">🤩 상품 TOP 8</div>
+        <div class="product-container">
+            <div th:each="product : ${productList}">
+                <div class="card" th:onclick="'goViewPage(' + ${product.PRO_ID} + ')'">
+                    <img th:src="${product.PRO_IMG_NAME}" th:alt="${product.PRO_NAME}" class="card-img"/>
+                    <div class="card-content">
+                        <div class="card-content-group01">
+                            <div class="card-content-01">
+                                판매기간 <span th:text="${#dates.format(product.TOUR_START, 'MM-dd')}"></span> ~ <span th:text="${#dates.format(product.TOUR_END, 'MM-dd')}"></span></span>
+                            </div>
+                            <div class="card-content-02">조회 <span th:text="${product.PRO_VIEW}"></span></div>
+                        </div>
+                        <div class="card-content-03" th:text="${product.PRO_NAME}"></div>
+                        <div class="card-content-04">₩ <span th:text="${product.PRO_PRICE}"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 지역 정보 조회수순 6개 -->
     <div class="rank-background">
         <div class="rank-outer-div">
-            <div  class="title">여행지 TOP 8 </div>
+            <div  class="title">여행지 TOP 6 </div>
             <div class="rank-container">
                 <div th:each="viewLocation : ${locList}" th:onclick="moveToLocationDetail([[${viewLocation.locationInfoId}]])" th:class="rank-card">
                     <img th:src="@{${viewLocation.profileUrl}}" th:alt="${viewLocation.title}">
@@ -98,8 +123,9 @@
             </div>
         </div>
     </div>
-</div>
 
-<script type="text/javascript" src="/js/location/list.js"></script>
+</div>
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+<script type="text/javascript" src="/js/planner/mainList.js"></script>
 </body>
 </html>

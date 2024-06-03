@@ -8,6 +8,7 @@ import com.back.travelit.dto.response.planner.PlanLocInfo;
 import com.back.travelit.security.LoginUser;
 import com.back.travelit.security.oauth.UserDTO;
 import com.back.travelit.service.planner.PlanService;
+import com.back.travelit.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class PlanController {
     private PlanService planService;
     private Model model;
     private ModelAndView modelAndView;
+    @Autowired
+    private ProductService productService;
 
     //플래너 만들기 페이지
     @GetMapping("/plan-first")
@@ -104,6 +107,8 @@ public class PlanController {
         model.addAttribute("myPlanList",planService.getMyPlanList(userId));
         //지역정보 리스트(조회수순 6개)
         model.addAttribute("locList",planService.selectLocList());
+        //상품정보 리스트(조회수순 8개)
+        model.addAttribute("productList",productService.selectProductList());
         return "planner/mainList";
     }
 
@@ -117,8 +122,15 @@ public class PlanController {
     //플래너 상세보기
     @GetMapping("/plan-detail/{planId}")
     public String detailPlan(@PathVariable("planId") int planId, Model model){
+        model.addAttribute("planId",planId);
         model.addAttribute("planInfos",planService.getPlanDetail(planId));
         model.addAttribute("scheds",planService.getSchedDetail(planId));
         return "planner/plan-detail";
+    }
+
+    //플래너 삭제
+    @DeleteMapping("/plan-delete")
+    public void deletePlan(@RequestBody int planId){
+        log.info("deletePlan");
     }
 }
