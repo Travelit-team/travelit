@@ -50,7 +50,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         else return null;
 
         String loginId = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
-        UserEntity existUser = userRepository.findByLoginID(loginId).orElse(null);
+        UserEntity existUser = userRepository.findByLoginId(loginId).orElse(null);
 
         if (existUser == null) {
             UserEntity user = UserEntity.builder()
@@ -91,7 +91,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Transactional(readOnly = true)
     public CustomOAuth2User loadUserByUsername(String loginId) throws UsernameNotFoundException {
-        UserEntity findUser = userRepository.findByLoginID(loginId)
+        UserEntity findUser = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> {
                     log.error("존재하지 않는 사용자입니다. loginId : {}", loginId);
                     throw new BaseException(ErrorCode.USER_NOT_FOUND);
