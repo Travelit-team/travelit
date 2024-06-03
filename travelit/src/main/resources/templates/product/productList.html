@@ -15,7 +15,7 @@
     <!-- 헤더 -->
     <header th:replace="fragments/header :: header"></header>
 
-    <button onclick="location.href='/product/productWrite'" class="product-write">상품 등록</button>
+    <button th:if="${#authorization.expression('hasRole(''ADMIN'')')}" onclick="location.href='/product/productWrite'" class="product-write">상품 등록</button>
 
     <!-- 검색 -->
     <!-- onsubmit은 폼 실행 시 실행할 js를 지정 , 하지만 실행하지 않을 것이므로 false -->

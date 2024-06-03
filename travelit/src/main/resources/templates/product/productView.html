@@ -15,9 +15,9 @@
         <header th:replace="fragments/header :: header"></header>
 
         <div class=" ">
-                <button type="button" onclick="productWritePage();" class="product-update">수정</button>
-                <button type="button" onclick="DeleteProduct();" class="product-delete">삭제</button>
-                <button type="button" onclick="productListPage();" class="product-back">뒤로</button><br/>
+                <button th:if="${#authorization.expression('hasRole(''ADMIN'')')}" type="button" onclick="productWritePage();" class="product-update">수정</button>
+                <button th:if="${#authorization.expression('hasRole(''ADMIN'')')}" type="button" onclick="DeleteProduct();" class="product-delete">삭제</button>
+                <button th:if="${#authorization.expression('hasRole(''ADMIN'')')}" type="button" onclick="productListPage();" class="product-back">뒤로</button><br/>
         </div>
 
         <!-- 상품 상세 이미지 -->
@@ -72,7 +72,7 @@
                         <!-- 구매 페이지 이동 버튼 -->
                         <div class="productPurchase-bottom">
                                 <a th:href="@{/product/reservationWrite(PRO_ID=${product.PRO_ID})}" class="purchase-bnt">
-                                        <div class="purchase-bnt-text">구 매 하 기</div>
+                                        <div th:if="${#authorization.expression('hasRole(''USER'')')}" class="purchase-bnt-text">구 매 하 기</div>
                                 </a>
                         </div>
                 </div>
@@ -108,7 +108,7 @@
                         </div>
                         <br/>
                         <textarea id="content" name="content" onkeyup="countingLength(this);" cols="50" rows="4" placeholder="리뷰를 입력해 주세요." class="review-input"></textarea>
-                        <span><button type="button" onclick="saveReview();" class="review-submit-bnt">등 록</button></span>
+                        <span><button th:if="${#authorization.expression('hasRole(''USER'')')}"  type="button" onclick="saveReview();" class="review-submit-bnt">등 록</button></span>
                         <i id="counter" class="review-length">0/300자</i>
                 </div>
         </div>
@@ -124,7 +124,7 @@
                 <div class="pop_container">
                         <textarea id="modalContent" name="modalContent" cols="90" rows="10" placeholder="수정할 내용을 입력해 주세요." style="width:70%;" class="review-update-textarea"></textarea><br/>
                         <div class="review-btn-container">
-                                <button type="button" id="commentUpdateBtn" class="review-update-btn">수정</button>
+                                <button th:if="${#authorization.expression('hasRole(''USER'')')}" type="button" id="commentUpdateBtn" class="review-update-btn">수정</button>
                                 <button type="button" onclick="closeUpdatePopup();" class="review-cancel-btn">취소</button>
                         </div>
                 </div>

@@ -4,6 +4,7 @@ import com.back.travelit.dto.request.product.ProductReviewRequest;
 import com.back.travelit.dto.response.product.ProductReviewResponse;
 import com.back.travelit.service.product.ProductReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class ProductReviewController {
 
     //새 리뷰 작성
     //REST API에서는 명사, 소문자 /는 계층을 나태내므로 마지마겡 들어가지 않도록 주의
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/product/{PRO_ID}/reviews")
     public ProductReviewResponse saveProductReview(@PathVariable final int PRO_ID, @RequestBody ProductReviewRequest params) {
         int PRO_REVIEW_ID = productReviewService.saveReview(params);
@@ -36,13 +38,15 @@ public class ProductReviewController {
     }
 
     //리뷰 수정
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PatchMapping("/product/{PRO_ID}/reviews/{pro_REVIEW_ID}")
     public ProductReviewResponse updateReview(@PathVariable final int PRO_ID, @PathVariable final int pro_REVIEW_ID, @RequestBody final ProductReviewRequest params) {
         productReviewService.updateReview(params);
         return productReviewService.findReviewById(pro_REVIEW_ID);
     }
 
-    // 댓글 삭제
+    //리뷰 삭제
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @DeleteMapping("/product/{PRO_ID}/reviews/{pro_REVIEW_ID}")
     public int deleteReview(@PathVariable final int PRO_ID, @PathVariable final int pro_REVIEW_ID) {
         return productReviewService.deleteReview(pro_REVIEW_ID);

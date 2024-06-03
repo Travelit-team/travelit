@@ -5,6 +5,7 @@ import com.back.travelit.dto.request.product.ReservationRequest;
 import com.back.travelit.dto.response.product.ReservationResponse;
 import com.back.travelit.service.product.ReservationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     //예약 목록
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/product/reservationList")
     public String reservationList(Model model) {
         List<ReservationResponse> response = reservationService.findAllRes();
@@ -32,6 +34,7 @@ public class ReservationController {
     }
 
     //예약상세 페이지
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/product/reservationView")
     public String reservationView(@RequestParam final int RES_ID, Model model) {
         ReservationResponse response = reservationService.findByResId(RES_ID);
@@ -40,6 +43,7 @@ public class ReservationController {
     }
 
     //예약 입력 페이지
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/product/reservationWrite")
     public String reservationWrite(@RequestParam(value = "RES_ID", required = false) final Integer RES_ID, @RequestParam("PRO_ID") int PRO_ID, Model model) {
 
@@ -53,13 +57,15 @@ public class ReservationController {
     }
 
     //예약 입력
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/product/reservationSave")
     public String saveReservation(final ReservationRequest params) {
         reservationService.saveRes(params);
         return "redirect:/product/reservationList";
     }
 
-    //게시글 삭제
+    //예약 삭제
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/product/reservationDelete")
     public String deleteReservation(@RequestParam final Integer RES_ID, Model model) {
         reservationService.deleteRes(RES_ID);
