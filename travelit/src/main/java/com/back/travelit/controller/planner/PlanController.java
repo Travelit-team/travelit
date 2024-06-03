@@ -108,8 +108,9 @@ public class PlanController {
     //내 플래너 리스트
     @GetMapping("/main")
     public String mainList(@LoginUser UserDTO userDTO, Model model){
-        int userId = 2;
-        model.addAttribute("myPlanList",planService.getMyPlanList(userId));
+        if(userDTO != null) {
+            model.addAttribute("myPlanList", planService.getMyPlanList(userDTO.getUserId()));
+        }
         //지역정보 리스트(조회수순 6개)
         model.addAttribute("locList",planService.selectLocList());
         //상품정보 리스트(조회수순 8개)

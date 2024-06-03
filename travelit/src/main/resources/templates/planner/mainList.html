@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <!--    <link rel="stylesheet" href="/css/location/mainList.css" />-->
     <link rel="stylesheet" href="/css/planner/mainList.css" />
@@ -60,26 +60,28 @@
     </div>
 </div>
 <div id="all-list-container">
-    <div class="planner-list-container">
-        <div class="my-planner-list-container">
-            <div class="my-planner">
-                나의 플래너
-            </div>
-            <div>
-                <div class="plan-card-container">
-                    <div class="plan-card" th:each="planList : ${myPlanList}">
-                        <div class="plan-title" th:text="${planList.plTitle}"></div>
-                        <div class="plan-date">
-                            <span th:text="${planList.startDate}"></span>
-                            ~
-                            <span th:text="${planList.endDate}"></span>
+    <th:block sec:authorize="isAuthenticated()">
+        <div class="planner-list-container">
+            <div class="my-planner-list-container">
+                <div class="my-planner">
+                    나의 플래너
+                </div>
+                <div>
+                    <div class="plan-card-container">
+                        <div class="plan-card" th:each="planList : ${myPlanList}">
+                            <div class="plan-title" th:text="${planList.plTitle}"></div>
+                            <div class="plan-date">
+                                <span th:text="${planList.startDate}"></span>
+                                ~
+                                <span th:text="${planList.endDate}"></span>
+                            </div>
+                            <div class="plan-locations" th:text="${planList.locations}"></div>
                         </div>
-                        <div class="plan-locations" th:text="${planList.locations}"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </th:block>
     <!-- 조회수 상위 5개 상품 -->
     <div class="product-list-container">
         <div class="view-produrt-title">🤩 상품 TOP 8</div>

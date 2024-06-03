@@ -1,7 +1,6 @@
 html, body {
     margin: 0px;
     padding: 0px;
-    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
 }
 
 body {
@@ -57,14 +56,14 @@ body {
 #all-list-container {
     margin: 0px 15vw;
     display: grid;
-    grid-template-rows: 320px auto auto;
+    grid-template-rows: auto auto auto;
     grid-row: 3;
     row-gap: 10px;
     align-content: center;
 }
 
 .planner-list-container {
-    height: 100%;
+    height: 180px;
     grid-row-start: 1;
     display: flex;
     overflow: auto;
