@@ -54,7 +54,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         redisUtil.setData(username,token.getRefreshToken(),refreshMS);
         
         response.addCookie(jwtUtil.createCookie("Authorization", token.getAccessToken()));
-        response.sendRedirect("http://localhost:8080/my");
+        response.sendRedirect("http://localhost:8080/location/list");
         
     }
 }
