@@ -1,9 +1,18 @@
+// 해당 지역 정보 페이지
 function moveToLocation(locationCode) {
     // 서버로 locationCode 값을 포함한 요청을 보냅니다.
     const url = `/location/list?locationCode=${locationCode}`;
     window.location.href = url;
 }
 
+// 플래너 상세 페이지
+function moveToPlanDetail(planId) {
+    const url = '/planner/plan-detail/' + planId;
+    window.location.href = url;
+}
+
+
+// 지역 정보 상세 페이지
 function moveToLocationDetail(locationInfoId) {
     const url = '/location/detail/' + locationInfoId;
     window.location.href = url;

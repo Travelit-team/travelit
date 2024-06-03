@@ -68,7 +68,7 @@
                 </div>
                 <div>
                     <div class="plan-card-container">
-                        <div class="plan-card" th:each="planList : ${myPlanList}">
+                        <div class="plan-card" th:each="planList : ${myPlanList}" th:onclick="moveToPlanDetail([[${planList.planId}]])">
                             <div class="plan-title" th:text="${planList.plTitle}"></div>
                             <div class="plan-date">
                                 <span th:text="${planList.startDate}"></span>
