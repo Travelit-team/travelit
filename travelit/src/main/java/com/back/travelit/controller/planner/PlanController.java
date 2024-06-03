@@ -12,6 +12,7 @@ import com.back.travelit.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,7 @@ public class PlanController {
     private ProductService productService;
 
     //플래너 만들기 페이지
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/plan-first")
     public String makePlanPage(){
         return "/planner/plan-first";
