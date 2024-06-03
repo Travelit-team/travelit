@@ -62,12 +62,12 @@ public class JWTFilter extends OncePerRequestFilter {
 
         //토큰에서 username과 role 획득 이거 바꿨어야했나?? get
         //username 저 밑에꺼 연동 돼...????
-        String username = jwtUtil.getUsername(token);
+        String loginId = jwtUtil.getLoginId(token);
         String role = jwtUtil.getRole(token);
 
         if(jwtUtil.isExpired(token)){
 
-            String refreshToken = redisUtil.getData(username);
+            String refreshToken = redisUtil.getData(loginId);
 
             token = jwtUtil.validateRefreshToken(refreshToken);
 
@@ -86,16 +86,12 @@ public class JWTFilter extends OncePerRequestFilter {
 
         response.addCookie(jwtUtil.createCookie("Authorization", token));
 
-
         //스프링 시큐리티 인증 토큰 생성
         Authentication authToken = jwtUtil.getAuthentication(token);
         //세션에 사용자 등록
         SecurityContextHolder.getContext().setAuthentication(authToken);
-
-
-
-
-        request.getSession().setAttribute("username",username);
+        
+        request.getSession().setAttribute("loginId",loginId);
 
         filterChain.doFilter(request, response);
     }

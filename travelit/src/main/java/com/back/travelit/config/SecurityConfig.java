@@ -3,6 +3,7 @@ package com.back.travelit.config;
 import com.back.travelit.security.jwt.JWTFilter;
 import com.back.travelit.security.jwt.JWTUtil;
 import com.back.travelit.security.jwt.RedisUtil;
+import com.back.travelit.security.oauth.handler.CustomLogoutSuccessHandler;
 import com.back.travelit.security.oauth.handler.CustomSuccessHandler;
 import com.back.travelit.security.oauth.service.CustomOAuth2UserService;
 import com.back.travelit.security.handler.CustomAccessDeniedHandler;
@@ -31,14 +32,16 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomSuccessHandler customSuccessHandler;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
     private final JWTUtil jwtUtil;
     private final RedisUtil redisUtil;
 
 
-    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomSuccessHandler customSuccessHandler, JWTUtil jwtUtil, RedisUtil redisUtil) {
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomSuccessHandler customSuccessHandler,CustomLogoutSuccessHandler customLogoutSuccessHandler, JWTUtil jwtUtil, RedisUtil redisUtil) {
 
         this.customOAuth2UserService = customOAuth2UserService;
         this.customSuccessHandler = customSuccessHandler;
+        this.customLogoutSuccessHandler = customLogoutSuccessHandler;
         this.jwtUtil = jwtUtil;
         this.redisUtil = redisUtil;
     }
@@ -87,19 +90,23 @@ public class SecurityConfig {
                         .successHandler(customSuccessHandler)
                        // .loginPage("/user/login")
                 );
+        
+        http
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .invalidateHttpSession(false)
+                        .logoutSuccessUrl("/")
+                        .logoutSuccessHandler(customLogoutSuccessHandler)
+                        .deleteCookies("Authorization")
+                );
 
         //경로별 인가 작업
-        //http
-                /*.authorizeHttpRequests((auth) -> auth
+        http
+                .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/my").hasAuthority("ROLE_USER") //리다이렉이랑 머야
-                        .anyRequest().authenticated());*/
-
-
-
-
-
+                        .anyRequest().authenticated());
 
         //세션 설정 : STATELESS
         http

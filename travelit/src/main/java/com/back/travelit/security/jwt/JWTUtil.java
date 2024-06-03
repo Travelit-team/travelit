@@ -108,7 +108,7 @@ public class JWTUtil {
           if (!claims.getPayload().getExpiration().before(new Date())){
 
 
-              return recreationAccessToken(claims.getPayload().get("username") , claims.getPayload().get("role")    );
+              return recreationAccessToken(claims.getPayload().get("loginId") , claims.getPayload().get("role")    );
           }
         }
         catch (Exception e ){
@@ -121,9 +121,9 @@ public class JWTUtil {
     }
 
 
-    public String recreationAccessToken(  Object username, Object role ){
+    public String recreationAccessToken(  Object loginId, Object role ){
         return Jwts.builder()
-                .claim("username", (String) username )
+                .claim("loginId", (String) loginId )
                 .claim("role", (String) role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + accessMS))

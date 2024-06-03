@@ -8,7 +8,7 @@
     </appender>
 
     <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logginginfo.log</file>
+        <file>logging/info.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logging\error%d{yyyy-MM-dd}.log.zip</fileNamePattern>
             <maxHistory>15</maxHistory>
