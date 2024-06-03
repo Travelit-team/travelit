@@ -49,15 +49,14 @@ $("#generate-btn").click(function () {
         schedule: scheduleData
     };
 
-    console.log(dataToSend);
-
     $.ajax({
         type: "POST",
         url: "/planner/make-sched",  // replace with your actual endpoint
         contentType: "application/json",
         data: JSON.stringify(dataToSend),
         success: function (response) {
-            console.log("Data successfully sent:", response);
+            console.log(response);
+            window.location.href = "/planner/plan-detail/" + response;
         },
         error: function (error) {
             console.error("Error sending data:", error);
