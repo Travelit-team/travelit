@@ -29,6 +29,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Value("${spring.jwt.refreshMS}")
     private Long refreshMS;
 
+    @Value("${login-success-redirect}")
+    private String loginSuccessRedirect;
+
     public CustomSuccessHandler(JWTUtil jwtUtil) {
 
         this.jwtUtil = jwtUtil;
@@ -53,7 +56,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         redisUtil.setData(username,token.getRefreshToken(),refreshMS);
         
         response.addCookie(jwtUtil.createCookie("Authorization", token.getAccessToken()));
-        response.sendRedirect("http://localhost:8080/travelit");
+        response.sendRedirect(loginSuccessRedirect);
         
     }
 }
