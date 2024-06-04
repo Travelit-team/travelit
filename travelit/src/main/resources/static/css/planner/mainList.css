@@ -67,28 +67,24 @@ body {
     grid-row-start: 1;
     display: flex;
     overflow: auto;
-    box-shadow: 3px 3px 3px RGB(255 81 0 / 20%);
-    border: 1px solid RGB(255 81 0 / 20%);
     border-radius: 15px;
 }
 
 .planner-list-container::-webkit-scrollbar{
-    width:auto;
+    width:8px;
 }
-
 .planner-list-container::-webkit-scrollbar-track{
-    /*background-color: #9a9a9a;*/
+    background-color: rgba(255, 81, 0, 0.05);
 }
 .planner-list-container::-webkit-scrollbar-thumb{
-    background-color: RGB(255 81 0 / 50%);
-    height: 10px;
+    background-color: rgba(255, 81, 0, 0.2);
 }
 .planner-list-container::-webkit-scrollbar-button{
     display: none;
 }
 .planner-list-container::-webkit-scrollbar-track,
 .planner-list-container::-webkit-scrollbar-thumb {
-    border-radius: 15px;
+    border-radius: 5px;
 }
 
 
@@ -115,10 +111,10 @@ body {
     padding-left:60px
 }
 .plan-card{
+    border-radius: 15px;
     width:250px;
     height:80px;
-    border-radius: 20px;
-    border: 3px dashed RGB(255, 81, 0, 0.5);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 10px;
     display: flex;
     flex-direction: column;
