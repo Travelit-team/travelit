@@ -27,7 +27,7 @@ html, body {
     height: 100%;
     margin: 6vh 15vw 6vh 15vw;
     display: flex;
-    border: 1px solid #24292D;
+    border: 1px solid #ccc;
     border-radius: 15px;
     pdding: 15px;
 }
@@ -54,7 +54,7 @@ html, body {
   height: 50px;
   display: flex;
   justify-content: flex-start;
-  border: 1px solid #24292d;
+  border: 1px solid #ccc;
   border-radius: 15px;
   align-items: center;
 }
@@ -101,7 +101,7 @@ html, body {
     height:30px;
     margin: 10px;
     background-color: #fff;
-    border: 1px solid #24292D;
+    border: 1px solid #ccc;
     border-radius: 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 10px;
@@ -142,8 +142,8 @@ html, body {
 }
 
 .date-picker input {
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: none;
+    border-bottom: 1px solid #ccc;
     padding: 5px;
     text-align: center;
     width: 40%;
@@ -157,7 +157,7 @@ html, body {
 }
 
 .selected-range {
-    background-color: #e7e7e7;
+    background-color: rgba(255, 81, 0, 0.2);
 }
 
 .calender-how-to {

@@ -19,7 +19,7 @@ h2 {
 .plan-second-wrap {
   height: 740px;
   margin: 3vh 15vw 6vh 15vw;
-  border: 1px solid #24292d;
+  border: 1px solid #ccc;
   border-radius: 15px;
   padding: 15px;
   display: flex;
@@ -91,6 +91,27 @@ h2 {
   overflow: auto;
 }
 
+.schedule::-webkit-scrollbar{
+  width:8px;
+}
+
+.schedule::-webkit-scrollbar-track{
+  background-color: rgba(255, 81, 0, 0.05);
+}
+
+.schedule::-webkit-scrollbar-thumb{
+  background-color: rgba(255, 81, 0, 0.2);
+}
+
+.schedule::-webkit-scrollbar-button{
+  display: none;
+}
+
+.schedule::-webkit-scrollbar-track,
+.schedule::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+}
+
 .schedule, .my-list{
   border: 1px solid #ccc;
   border-radius: 15px;
@@ -114,6 +135,27 @@ h2 {
   margin-top:10px;
   overflow: auto;
   height: 618px;
+}
+
+.details::-webkit-scrollbar{
+  width:8px;
+}
+
+.details::-webkit-scrollbar-track{
+  background-color: rgba(204, 204, 204, 0.1);
+}
+
+.details::-webkit-scrollbar-thumb{
+  background-color: rgba(204, 204, 204, 0.5);
+}
+
+.details::-webkit-scrollbar-button{
+  display: none;
+}
+
+.details::-webkit-scrollbar-track,
+.details::-webkit-scrollbar-thumb {
+  border-radius: 5px;
 }
 
 .location-list-card, .mark-list-card{
@@ -159,7 +201,7 @@ button.generate-btn {
 }
 
 .medium {
-  color: rgb(255, 81, 0, 0.8);
+  color: rgba(255, 81, 0, 0.8);
   font-size: 18px;
   font-weight: bold;
 }
@@ -182,5 +224,5 @@ button.generate-btn {
 }
 
 .selected {
-  color: red;
+  color: rgba(255, 81, 0, 0.8);
 }

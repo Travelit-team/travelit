@@ -13,8 +13,9 @@ html, body {
   align-items: center;
   background-color: #fff;
   padding: 20px;
-  border-bottom: 1px solid #ddd;
-  height: 100px;
+  margin: 20px;
+  border-bottom: 1px solid rgb(255, 81, 0);
+  height: 100px;,
 }
 
 .top-center {
@@ -66,7 +67,7 @@ html, body {
 }
 
 button {
-  background-color: rgba(255, 81, 0, 0.6);
+  background-color: rgba(255, 81, 0, 0.8);
   color: white;
   border: none;
   border-radius: 10px;
