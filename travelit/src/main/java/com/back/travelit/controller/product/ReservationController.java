@@ -81,7 +81,7 @@ public class ReservationController {
     //알림창
     private String AlertMessage(final ReservationMessage params, Model model) {
         model.addAttribute("params", params);
-        return "product/alertMessage";
+        return "product/AlertMessage";
     }
 
 }
