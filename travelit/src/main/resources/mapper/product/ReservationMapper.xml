@@ -4,7 +4,7 @@
 <mapper namespace="com.back.travelit.mapper.product.ReservationMapper">
 
     <!-- 예약정보 조회 -->
-    <select id="findAllRes" resultType="com.back.travelit.dto.response.product.ReservationResponse">
+    <select id="findAllRes" parameterType="int" resultType="com.back.travelit.dto.response.product.ReservationResponse">
         SELECT R.RES_ID, R.RES_NAME, R.RES_PHONE, R.RES_DATE, R.USE_DATE, R.RES_STATE, R.RES_NUM, R.RES_REQUEST, R.PAYMENT,
                P.PRO_PRICE, U.USER_ID, P.PRO_NAME, PI.PRO_IMG_NAME
         FROM RESERVATION R
@@ -42,7 +42,6 @@
         DELETE
         FROM RESERVATION
         WHERE RES_ID = #{RES_ID}
-        AND USER_ID = #{USER_ID}
     </delete>
 
     <!-- 조회순 5개 상품 조회 -->

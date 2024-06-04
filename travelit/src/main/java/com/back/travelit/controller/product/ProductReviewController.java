@@ -2,6 +2,8 @@ package com.back.travelit.controller.product;
 
 import com.back.travelit.dto.request.product.ProductReviewRequest;
 import com.back.travelit.dto.response.product.ProductReviewResponse;
+import com.back.travelit.security.LoginUser;
+import com.back.travelit.security.dto.UserDTO;
 import com.back.travelit.service.product.ProductReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +34,9 @@ public class ProductReviewController {
     //REST API에서는 명사, 소문자 /는 계층을 나태내므로 마지마겡 들어가지 않도록 주의
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/product/{PRO_ID}/reviews")
-    public ProductReviewResponse saveProductReview(@PathVariable final int PRO_ID, @RequestBody ProductReviewRequest params) {
+    public ProductReviewResponse saveProductReview(@LoginUser UserDTO user, @PathVariable final int PRO_ID, @RequestBody ProductReviewRequest params) {
+        int userId = user.getUserId();
+        params.setUserId(userId);
         int PRO_REVIEW_ID = productReviewService.saveReview(params);
         return productReviewService.findReviewById(PRO_REVIEW_ID);
     }

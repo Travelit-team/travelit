@@ -2,10 +2,12 @@ package com.back.travelit.dto.request.product;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class ProductReviewRequest {
     private int proReviewId;
@@ -15,4 +17,5 @@ public class ProductReviewRequest {
     private LocalDateTime proReviewDate;
     private int proScore;
     private int resId;
+
 }

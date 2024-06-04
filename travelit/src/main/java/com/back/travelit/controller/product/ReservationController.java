@@ -3,6 +3,8 @@ package com.back.travelit.controller.product;
 import com.back.travelit.dto.request.product.ReservationMessage;
 import com.back.travelit.dto.request.product.ReservationRequest;
 import com.back.travelit.dto.response.product.ReservationResponse;
+import com.back.travelit.security.LoginUser;
+import com.back.travelit.security.dto.UserDTO;
 import com.back.travelit.service.product.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,12 +26,12 @@ public class ReservationController {
     //예약 목록
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/product/reservationList")
-    public String reservationList(Model model) {
-        List<ReservationResponse> response = reservationService.findAllRes();
+    public String reservationList(@LoginUser UserDTO user, Model model) {
+        int USER_ID = user.getUserId();
+        List<ReservationResponse> response = reservationService.findAllRes(USER_ID);
         List<ReservationResponse> fiveProduct = reservationService.findByRand();
         model.addAttribute("response", response);
         model.addAttribute("fiveProduct", fiveProduct);
-        System.out.println(model);
         return "product/reservationList";
     }
 
@@ -46,7 +48,6 @@ public class ReservationController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/product/reservationWrite")
     public String reservationWrite(@RequestParam(value = "RES_ID", required = false) final Integer RES_ID, @RequestParam("PRO_ID") int PRO_ID, Model model) {
-
         if (RES_ID != null) {
             ReservationResponse reservation = reservationService.findByResId(RES_ID);
             model.addAttribute("reservation", reservation);
@@ -59,8 +60,12 @@ public class ReservationController {
     //예약 입력
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/product/reservationSave")
-    public String saveReservation(final ReservationRequest params) {
+    public String saveReservation(@LoginUser UserDTO user, final ReservationRequest params, Model model) {
+        int USER_ID = user.getUserId();
+        params.setUSER_ID(USER_ID);
         reservationService.saveRes(params);
+        model.addAttribute("USER_ID", USER_ID);
+        model.addAttribute("params", params);
         return "redirect:/product/reservationList";
     }
 
