@@ -5,7 +5,6 @@ import com.back.travelit.security.jwt.JWTUtil;
 import com.back.travelit.security.jwt.RedisUtil;
 import com.back.travelit.security.oauth.CustomOAuth2User;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +53,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         redisUtil.setData(username,token.getRefreshToken(),refreshMS);
         
         response.addCookie(jwtUtil.createCookie("Authorization", token.getAccessToken()));
-        response.sendRedirect("http://localhost:8080/location/list");
+        response.sendRedirect("http://localhost:8080/travelit");
         
     }
 }

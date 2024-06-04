@@ -6,11 +6,7 @@ import com.back.travelit.security.jwt.RedisUtil;
 import com.back.travelit.security.oauth.handler.CustomLogoutSuccessHandler;
 import com.back.travelit.security.oauth.handler.CustomSuccessHandler;
 import com.back.travelit.security.oauth.service.CustomOAuth2UserService;
-import com.back.travelit.security.handler.CustomAccessDeniedHandler;
-import com.back.travelit.security.handler.CustomAuthenticationEntryPoint;
-import jakarta.servlet.http.HttpServletRequest;
-
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,12 +19,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig {
 
@@ -39,14 +35,6 @@ public class SecurityConfig {
     private final RedisUtil redisUtil;
 
 
-    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomSuccessHandler customSuccessHandler,CustomLogoutSuccessHandler customLogoutSuccessHandler, JWTUtil jwtUtil, RedisUtil redisUtil) {
-
-        this.customOAuth2UserService = customOAuth2UserService;
-        this.customSuccessHandler = customSuccessHandler;
-        this.customLogoutSuccessHandler = customLogoutSuccessHandler;
-        this.jwtUtil = jwtUtil;
-        this.redisUtil = redisUtil;
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -103,12 +91,12 @@ public class SecurityConfig {
                 );
 
         //경로별 인가 작업
-        http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/my").hasAuthority("ROLE_USER") //리다이렉이랑 머야
-                        .anyRequest().authenticated());
+//        http
+//                .authorizeHttpRequests((auth) -> auth
+//                        .requestMatchers("/").permitAll()
+//                        .requestMatchers("/login").permitAll()
+//                        .requestMatchers("/my").hasAuthority("ROLE_USER") //리다이렉이랑 머야
+//                        .anyRequest().authenticated());
 
         //세션 설정 : STATELESS
         http
