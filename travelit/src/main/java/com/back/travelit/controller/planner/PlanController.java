@@ -39,7 +39,7 @@ public class PlanController {
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/plan-first")
     public String makePlanPage(){
-        return "/planner/plan-first";
+        return "planner/plan-first";
     }
 
     //플래너 만들기
