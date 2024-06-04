@@ -25,6 +25,7 @@ html, body {
     display: flex;
     font-size: 18px;
     color: #a7a7a7;
+
 }
 
 #header-menu > ul {
@@ -35,6 +36,11 @@ html, body {
     justify-content: space-between;
     align-items: center;
     font-weight: 650;
+}
+
+.header-menu-list > a{
+    color: inherit;
+    text-decoration-line: none;
 }
 
 .header-menu-list:hover {

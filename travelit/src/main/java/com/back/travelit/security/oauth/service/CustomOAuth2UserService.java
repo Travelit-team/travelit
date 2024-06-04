@@ -4,10 +4,10 @@ import com.back.travelit.common.exception.BaseException;
 import com.back.travelit.common.exception.ErrorCode;
 import com.back.travelit.domain.user.UserEntity;
 import com.back.travelit.repository.UserRepository;
+import com.back.travelit.security.dto.UserDTO;
 import com.back.travelit.security.oauth.CustomOAuth2User;
 import com.back.travelit.security.oauth.KakaoResponse;
 import com.back.travelit.security.oauth.OAuth2Response;
-import com.back.travelit.security.oauth.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -23,11 +23,17 @@ import java.util.Date;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
+
+
+
     private final UserRepository userRepository;
 
     public CustomOAuth2UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+
+
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

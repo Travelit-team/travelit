@@ -9,7 +9,7 @@ import com.back.travelit.dto.response.location.LocationDetailResponse;
 import com.back.travelit.dto.response.location.LocationLikeResponse;
 import com.back.travelit.dto.response.location.LocationPostResponse;
 import com.back.travelit.security.LoginUser;
-import com.back.travelit.security.oauth.UserDTO;
+import com.back.travelit.security.dto.UserDTO;
 import com.back.travelit.service.location.LocationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,7 @@ public class LocationController {
 
         int locationInfoId = locationService.saveLocationInfo(writeRequest);
 
-        return "redirect:/location/detail/{locationInfoId}";
+        return "redirect:/location/detail/" + locationInfoId;
     }
 
     @GetMapping("/locationCodes")

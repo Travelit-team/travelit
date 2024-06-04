@@ -15,17 +15,16 @@
     </select>
 
     <!--전체 지역 정보 조회 -->
-    <select id="selectAllLocInfo" parameterType="com.back.travelit.domain.common.PagingSearchCriteria" resultType="com.back.travelit.dto.response.planner.PlanLocInfo">
+    <select id="selectAllLocInfo" parameterType="String" resultType="com.back.travelit.dto.response.planner.PlanLocInfo">
         select LOC.LOCATION_INFO_ID AS locInfoId, LOC.LOCATION_CODE AS locCode, CODE.LOCATION_NAME AS locName, LOC.TITLE AS locTitle, LOC.SUB_TITLE AS locSubTitle, LOC.ADDRESS AS locAddress
         from LOCATION_INFO LOC
         left join LOCATION_CODE CODE
         ON LOC.LOCATION_CODE = CODE.LOCATION_CODE
-        <!--<if test="searchRequest.keyword != null and searchRequest.keyword != ''">
-            where CODE.LOCATION_NAME LIKE '%서울%'
-            or LOC.TITLE LIKE '%서울%'
-            or LOC.DESCRIPTION LIKE '%서울%'
-            or LOC.ADDRESS LIKE '%서울%'
-        </if>-->
+        <if test="keyword != null and keyword != ''">
+            where CODE.LOCATION_NAME LIKE CONCAT('%', #{keyword}, '%')
+            or LOC.TITLE LIKE CONCAT('%', #{keyword}, '%')
+            or LOC.ADDRESS LIKE CONCAT('%', #{keyword}, '%')
+        </if>
     </select>
 
     <!-- 플래너 상세 보기 -->
@@ -102,6 +101,42 @@
         WHERE P.USER_ID = #{userId}
         GROUP BY
             P.PLAN_ID, P.USER_ID, P.PL_STR_DATE, P.PL_END_DATE, P.PL_TITLE, P.PL_CREATE_AT
+    </select>
+
+    <!--지역정보 리스트(조회수순 6개)-->
+    <select id="selectLocList" parameterType="int" resultType="com.back.travelit.dto.response.location.LocationPostResponse">
+        select L.LOCATION_INFO_ID AS locationInfoId, L.TITLE, L.DESCRIPTION, L.ADDRESS, I.IMG_SRC AS profileUrl, L.VIEWS AS views, IFNULL(IL.LIKE_COUNT, 0) AS likeCount, L.CREATE_AT
+        from LOCATION_INFO L
+                 inner join (
+            select I1.LOCATION_INFO_ID, I1.IMG_SRC
+            from LOCATION_INFO_IMG I1
+                     inner join (
+                select LOCATION_INFO_ID, MIN(LOCATION_IMG_ID) as LOCATION_IMG_ID
+                from LOCATION_INFO_IMG
+                group by LOCATION_INFO_ID
+            ) I2 ON I1.LOCATION_IMG_ID = I2.LOCATION_IMG_ID
+        ) I on L.LOCATION_INFO_ID = I.LOCATION_INFO_ID
+                 LEFT OUTER JOIN (
+            SELECT LOCATION_INFO_ID, count(LOCATION_INFO_ID) as LIKE_COUNT
+            FROM LOCATION_INFO_LIKES
+            GROUP BY LOCATION_INFO_ID
+        ) IL ON L.LOCATION_INFO_ID = IL.LOCATION_INFO_ID
+        order by views desc
+        limit #{count};
+    </select>
+
+    <!-- 상품 정보 리스트 (조회수순 8개)-->
+    <select id="selectProductList" resultType="com.back.travelit.dto.response.product.ProductResponse">
+        SELECT P.PRO_ID, P.PRO_NAME, P.PRO_PRICE, P.PRO_LOCATION, P.PRO_VIEW, P.TOUR_START, P.TOUR_END, PI.PRO_IMG_NAME
+        FROM PRODUCT P
+                 INNER JOIN (
+            SELECT PI.PRO_ID, MIN(PI.PRO_IMG_ID) AS MIN_PRO_IMG_ID
+            FROM PRODUCT_IMG PI
+            GROUP BY PI.PRO_ID
+        ) MIN_IMG ON P.PRO_ID = MIN_IMG.PRO_ID
+                 INNER JOIN PRODUCT_IMG PI ON MIN_IMG.MIN_PRO_IMG_ID = PI.PRO_IMG_ID
+        ORDER BY P.PRO_VIEW DESC
+        LIMIT 8
     </select>
 
     <!-- 페이징 처리 -->

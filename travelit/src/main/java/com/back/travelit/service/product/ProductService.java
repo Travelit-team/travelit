@@ -6,6 +6,7 @@ import com.back.travelit.dto.response.product.ProductPagination;
 import com.back.travelit.dto.response.product.ProductPagingResponse;
 import com.back.travelit.dto.response.product.ProductResponse;
 import com.back.travelit.dto.response.product.ProductViewResponse;
+import com.back.travelit.mapper.planner.PlanMapper;
 import com.back.travelit.mapper.product.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ProductService {
 
     private final ProductMapper productMapper;
+    private final PlanMapper planMapper;
 
     //상품 목록 조회
     public ProductPagingResponse<ProductResponse> findAllProduct(ProductSearch params){
@@ -85,4 +87,6 @@ public class ProductService {
         return productMapper.findByViews();
     }
 
+    //조회순 8개 상품 조회
+    public List <ProductResponse> selectProductList() { return planMapper.selectProductList();}
 }

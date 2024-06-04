@@ -8,8 +8,9 @@ import java.util.Date;
 @Table(name = "USER")
 @Entity
 @Getter
+@Setter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class UserEntity {
     @Id

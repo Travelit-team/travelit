@@ -1,16 +1,18 @@
 package com.back.travelit.controller.planner;
 
 import com.back.travelit.dto.request.planner.PlanCreateReq;
-import com.back.travelit.dto.request.planner.ScheduleCreateReq;
 import com.back.travelit.dto.request.planner.ScheduleReplaceReq;
+import com.back.travelit.dto.request.planner.ScheduleRequest;
 import com.back.travelit.dto.response.planner.PlanLocCodeRes;
 import com.back.travelit.dto.response.planner.PlanLocInfo;
 import com.back.travelit.security.LoginUser;
-import com.back.travelit.security.oauth.UserDTO;
+import com.back.travelit.security.dto.UserDTO;
 import com.back.travelit.service.planner.PlanService;
+import com.back.travelit.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +32,11 @@ public class PlanController {
     private PlanService planService;
     private Model model;
     private ModelAndView modelAndView;
+    @Autowired
+    private ProductService productService;
 
     //플래너 만들기 페이지
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/plan-first")
     public String makePlanPage(){
         return "/planner/plan-first";
@@ -39,12 +44,12 @@ public class PlanController {
 
     //플래너 만들기
     @PostMapping("/plan-make")
-    public String makePlan(@ModelAttribute("createReqDTO") PlanCreateReq createReqDTO, Model model){
+    public String makePlan(@LoginUser UserDTO user, @ModelAttribute("createReqDTO") PlanCreateReq createReqDTO, Model model){
 
-        int userId = 2;
+        int userId = user.getUserId();
 
         //플래너 기본 정보 값 넣고,생성된 플래너 아이디 값 받기
-        int planId = planService.setMakePlan(createReqDTO);
+        int planId = planService.setMakePlan(userId, createReqDTO);
 
         log.info("planId");
         //user가 입력한 플래너 값을 리턴하는 view에 보내기
@@ -87,22 +92,19 @@ public class PlanController {
         return planService.getMarkLocInfo(userId);
     }
 
-
-    //스케줄 생성
-    @PostMapping("/make-sched")
-    public String makeShed(@ModelAttribute("schedCreateReq") ScheduleCreateReq schedCreateReq, Model model){
-
-        //상세 스케줄 값 넣기
-        planService.setMakeSched(schedCreateReq);
-        return "/planner/plan-detail";
+    @GetMapping("/location/search")
+    @ResponseBody
+    public List<PlanLocInfo> plannerLocationSerach(@RequestParam("keyword") String keyword) {
+        log.info("planner location search keyword : {}",keyword);
+        return planService.getLocInfoInKeyword(keyword);
     }
 
-    //내 플래너 리스트
-    @GetMapping("/main")
-    public String mainList(@LoginUser UserDTO userDTO, Model model){
-        int userId = 2;
-        model.addAttribute("myPlanList",planService.getMyPlanList(userId));
-        return "/planner/mainList";
+    @PostMapping("/make-sched")
+    @ResponseBody
+    public int schedDetailInsert(@RequestBody ScheduleRequest scheduleRequest) {
+        planService.setMakeSched(scheduleRequest);
+
+        return scheduleRequest.getPlanId();
     }
 
     //스케줄 수정
@@ -115,8 +117,17 @@ public class PlanController {
     //플래너 상세보기
     @GetMapping("/plan-detail/{planId}")
     public String detailPlan(@PathVariable("planId") int planId, Model model){
+        model.addAttribute("planId",planId);
         model.addAttribute("planInfos",planService.getPlanDetail(planId));
         model.addAttribute("scheds",planService.getSchedDetail(planId));
         return "planner/plan-detail";
+    }
+
+    //플래너 삭제
+    @DeleteMapping("/plan-delete")
+    @ResponseBody
+    public void deletePlan(@RequestBody int planId){
+        planService.deletePlan(planId);
+        log.info("deletePlan");
     }
 }
