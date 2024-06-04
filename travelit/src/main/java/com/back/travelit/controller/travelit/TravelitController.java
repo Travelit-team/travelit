@@ -1,7 +1,7 @@
 package com.back.travelit.controller.travelit;
 
 import com.back.travelit.security.LoginUser;
-import com.back.travelit.security.oauth.UserDTO;
+import com.back.travelit.security.dto.UserDTO;
 import com.back.travelit.service.planner.PlanService;
 import com.back.travelit.service.product.ProductService;
 import lombok.RequiredArgsConstructor;

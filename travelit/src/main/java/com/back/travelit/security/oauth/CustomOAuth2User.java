@@ -1,5 +1,6 @@
 package com.back.travelit.security.oauth;
 
+import com.back.travelit.security.dto.UserDTO;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -20,17 +21,25 @@ public class CustomOAuth2User implements OAuth2User {
 
     @Override
     public Map<String, Object> getAttributes() {
+
         return null;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        Collection<GrantedAuthority> auth = new ArrayList<>();
+        Collection<GrantedAuthority> collection = new ArrayList<>();
 
-        auth.add((GrantedAuthority) () -> userDTO.getRole());
+        collection.add(new GrantedAuthority() {
 
-        return auth;
+            @Override
+            public String getAuthority() {
+
+                return userDTO.getRole();
+            }
+        });
+
+        return collection;
     }
 
     @Override

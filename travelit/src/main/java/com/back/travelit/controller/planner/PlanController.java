@@ -6,7 +6,7 @@ import com.back.travelit.dto.request.planner.ScheduleRequest;
 import com.back.travelit.dto.response.planner.PlanLocCodeRes;
 import com.back.travelit.dto.response.planner.PlanLocInfo;
 import com.back.travelit.security.LoginUser;
-import com.back.travelit.security.oauth.UserDTO;
+import com.back.travelit.security.dto.UserDTO;
 import com.back.travelit.service.planner.PlanService;
 import com.back.travelit.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
