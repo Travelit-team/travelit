@@ -7,6 +7,48 @@ body {
     overflow-x: hidden;
 }
 
+.product-update {
+    position: fixed;
+    width: 120px;
+    height: 36px;
+    top: 94px;
+    margin-left: 80px;
+    border: none;
+    border-radius: 18px;
+    font-weight: bold;
+    color: white;
+    background: #333333;
+    z-index: 9999;
+}
+
+.product-delete {
+    position: fixed;
+    width: 120px;
+    height: 36px;
+    top: 134px;
+    margin-left: 80px;
+    border: none;
+    border-radius: 18px;
+    font-weight: bold;
+    color: white;
+    background: #333333;
+    z-index: 9999;
+}
+
+.product-back {
+    position: fixed;
+    width: 120px;
+    height: 36px;
+    top: 174px;
+    margin-left: 80px;
+    border: none;
+    border-radius: 18px;
+    font-weight: bold;
+    color: white;
+    background: #333333;
+    z-index: 9999;
+}
+
 /*slider -----------------------------*/
 .bx-wrapper {
     border: none !important;

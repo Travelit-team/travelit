@@ -284,3 +284,17 @@ body {
     color: #ff006b;
     margin: 5px 0;
 }
+
+.product-write {
+    position: fixed;
+    width: 120px;
+    height: 36px;
+    top: 500px;
+    margin-left: 80px;
+    border: none;
+    border-radius: 18px;
+    font-weight: bold;
+    color: white;
+    background: #333333;
+    z-index: 9999;
+}

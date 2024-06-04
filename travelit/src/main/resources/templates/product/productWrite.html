@@ -74,26 +74,20 @@
             <div class="write-content02"><textarea id="PRO_CONTENT" name="PRO_CONTENT" cols="50" rows="10" placeholder="내용을 입력해 주세요." required></textarea></div>
 
             <!-- 대표 이미지 파일 -->
+            <div class="write-img-title">상품 소개 이미지&nbsp;&nbsp;<button type="button" onclick="addFile();" class="btns fn_add_btn"><span>파일 추가</span></button></div>
             <div class="file_list">
-                <div>
-                    <div class="file_input">
-                        <div class="write-img-title">상품 소개 이미지</div>
-                        <button type="button" onclick="addFile();" class="btns fn_add_btn"><span>파일 추가</span></button>
-                        <input type="file" name="files" onchange="selectFile(this);"/>
-                        <button type="button" onclick="removeFile(this);" class="btns del_btn"><span>삭제</span></button>
-                    </div>
+                <div class="file_input">
+                    <input type="file" name="files" onchange="selectFile(this);" class="write-img-input"/>
+                    <button type="button" onclick="removeFile(this);" class="btns del_btn"><span>삭제</span></button>
                 </div>
             </div>
 
             <!-- 상세 이미지 파일 -->
+            <div class="write-deimg-title">상품 상세 이미지&nbsp;&nbsp;<button type="button" onclick="addDeFile();" class="btns fn_add_btn"><span>파일 추가</span></button></div>
             <div class="defile_list">
-                <div>
-                    <div class="defile_input">
-                        <div class="write-deimg-title">상품 상세 이미지</div>
-                        <button type="button" onclick="addDeFile();" class="btns fn_add_btn"><span>파일 추가</span></button>
-                        <input type="file" name="defiles" onchange="selectDeFile(this);"/>
-                        <button type="button" onclick="removeDeFile(this);" class="btns dedel_btn"><span>삭제</span></button>
-                    </div>
+                <div class="defile_input">
+                    <input type="file" name="defiles" onchange="selectDeFile(this);" class="write-deimg-input"/>
+                    <button type="button" onclick="removeDeFile(this);" class="btns del_btn"><span>삭제</span></button>
                 </div>
             </div>
         </div>
@@ -153,6 +147,8 @@
     /*]]>*/
 </script>
 
+</html>
+
 <script th:inline="javascript">
     /*<![CDATA[*/
 
@@ -187,12 +183,9 @@
         const fileDiv = document.createElement('div');
         fileDiv.innerHTML =`
             <div class="file_input">
-                <input type="text" readonly />
-                <label> 상품 소개 이미지
                     <input type="file" name="files" onchange="selectFile(this);" />
-                </label>
+                    <button type="button" onclick="removeFile(this);" class="btns del_btn"><span>삭제</span></button>
             </div>
-            <button type="button" onclick="removeFile(this);" class="btns del_btn"><span>삭제</span></button>
         `;
         document.querySelector('.file_list').appendChild(fileDiv);
     }
@@ -239,12 +232,9 @@
         const fileDiv = document.createElement('div');
         fileDiv.innerHTML =`
             <div class="defile_input">
-                <input type="text" readonly />
-                <label> 상품 상세 이미지
                     <input type="file" name="defiles" onchange="selectDeFile(this);" />
-                </label>
+                <button type="button" onclick="removeDeFile(this);" class="btns del_btn"><span>삭제</span></button>
             </div>
-            <button type="button" onclick="removeDeFile(this);" class="btns dedel_btn"><span>삭제</span></button>
         `;
         document.querySelector('.defile_list').appendChild(fileDiv);
     }
@@ -261,4 +251,3 @@
     }
     /*]]>*/
 </script>
-</html>

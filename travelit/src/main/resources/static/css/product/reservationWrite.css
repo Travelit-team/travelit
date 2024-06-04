@@ -1,0 +1,147 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    overflow-x: hidden;
+
+}
+
+/*reservation ------------------------*/
+
+.reservation-wrapper {
+    width: 800px;
+    height: 800px;
+    margin: auto;
+    background-color: #f3f3f3;
+}
+
+.reservation-container {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    height: 800px;
+    align-items: center;
+    justify-content: center;
+}
+
+.reservation-container-box {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    grid-gap: 30px;
+    align-items: center;
+}
+
+.reservation-name-title {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.reservation-name {
+    height: 30px;
+    border: none;
+    padding: 0 20px;
+    border-radius: 15px;
+    grid-column: 2;
+    grid-row: 1;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.reservation-phone-title {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.reservation-phone {
+    height: 30px;
+    border: none;
+    padding: 0 20px;
+    border-radius: 15px;
+    grid-column: 2;
+    grid-row: 2;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.reservation-date-title {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.reservation-date {
+    height: 30px;
+    border: none;
+    padding: 0 20px;
+    border-radius: 15px;
+    grid-column: 2;
+    grid-row: 3;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.reservation-count-title {
+    grid-column: 1;
+    grid-row: 4;
+}
+
+.reservation-count {
+    height: 30px;
+    border: none;
+    padding: 0 20px;
+    border-radius: 15px;
+    grid-column: 2;
+    grid-row: 4;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.reservation-payment-title {
+    grid-column: 1;
+    grid-row: 5;
+}
+
+.reservation-payment {
+    height: 30px;
+    border: none;
+    padding: 0 20px;
+    border-radius: 15px;
+    grid-column: 2;
+    grid-row: 5;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.reservation-request {height: 200px;
+    border: none;
+    padding: 20px 20px;
+    border-radius: 15px;
+    grid-column: 2;
+    grid-row: 6;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.reservation-btn {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    grid-column: 2;
+    grid-row: 7;
+}
+
+.reservation-back-btn {
+    width: 220px;
+    height: 30px;
+    border: none;
+    border-radius: 15px;
+    font-weight: bold;
+    color: white;
+    background-color: #333333;
+}
+
+.reservation-save-btn {
+    width: 220px;
+    height: 30px;
+    border: none;
+    border-radius: 15px;
+    font-weight: bold;
+    color: white;
+    background: #FF5100;
+}
+

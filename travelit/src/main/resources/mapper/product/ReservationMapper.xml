@@ -4,7 +4,7 @@
 <mapper namespace="com.back.travelit.mapper.product.ReservationMapper">
 
     <!-- 예약정보 조회 -->
-    <select id="findAllRes" resultType="com.back.travelit.dto.response.product.ReservationResponse">
+    <select id="findAllRes" parameterType="int" resultType="com.back.travelit.dto.response.product.ReservationResponse">
         SELECT R.RES_ID, R.RES_NAME, R.RES_PHONE, R.RES_DATE, R.USE_DATE, R.RES_STATE, R.RES_NUM, R.RES_REQUEST, R.PAYMENT,
                P.PRO_PRICE, U.USER_ID, P.PRO_NAME, PI.PRO_IMG_NAME
         FROM RESERVATION R
@@ -15,7 +15,7 @@
             FROM PRODUCT_IMG
             WHERE PRO_ID = P.PRO_ID
         )
-        WHERE U.USER_ID = 1
+        WHERE U.USER_ID = #{USER_ID}
         ORDER BY R.RES_ID DESC;
 
     </select>
@@ -34,7 +34,7 @@
     <!-- 예약정보 입력 -->
     <insert id="saveRes" parameterType="com.back.travelit.dto.request.product.ReservationRequest" useGeneratedKeys="true" keyProperty="RES_ID">
         INSERT INTO RESERVATION (RES_ID, USER_ID, PRO_ID, RES_NAME, RES_PHONE, RES_DATE, USE_DATE, RES_STATE, RES_NUM, RES_REQUEST, PAYMENT)
-        VALUES (#{RES_ID}, 1, #{PRO_ID}, #{RES_NAME}, #{RES_PHONE}, DEFAULT, #{USE_DATE}, DEFAULT, #{RES_NUM}, #{RES_REQUEST}, #{PAYMENT})
+        VALUES (#{RES_ID}, #{USER_ID}, #{PRO_ID}, #{RES_NAME}, #{RES_PHONE}, DEFAULT, #{USE_DATE}, DEFAULT, #{RES_NUM}, #{RES_REQUEST}, #{PAYMENT})
     </insert>
 
     <!-- 예약정보 삭제 -->
@@ -42,7 +42,6 @@
         DELETE
         FROM RESERVATION
         WHERE RES_ID = #{RES_ID}
-        AND USER_ID = 1
     </delete>
 
     <!-- 조회순 5개 상품 조회 -->

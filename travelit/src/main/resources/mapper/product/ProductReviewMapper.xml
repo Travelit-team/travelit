@@ -25,7 +25,7 @@
     <!-- 리뷰 저장 -->
     <insert id="save" parameterType="com.back.travelit.dto.request.product.ProductReviewRequest" useGeneratedKeys="true" keyProperty="proReviewId">
         INSERT INTO PRODUCT_REVIEW(PRO_REVIEW_ID, USER_ID, PRO_ID, PRO_REVIEW_CONTENT, PRO_REVIEW_DATE, PRO_SCORE)
-        VALUES(#{proReviewId}, 1, #{proId}, #{proReviewContent}, DEFAULT, #{proScore})
+        VALUES(#{proReviewId}, #{userId}, #{proId}, #{proReviewContent}, DEFAULT, #{proScore})
     </insert>
 
     <!-- 리뷰 수정 -->

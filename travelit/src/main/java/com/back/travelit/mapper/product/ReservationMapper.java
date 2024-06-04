@@ -10,7 +10,7 @@ import java.util.List;
 public interface ReservationMapper {
 
     //전체 예약내역
-    List<ReservationResponse> findAllRes();
+    List<ReservationResponse> findAllRes(int USER_ID);
 
     //상세 예약 내역
     ReservationResponse findByResId(int RES_ID);

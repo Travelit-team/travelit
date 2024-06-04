@@ -9,6 +9,7 @@ import com.back.travelit.service.product.ProductDetailFileService;
 import com.back.travelit.service.product.ProductFileService;
 import com.back.travelit.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +55,7 @@ public class ProductController {
     }
 
     //상품 작성 페이지
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/product/productWrite")
     public String productWrite(@RequestParam(value = "PRO_ID", required = false) final Integer PRO_ID, Model model) {
         if(PRO_ID != null) {
@@ -64,6 +66,7 @@ public class ProductController {
     }
 
     //상픔 작성
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/product/save")
     public String saveProduct(final ProductRequest params, Model model, @RequestParam("files") List<MultipartFile> files, @RequestParam("defiles") List<MultipartFile> defiles) {
         //1.게시글 삽입
@@ -103,6 +106,7 @@ public class ProductController {
     }
 
     //상품 수정
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/product/update")
     public String updateProduct(final ProductRequest params, Model model) {
         productService.updateProduct(params);
@@ -111,6 +115,7 @@ public class ProductController {
     }
 
     //게시글 삭제
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/product/delete")
     public String deleteProduct(@RequestParam final Integer PRO_ID, final ProductSearch queryParams, Model model) {
         productService.deleteProduct(PRO_ID);

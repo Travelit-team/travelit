@@ -5,31 +5,41 @@
     <title>예약하기</title>
     <th:block th:replace="fragments/header :: head"></th:block>
     <th:block th:replace="fragments/footer :: head"></th:block>
+    <link th:href="@{/css/product/reservationWrite.css}" rel="stylesheet">
 </head>
 <body>
     <header th:replace="fragments/header :: header"></header>
 
-    <form id="saveForm" method="post" autocomplete="off">
+    <div class="reservation-wrapper">
+        <form id="saveForm" method="post" autocomplete="off">
+            <div><input type="hidden" id="RES_ID" name="RES_ID" th:if="${reservation != null}" th:value="${reservation.RES_ID}"/></div>
+            <input type="hidden" id="PRO_ID" name="PRO_ID" th:value="${PRO_ID}"/><!-- PRO_ID 값을 받아옴 -->
 
-        <div><input type="hidden" id="RES_ID" name="RES_ID" th:if="${reservation != null}" th:value="${reservation.RES_ID}"/></div>
-        <input type="hidden" id="PRO_ID" name="PRO_ID" th:value="${PRO_ID}"/><!-- PRO_ID 값을 받아옴 -->
+            <div class="reservation-container">
+                <div class="reservation-container-box">
+                    <div class="reservation-name-title">예약자명</div>
+                    <input type="text" id="RES_NAME" name="RES_NAME" maxlength="50" placeholder="예약자명을 입력해 주세요." class="reservation-name"/>
+                    <div class="reservation-phone-title">전화번호</div>
+                    <input type="text" id="RES_PHONE" name="RES_PHONE" maxlength="15" placeholder="전화번호를 입력해 주세요." class="reservation-phone"/>
+                    <div class="reservation-date-title">사용 예정일</div>
+                    <input type="date" id="USE_DATE" name="USE_DATE" maxlength="20" class="reservation-date"/>
+                    <div class="reservation-count-title">수량</div>
+                    <input type="number" id="RES_NUM" name="RES_NUM" maxlength="2" class="reservation-count"/>
+                    <div class="reservation-payment-title">결제수단</div>
+                    <select id="PAYMENT" name="PAYMENT" required class="reservation-payment">
+                        <option value="무통장 입금">무통장 입금</option>
+                        <option value="카카오페이">카카오페이</option>
+                    </select>
+                    <textarea id="RES_REQUEST" name="RES_REQUEST" cols="50" rows="10" placeholder="요청사항을 입력해 주세요." class="reservation-request"></textarea>
+                    <div class="reservation-btn">
+                        <button type="button" onclick="window.location.href='/product/reservationList';" class="reservation-back-btn">뒤로</button>
+                        <button type="button" id="saveBtn" onclick="saveReservation();" class="reservation-save-btn">구매하기</button>
+                    </div>
+                </div>
+            </div>
+        </form>
 
-        <div>예약자명<input type="text" id="RES_NAME" name="RES_NAME" maxlength="50" placeholder="예약자명을 입력해 주세요." /></div>
-        <div>전화번호<input type="text" id="RES_PHONE" name="RES_PHONE" maxlength="15" placeholder="전화번호를 입력해 주세요." /></div>
-        <div>사용일<input type="date" id="USE_DATE" name="USE_DATE" maxlength="20"/></div>
-        <div>수량<input type="number" id="RES_NUM" name="RES_NUM" maxlength="2"/></div>
-        <div>
-            <label for="PAYMENT">결제수단</label>
-            <select id="PAYMENT" name="PAYMENT" required>
-                <option value="카카오페이">카카오페이</option>
-                <option value="무통장 입금">무통장 입금</option>
-            </select>
-        </div>
-        <div>요청사항<br/><textarea id="RES_REQUEST" name="RES_REQUEST" cols="50" rows="10" placeholder="요청사항을 입력해 주세요."></textarea></div>
-    </form>
-
-        <button type="button" id="saveBtn" onclick="saveReservation();">저장</button>
-        <a th:href="@{/product/reservationList}">뒤로</a>
+    </div>
 
     <footer th:replace="fragments/footer :: footer"></footer>
 </body>
