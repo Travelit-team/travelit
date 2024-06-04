@@ -48,7 +48,7 @@ public class LocationController {
 
         int locationInfoId = locationService.saveLocationInfo(writeRequest);
 
-        return "redirect:/location/detail/{locationInfoId}";
+        return "redirect:/location/detail/" + locationInfoId;
     }
 
     @GetMapping("/locationCodes")
