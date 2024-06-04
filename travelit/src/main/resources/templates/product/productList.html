@@ -207,7 +207,7 @@
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    // 페이지 HTML
+    //페이지 HTML
     function drawPage(pagination, params) {
         //파라미터가 없는 경우, 페이지 번호 제거
         if (!pagination || !params) {
@@ -216,7 +216,7 @@
         }
         //HTML 저장
         let html = '';
-        // 시작 페이지(startPage)가 1이 아닌 경우 시작 페이지 버튼, 이전 페이지 버튼 추가
+        //시작 페이지(startPage)가 1이 아닌 경우 시작 페이지 버튼, 이전 페이지 버튼 추가
         if (pagination.existPrevPage) {
             html += `
                     <a href="javascript:void(0);" onclick="movePage(1)" class="page_bt first">시작 페이지</a>
@@ -308,10 +308,10 @@
 <script th:inline="javascript">
     //지역 선택
     function selectRegion(regionName) {
-        // 전국"을 선택, 검색어는 유지, 지역 초기화
+        // 전국 선택, 검색어는 유지, 지역 초기화
         if (regionName === "전국") {
-            findAllProduct(); //모든 결과 호출
-            return; //
+            findAllProduct(); //결과 호출
+            return;
         }
 
         //현재 검색 결과 필터링

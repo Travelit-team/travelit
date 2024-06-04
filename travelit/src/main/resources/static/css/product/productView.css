@@ -213,6 +213,7 @@ body {
     height: 50px;
     min-height: 30px;
     text-align: center;
+    text-decoration: none;
     border-radius: 10px;
     background-color: #333333;
 }
