@@ -93,12 +93,12 @@ public class SecurityConfig {
                 );
 
         //경로별 인가 작업
-//        http
-//                .authorizeHttpRequests((auth) -> auth
-//                        .requestMatchers("/").permitAll()
-//                        .requestMatchers("/login").permitAll()
-//                        .requestMatchers("/my").hasAuthority("ROLE_USER") //리다이렉이랑 머야
-//                        .anyRequest().authenticated());
+        http
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/", "/travelit", "/location/**", "/planner/**", "/product/**").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/my").hasAuthority("ROLE_USER") //리다이렉이랑 머야
+                        .anyRequest().authenticated());
 
         //세션 설정 : STATELESS
         http
