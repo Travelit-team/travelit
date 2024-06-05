@@ -316,3 +316,23 @@ body {
 .on {
     background-color: #d5d5d5;
 }
+
+
+#admin-location-write-btn {
+    position: fixed;
+    bottom: 50vh;
+    left: 20px;
+    border-radius: 25px;
+    background: #403c3b;
+    border: none;
+    color: white;
+    height: 45px;
+    width: 110px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+#admin-location-write-btn > a {
+    text-decoration: none;
+    color: white;
+}
